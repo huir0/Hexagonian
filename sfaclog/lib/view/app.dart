@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/view/router.dart';
 
-class SFACApp extends StatelessWidget {
-  const SFACApp({super.key});
+class SFACLOGApp extends StatelessWidget {
+  const SFACLOGApp({super.key});
 
   @override
   Widget build(BuildContext context) {
