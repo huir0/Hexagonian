@@ -40,7 +40,6 @@ dependencies:
   google_sign_in: ^6.2.1
   http: ^1.2.0
   pocketbase: ^0.17.1
-  url_launcher: ^6.2.4
   sfaclog_widgets:
     path: ../sfaclog_widgets
 
