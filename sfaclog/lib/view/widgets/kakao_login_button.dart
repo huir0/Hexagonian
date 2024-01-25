@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
-import 'package:sfaclog/viewmodel/auth/kakao_auth/kakao_login_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sfaclog/viewmodel/auth/kakao_auth/kakao_login_state.dart';
+import 'package:sfaclog/viewmodel/auth/oauth2_auth_notifier.dart';
 
 class KakaoLoginButton extends ConsumerWidget {
   const KakaoLoginButton({
@@ -12,18 +10,14 @@ class KakaoLoginButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    User? userData;
-    print(userData);
     return GestureDetector(
       onTap: () async {
         try {
-          ref.read(kakaoLoginProvider.notifier).kakaoLogin();
-
-          if (ref.read(kakaoLoginProvider).authStatus ==
-              SNSAuthStatus.success) {
-            userData = ref.read(kakaoLoginProvider).userInfo;
-            ref.read(pocketbaseAuthProvider).setUserDataPbFromKakao(userData!);
-          }
+          final authData =
+              await ref.read(pocketbaseAuthProvider).signinWithOAuth2(
+                    'kakao',
+                  );
+          ref.read(oAuth2Provider.notifier).setOAuthData(authData);
         } catch (e) {
           print('카카오로그인 실패: $e');
         }
