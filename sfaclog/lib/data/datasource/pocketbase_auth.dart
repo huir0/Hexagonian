@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PocketbaseAuth {
   PocketbaseAuth();
@@ -21,22 +21,18 @@ class PocketbaseAuth {
     });
   }
 
-  void setUserDataPbFromKakao(
-    User userData,
-  ) async {
-    final authData = await pb.collection('users').authWithOAuth2(
-      'kakao',
-      (url) async {
-        print('redirect url: $url');
-      },
-      createData: {
-        'username': userData.kakaoAccount?.profile?.nickname,
-        'email': userData.kakaoAccount?.email,
-        'name': userData.kakaoAccount?.profile?.nickname,
-        'created': DateTime.now(),
-        'updated': DateTime.now(),
-      },
-    );
+  Future<RecordAuth> signinWithOAuth2(String provider) async {
+    try {
+      final authData = await pb.collection('users').authWithOAuth2(
+        provider,
+        (url) async {
+          await launchUrl(url);
+        },
+      );
+      return authData;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void logout() {
