@@ -44,6 +44,7 @@ dependencies:
   http: ^1.2.0
   json_serializable: ^6.7.1
   pocketbase: ^0.18.0
+  url_launcher: ^6.2.4
   sfaclog_widgets:
     path: ../sfaclog_widgets
 
