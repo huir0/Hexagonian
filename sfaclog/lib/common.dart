@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ enum SLStyle {
   Display_S_Regular,
   Heading_L_Regular,
   Heading_M_Regular,
+  Heading_S_Bold,
+  Heading_S_Medium,
   Heading_S_Regular,
   Text_L_Bold,
   Text_L_Medium,
@@ -43,56 +47,100 @@ class SLTextStyle {
   static const FontWeight _regular = FontWeight.w400;
 
   //Display Style
-  static TextStyle? get Display_L_Regular =>
-      const TextStyle(fontSize: _displayL, fontWeight: _regular);
-  static TextStyle? get Display_M_Regular =>
-      const TextStyle(fontSize: _displayM, fontWeight: _regular);
-  static TextStyle? get Display_S_Regular =>
-      const TextStyle(fontSize: _displayS, fontWeight: _regular);
+  static TextStyle? get Display_L_Regular => const TextStyle(
+        fontSize: _displayL,
+        fontWeight: _regular,
+      );
+  static TextStyle? get Display_M_Regular => const TextStyle(
+        fontSize: _displayM,
+        fontWeight: _regular,
+      );
+  static TextStyle? get Display_S_Regular => const TextStyle(
+        fontSize: _displayS,
+        fontWeight: _regular,
+      );
 
   //Heading Style
-  static TextStyle? get Heading_L_Regular =>
-      const TextStyle(fontSize: _headingL, fontWeight: _regular);
-  static TextStyle? get Heading_M_Regular =>
-      const TextStyle(fontSize: _headingM, fontWeight: _regular);
-  static TextStyle? get Heading_S_Regular =>
-      const TextStyle(fontSize: _headingS, fontWeight: _regular);
+  static TextStyle? get Heading_L_Regular => const TextStyle(
+        fontSize: _headingL,
+        fontWeight: _regular,
+      );
+  static TextStyle? get Heading_M_Regular => const TextStyle(
+        fontSize: _headingM,
+        fontWeight: _regular,
+      );
+  static TextStyle? get Heading_S_Bold => const TextStyle(
+        fontSize: _headingS,
+        fontWeight: _bold,
+      );
+  static TextStyle? get Heading_S_Meduim => const TextStyle(
+        fontSize: _headingS,
+        fontWeight: _medium,
+      );
+  static TextStyle? get Heading_S_Regular => const TextStyle(
+        fontSize: _headingS,
+        fontWeight: _regular,
+      );
 
   //Text L Style
-  static TextStyle? get Text_L_Bold =>
-      const TextStyle(fontSize: _textL, fontWeight: _bold);
-  static TextStyle? get Text_L_Medium =>
-      const TextStyle(fontSize: _textL, fontWeight: _medium);
-  static TextStyle? get Text_L_Regular =>
-      const TextStyle(fontSize: _textL, fontWeight: _regular);
+  static TextStyle? get Text_L_Bold => const TextStyle(
+        fontSize: _textL,
+        fontWeight: _bold,
+      );
+  static TextStyle? get Text_L_Medium => const TextStyle(
+        fontSize: _textL,
+        fontWeight: _medium,
+      );
+  static TextStyle? get Text_L_Regular => const TextStyle(
+        fontSize: _textL,
+        fontWeight: _regular,
+      );
 
   //Text M Style
-  static TextStyle? get Text_M_Bold =>
-      const TextStyle(fontSize: _textM, fontWeight: _bold);
-  static TextStyle? get Text_M_Medium =>
-      const TextStyle(fontSize: _textM, fontWeight: _medium);
-  static TextStyle? get Text_M_Regular =>
-      const TextStyle(fontSize: _textM, fontWeight: _regular);
+  static TextStyle? get Text_M_Bold => const TextStyle(
+        fontSize: _textM,
+        fontWeight: _bold,
+      );
+  static TextStyle? get Text_M_Medium => const TextStyle(
+        fontSize: _textM,
+        fontWeight: _medium,
+      );
+  static TextStyle? get Text_M_Regular => const TextStyle(
+        fontSize: _textM,
+        fontWeight: _regular,
+      );
 
   //Text S Style
-  static TextStyle? get Text_S_Bold =>
-      const TextStyle(fontSize: _textS, fontWeight: _bold);
-  static TextStyle? get Text_S_Medium =>
-      const TextStyle(fontSize: _textS, fontWeight: _medium);
-  static TextStyle? get Text_S_Regular =>
-      const TextStyle(fontSize: _textS, fontWeight: _regular);
+  static TextStyle? get Text_S_Bold => const TextStyle(
+        fontSize: _textS,
+        fontWeight: _bold,
+      );
+  static TextStyle? get Text_S_Medium => const TextStyle(
+        fontSize: _textS,
+        fontWeight: _medium,
+      );
+  static TextStyle? get Text_S_Regular => const TextStyle(
+        fontSize: _textS,
+        fontWeight: _regular,
+      );
 
   //Text XS Style
-  static TextStyle? get Text_XS_Bold =>
-      const TextStyle(fontSize: _textXS, fontWeight: _bold);
-  static TextStyle? get Text_XS_Medium =>
-      const TextStyle(fontSize: _textXS, fontWeight: _medium);
-  static TextStyle? get Text_XS_Regular =>
-      const TextStyle(fontSize: _textXS, fontWeight: _regular);
+  static TextStyle? get Text_XS_Bold => const TextStyle(
+        fontSize: _textXS,
+        fontWeight: _bold,
+      );
+  static TextStyle? get Text_XS_Medium => const TextStyle(
+        fontSize: _textXS,
+        fontWeight: _medium,
+      );
+  static TextStyle? get Text_XS_Regular => const TextStyle(
+        fontSize: _textXS,
+        fontWeight: _regular,
+      );
   final TextStyle style;
   final Color color;
 
-  SLTextStyle({SLStyle? style, this.color = Colors.black})
+  SLTextStyle({SLStyle? style, this.color = Colors.white})
       : style = _getStyle(style ?? SLStyle.Text_L_Regular);
 
   static TextStyle _getStyle(SLStyle style) {
@@ -107,6 +155,10 @@ class SLTextStyle {
         return Heading_L_Regular!;
       case SLStyle.Heading_M_Regular:
         return Heading_M_Regular!;
+      case SLStyle.Heading_S_Bold:
+        return Heading_S_Bold!;
+      case SLStyle.Heading_S_Medium:
+        return Heading_S_Meduim!;
       case SLStyle.Heading_S_Regular:
         return Heading_S_Regular!;
       case SLStyle.Text_L_Bold:
