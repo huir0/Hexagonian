@@ -8,8 +8,11 @@ class SFACLOGApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       //builder: FToastBuilder(),
-      //theme: ThemeData(fontFamily: 'Pretendard'),
-      //themeMode: ThemeMode.system,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: 'Pretendard',
+      ),
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       routeInformationParser: router.routeInformationParser,
       routeInformationProvider: router.routeInformationProvider,
