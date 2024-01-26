@@ -3,21 +3,26 @@ import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:sfaclog/view/pages/login_page/naver_login/login_platform.dart';
 
 void main() {
-  runApp(
-    MaterialApp(
-      home: sampleLogin(),
-    ),
-  );
+  runApp(MyApp());
 }
 
-class sampleLogin extends StatefulWidget {
-  const sampleLogin({super.key});
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SampleLogin(),
+    );
+  }
+}
+
+class SampleLogin extends StatefulWidget {
+  const SampleLogin({Key? key}) : super(key: key);
 
   @override
-  State<sampleLogin> createState() => _sampleLoginState();
+  _SampleLoginState createState() => _SampleLoginState();
 }
 
-class _sampleLoginState extends State<sampleLogin> {
+class _SampleLoginState extends State<SampleLogin> {
   LoginPlatform _loginPlatform = LoginPlatform.none;
 
   void signInWithNaver() async {
@@ -81,7 +86,7 @@ class _sampleLoginState extends State<sampleLogin> {
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
       child: Ink.image(
-        image: AssetImage('asset/image/$path.png'),
+        image: AssetImage('assets/image/naver.png'),
         width: 60,
         height: 60,
         child: InkWell(

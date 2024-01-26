@@ -67,6 +67,14 @@
       </array>
       </dict>
     </array>
+    	<key>naverConsumerKey</key>
+		<string>Client ID</string>
+		<key>naverConsumerSecret</key>
+		<string>Secret</string>
+		<key>naverServiceAppName</key>
+		<string>AppName</string>
+		<key>naverServiceAppUrlScheme</key>
+		<string>UrlScheme</string>
 
     <key>LSApplicationQueriesSchemes</key>
     <array>
