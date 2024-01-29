@@ -10,3 +10,6 @@ export 'package:sfaclog_widgets/tooltips/sl_alert.dart';
 export 'package:sfaclog_widgets/tooltips/sl_snackbar.dart';
 export 'package:sfaclog_widgets/menus/sl_dropmenu.dart';
 export 'package:sfaclog_widgets/tabs/sl_tab.dart';
+export 'package:sfaclog_widgets/chips/chips.dart';
+export 'package:sfaclog_widgets/chips/sl_checkbox.dart';
+export 'package:sfaclog_widgets/tooltips/bubble_tooltip.dart';
