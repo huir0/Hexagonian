@@ -14,18 +14,27 @@ class LogPageCardWidget extends StatelessWidget {
     List<Widget> chipList = [
       SFACTag(
         backgroundColor: SLColor.neutral.shade90,
-        text: '#프론트앤드',
-        textColor: Colors.white,
+        text: Text(
+          '#프론트앤드',
+          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+              .textStyle,
+        ),
       ),
       SFACTag(
         backgroundColor: SLColor.neutral.shade90,
-        text: '#개발자의 삶',
-        textColor: Colors.white,
+        text: Text(
+          '#개발자의삶',
+          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+              .textStyle,
+        ),
       ),
       SFACTag(
         backgroundColor: SLColor.neutral.shade90,
-        text: '#백앤드',
-        textColor: Colors.white,
+        text: Text(
+          '#백앤드',
+          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+              .textStyle,
+        ),
       )
     ];
     return SizedBox(
