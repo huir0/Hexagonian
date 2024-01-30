@@ -120,8 +120,13 @@ class _LogSearchPageState extends ConsumerState<LogSearchPage> {
                         (index) {
                           if (state.skillModel != null) {
                             return SFACTag(
-                              text: '#${state.skillModel![index].name}',
-                              textColor: SLColor.neutral.shade60,
+                              text: Text(
+                                '#${state.skillModel![index].name}',
+                                style: SLTextStyle(
+                                        color: SLColor.neutral.shade60,
+                                        style: SLStyle.Text_XS_Medium)
+                                    .textStyle,
+                              ),
                             );
                             // SFACTag(text: state.skillModel![index].name);
                           } else {
