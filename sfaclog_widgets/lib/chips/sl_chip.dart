@@ -7,6 +7,9 @@ class SFACChip extends StatelessWidget {
   /// Chip 배경 색
   final Color backgroundColor;
 
+  /// Chip Border 색
+  final Color borderColor;
+
   /// Chip 글자 색
   final Color? textColor;
 
@@ -17,6 +20,7 @@ class SFACChip extends StatelessWidget {
       {super.key,
       required this.text,
       this.backgroundColor = const Color(0xFF0059FF),
+      this.borderColor = const Color(0x00000000),
       this.textColor,
       this.suffixIcon,
       this.onPressed});
@@ -28,9 +32,9 @@ class SFACChip extends StatelessWidget {
       child: Chip(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
-        shape: const RoundedRectangleBorder(
-            side: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.all(Radius.circular(100))),
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: borderColor),
+            borderRadius: const BorderRadius.all(Radius.circular(100))),
         backgroundColor: backgroundColor,
         label: SizedBox(
           height: 32,
