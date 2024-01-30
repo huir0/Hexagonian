@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_page.dart';
 
@@ -13,10 +15,16 @@ final router = GoRouter(initialLocation: '/home', routes: [
     path: '/main',
     builder: (context, state) => const MainPage(),
   ),
-  GoRoute(
-    path: '/log',
-    builder: (context, state) => const LogPage(),
-  ),
+  GoRoute(path: '/log', builder: (context, state) => const LogPage(), routes: [
+    GoRoute(
+      path: 'write',
+      builder: (context, state) => const LogWritePage(),
+    ),
+    GoRoute(
+      path: 'search',
+      builder: (context, state) => const LogSearchPage(),
+    )
+  ]),
   GoRoute(
     path: '/my',
     builder: (context, state) => const MyPage(),
