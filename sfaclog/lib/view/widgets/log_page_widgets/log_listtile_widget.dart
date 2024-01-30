@@ -13,18 +13,27 @@ class LogListTileWidget extends StatelessWidget {
     double listTileH = 257;
     double imgH = 157;
     List<Widget> chipList = [
-      const SFACTag(
-        text: '#프론트앤드',
-        textColor: Colors.white,
+      SFACTag(
+        text: Text(
+          '#프론트앤드',
+          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+              .textStyle,
+        ),
       ),
-      const SFACTag(
-        text: '#개발자의 삶',
-        textColor: Colors.white,
+      SFACTag(
+        text: Text(
+          '#개발자의삶',
+          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+              .textStyle,
+        ),
       ),
-      const SFACTag(
-        text: '#백앤드',
-        textColor: Colors.white,
-      )
+      SFACTag(
+        text: Text(
+          '#백앤드',
+          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+              .textStyle,
+        ),
+      ),
     ];
     return SizedBox(
       width: listTileW,
