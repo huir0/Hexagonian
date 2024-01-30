@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:sfaclog/common.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -14,6 +13,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      scrolledUnderElevation: 0,
       leading: Image.asset('assets/images/logo_blue.png'),
       title: Text(
         pageLabel,
