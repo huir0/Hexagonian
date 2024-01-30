@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/community_page/community_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
@@ -21,35 +20,34 @@ class AppWrapper extends ConsumerWidget {
       const LogPage(),
       const MyPage(),
     ];
-    List<String> pagesLabel = ['홈', '커뮤니티', '로그', '마이페이지'];
-
     return SafeArea(
       child: Scaffold(
-        appBar: AppBarWidget(pageLabel: pagesLabel[state.page]),
+        appBar: AppBar(
+          title: const Text('AppBar'),
+        ),
         body: pages[state.page],
         bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: SLColor.primary,
           type: BottomNavigationBarType.fixed,
           currentIndex: state.page,
           onTap: (index) {
             ref.read(appwrapperProvider.notifier).pageChanged(index);
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
-              icon: const Icon(Icons.home, size: 24),
-              label: pagesLabel[0],
+              icon: Icon(Icons.home, size: 24),
+              label: '홈',
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.explore, size: 24),
-              label: pagesLabel[1],
+              icon: Icon(Icons.explore, size: 24),
+              label: '커뮤니티',
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.note, size: 24),
-              label: pagesLabel[2],
+              icon: Icon(Icons.note, size: 24),
+              label: '로그',
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.people, size: 24),
-              label: pagesLabel[3].substring(0, 2),
+              icon: Icon(Icons.people, size: 24),
+              label: '마이',
             ),
           ],
         ),
