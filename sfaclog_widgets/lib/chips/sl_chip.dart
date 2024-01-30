@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 
 class SFACChip extends StatelessWidget {
   /// Chip의 Text
-  final String text;
+  final Text text;
 
   /// Chip 배경 색
   final Color backgroundColor;
 
   /// Chip Border 색
   final Color borderColor;
-
-  /// Chip 글자 색
-  final Color? textColor;
 
   ///suffixIcon
   final IconData? suffixIcon;
@@ -21,7 +18,6 @@ class SFACChip extends StatelessWidget {
       required this.text,
       this.backgroundColor = const Color(0xFF0059FF),
       this.borderColor = const Color(0x00000000),
-      this.textColor,
       this.suffixIcon,
       this.onPressed});
 
@@ -41,14 +37,7 @@ class SFACChip extends StatelessWidget {
           child: IntrinsicWidth(
             child: Row(
               children: [
-                Text(
-                  text,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                text,
                 suffixIcon != null ? Icon(suffixIcon) : const SizedBox(),
               ],
             ),

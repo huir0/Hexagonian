@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SFACTag extends StatelessWidget {
   /// Tag의 Text
-  final String text;
+  final Text text;
 
   /// Tag 배경 색
   final Color backgroundColor;
@@ -38,14 +38,7 @@ class SFACTag extends StatelessWidget {
             child: Row(
               children: [
                 prefixIcon != null ? Icon(prefixIcon) : const SizedBox(),
-                Text(
-                  text,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                text,
               ],
             ),
           ),
