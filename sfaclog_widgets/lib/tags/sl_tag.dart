@@ -7,9 +7,6 @@ class SFACTag extends StatelessWidget {
   /// Tag 배경 색
   final Color backgroundColor;
 
-  /// Tag 글자 색
-  final Color? textColor;
-
   ///suffixIcon
   final IconData? prefixIcon;
   final VoidCallback? onPressed;
@@ -17,7 +14,6 @@ class SFACTag extends StatelessWidget {
       {super.key,
       required this.text,
       this.backgroundColor = const Color(0xFF030303),
-      this.textColor,
       this.prefixIcon,
       this.onPressed});
 
