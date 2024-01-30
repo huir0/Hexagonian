@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SFACTag extends StatelessWidget {
-  /// Tag의 Text
+class SFACChip extends StatelessWidget {
+  /// Chip의 Text
   final String text;
 
-  /// Tag 배경 색
+  /// Chip 배경 색
   final Color backgroundColor;
 
-  /// Tag 글자 색
+  /// Chip 글자 색
   final Color? textColor;
 
   ///suffixIcon
-  final IconData? prefixIcon;
+  final IconData? suffixIcon;
   final VoidCallback? onPressed;
-  const SFACTag(
+  const SFACChip(
       {super.key,
       required this.text,
-      this.backgroundColor = const Color(0xFF030303),
+      this.backgroundColor = const Color(0xFF0059FF),
       this.textColor,
-      this.prefixIcon,
+      this.suffixIcon,
       this.onPressed});
 
   @override
@@ -26,18 +26,17 @@ class SFACTag extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Chip(
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
         shape: const RoundedRectangleBorder(
             side: BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.all(Radius.circular(4))),
+            borderRadius: BorderRadius.all(Radius.circular(100))),
         backgroundColor: backgroundColor,
         label: SizedBox(
-          height: 22,
+          height: 32,
           child: IntrinsicWidth(
             child: Row(
               children: [
-                prefixIcon != null ? Icon(prefixIcon) : const SizedBox(),
                 Text(
                   text,
                   style: TextStyle(
@@ -46,6 +45,7 @@ class SFACTag extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                suffixIcon != null ? Icon(suffixIcon) : const SizedBox(),
               ],
             ),
           ),
