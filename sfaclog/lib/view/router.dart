@@ -5,8 +5,6 @@ import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
-import 'package:sfaclog/view/pages/join_page/join_page.dart';
-import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_page.dart';
 
