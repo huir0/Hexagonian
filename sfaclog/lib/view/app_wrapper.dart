@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
-import 'package:sfaclog/common.dart';
-=======
->>>>>>> 3e357e9 (Add sfaclogWidget)
 import 'package:sfaclog/view/pages/community_page/community_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
