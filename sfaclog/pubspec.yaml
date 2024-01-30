@@ -28,16 +28,20 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  build_runner: ^2.4.8
+  carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.6
   equatable: ^2.0.5
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.4.9
   freezed: ^2.4.6
+  freezed_annotation: ^2.4.1
   go_router: ^13.0.1
   google_sign_in: ^6.2.1
   http: ^1.2.0
-  pocketbase: ^0.17.1
+  json_serializable: ^6.7.1
+  pocketbase: ^0.18.0
   sfaclog_widgets:
     path: ../sfaclog_widgets
 
