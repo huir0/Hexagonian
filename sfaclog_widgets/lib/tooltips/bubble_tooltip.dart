@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
 class BubbleTooltip extends StatelessWidget {
@@ -9,16 +10,25 @@ class BubbleTooltip extends StatelessWidget {
     this.textStyle,
     this.color = const Color(0xff464646),
     this.padding = const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
+    this.left = 0,
+    this.top,
+    this.right = 0,
+    this.bottom = -6,
   });
   final String tip;
   final double borderRadius;
   final TextStyle? textStyle;
   final Color color;
   final EdgeInsetsGeometry? padding;
+  final double? top;
+  final double? left;
+  final double? right;
+  final double? bottom;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Container(
           decoration: BoxDecoration(
@@ -30,32 +40,20 @@ class BubbleTooltip extends StatelessWidget {
               style: textStyle ??
                   SLTextStyle(style: SLStyle.Text_XS_Medium).textStyle),
         ),
-        CustomPaint(
-          painter: Triangle(color),
+        Positioned(
+          top: top,
+          bottom: bottom,
+          right: right,
+          left: left,
+          child: SvgPicture.asset(
+            'assets/icons/polygon.svg',
+            colorFilter: ColorFilter.mode(
+              color,
+              BlendMode.srcIn,
+            ),
+          ),
         ),
       ],
     );
-  }
-}
-
-class Triangle extends CustomPainter {
-  final Color bgColor;
-
-  Triangle(this.bgColor);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint()..color = bgColor;
-
-    var path = Path();
-    path.lineTo(-5, 0);
-    path.lineTo(0, 10);
-    path.lineTo(5, 0);
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }
