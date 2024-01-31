@@ -8,7 +8,6 @@ import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_page.dart';
 import 'package:sfaclog/view/widgets/appbar_widget.dart';
 import 'package:sfaclog/viewmodel/app_wrapper_viewModel/app_wrapper_notifier.dart';
-import 'package:sfaclog/viewmodel/app_wrapper_viewModel/app_wrapper_state.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class AppWrapper extends ConsumerWidget {
@@ -38,7 +37,9 @@ class AppWrapper extends ConsumerWidget {
                 onPressed: null,
                 child: SLCircleIconButton(
                   onTap: () {
-                    print('1');
+                    ref
+                        .read(appwrapperProvider.notifier)
+                        .handleFabTap(context, state.page);
                   },
                 ),
               )
