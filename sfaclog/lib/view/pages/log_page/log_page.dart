@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/log_page_widgets/log_card_widget.dart';
 import 'package:sfaclog/view/widgets/log_page_widgets/log_listtile_widget.dart';
+import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogPage extends StatefulWidget {
@@ -19,8 +20,6 @@ bool isVerifiedEmail = false;
 List<String> itemList = ['1', '2', '3', '4'];
 var optionList = ['등록순', '최신순'];
 String selectedOption = optionList[0];
-final List<Widget> itemSliders =
-    itemList.map((item) => const LogPageCardWidget()).toList();
 
 class _LogPageState extends State<LogPage> {
   @override
@@ -46,7 +45,13 @@ class _LogPageState extends State<LogPage> {
             viewportFraction: 0.725,
             enlargeCenterPage: true,
           ),
-          items: itemSliders,
+          items: itemList.map((item) {
+            return InkWell(
+                onTap: () {
+                  context.push('/log/read');
+                },
+                child: const LogPageCardWidget());
+          }).toList(),
         ),
         Padding(
           padding: const EdgeInsets.only(
@@ -81,7 +86,7 @@ class _LogPageState extends State<LogPage> {
                 '총 101010 로그',
                 style: SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
               ),
-              SFACSortMenuButton(
+              SFACMenuButton(
                 items: optionList,
                 onItemSelected: (value) {},
               ),
