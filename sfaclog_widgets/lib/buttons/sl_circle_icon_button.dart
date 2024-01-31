@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
-class SLIconButton extends StatelessWidget {
-  const SLIconButton({
+class SLCircleIconButton extends StatelessWidget {
+  const SLCircleIconButton({
     super.key,
     this.onTap,
     this.width = 56,
