@@ -2,21 +2,14 @@
 //  Generated file. Do not edit.
 //
 
-import FlutterMacOS
-import Foundation
+#import FlutterMacOS
+#import Foundation
 
-  UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
-import shared_preferences_foundation
+#import google_sign_in_ios
+#import url_launcher_macos
+
+void RegisterGeneratedPlugins(FlutterPluginRegistry* registry) {
+  [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
+  [UrlLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"UrlLauncherPlugin"]];
 }
 
-import url_launcher_macos
-import google_sign_in_ios
-import url_launcher_macos
-
-func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
-}
-func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  FLTGoogleSignInPlugin.register(with: registry.registrar(forPlugin: "FLTGoogleSignInPlugin"))
-  UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
-}
