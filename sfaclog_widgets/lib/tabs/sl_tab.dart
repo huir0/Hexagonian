@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import '../util/common.dart';
 
-
 class SLTab extends StatefulWidget {
-  const SLTab({
-    super.key,
-    required this.menu,
-    this.focusedColor,
-    this.width,
-    required this.height,
-    this.backgroundColor,
-    this.borderColor,
-    this.borderBottom,
-    this.borderWidth = 2,
-    this.onTap,
-    this.physics,
-    this.menuTextStyle,
-    this.defaultMenuTextColor = const Color(0xff666666),
-  });
+  const SLTab(
+      {super.key,
+      required this.menu,
+      this.focusedColor,
+      this.width,
+      required this.height,
+      this.backgroundColor,
+      this.borderColor,
+      this.borderBottom,
+      this.borderWidth = 2,
+      this.onTap,
+      this.physics,
+      this.menuTextStyle,
+      this.defaultMenuTextColor = const Color(0xff666666),
+      this.horizontalMargin = 0});
   final List<Widget?> menu;
   final Color? focusedColor;
   final double? width;
@@ -30,7 +29,8 @@ class SLTab extends StatefulWidget {
   final ScrollPhysics? physics;
   final TextStyle? menuTextStyle;
   final Color? defaultMenuTextColor;
-
+  /// 탭바 옆에 공간을 주고 싶을 경우 설정
+  final double horizontalMargin;
   @override
   State<SLTab> createState() => _SLTabState();
 }
@@ -40,7 +40,8 @@ class _SLTabState extends State<SLTab> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: widget.horizontalMargin),
       width: widget.width,
       height: widget.height,
       child: ListView.builder(
@@ -52,6 +53,7 @@ class _SLTabState extends State<SLTab> {
           TextStyle? menuStyle;
           menuStyle = widget.menuTextStyle ??
               SLTextStyle.Text_M_Bold?.copyWith(
+                fontFamily: 'Pretendard',
                   color: focused == index
                       ? widget.focusedColor ?? SLColor.primary[100]
                       : widget.defaultMenuTextColor) ??
@@ -71,8 +73,10 @@ class _SLTabState extends State<SLTab> {
             },
             child: Container(
               width: widget.width != null
-                  ? widget.width! / widget.menu.length
-                  : MediaQuery.of(context).size.width / widget.menu.length,
+                  ? (widget.width! - (widget.horizontalMargin * 2)) / widget.menu.length
+                  : (MediaQuery.of(context).size.width -
+                          (widget.horizontalMargin * 2)) /
+                      widget.menu.length,
               decoration: BoxDecoration(
                 color: widget.backgroundColor,
                 border: Border(

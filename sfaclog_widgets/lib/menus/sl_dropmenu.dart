@@ -13,7 +13,7 @@ const double _kMenuVerticalPadding = 0.0;
 const double _kMenuWidthStep = 56.0;
 const double _kMenuScreenPadding = 8.0;
 
-class SFACSortMenuButton extends StatefulWidget {
+class SFACMenuButton extends StatefulWidget {
   /// 메뉴 아이템 리스트
   final List<String> items;
 
@@ -32,7 +32,9 @@ class SFACSortMenuButton extends StatefulWidget {
   /// 눌렀을 시 실행될 ..
   final ValueChanged<String> onItemSelected;
 
-  SFACSortMenuButton({
+  /// offset
+  final Offset offset;
+  const SFACMenuButton({
     Key? key,
     required this.items,
     required this.onItemSelected,
@@ -43,13 +45,14 @@ class SFACSortMenuButton extends StatefulWidget {
       Icons.keyboard_arrow_down_sharp,
       size: 8,
     ),
+    this.offset = const Offset(0, 21),
   }) : super(key: key);
 
   @override
-  _SFACSortMenuButtonState createState() => _SFACSortMenuButtonState();
+  _SFACMenuButtonState createState() => _SFACMenuButtonState();
 }
 
-class _SFACSortMenuButtonState extends State<SFACSortMenuButton> {
+class _SFACMenuButtonState extends State<SFACMenuButton> {
   late String dropdownValue;
 
   @override
@@ -62,20 +65,15 @@ class _SFACSortMenuButtonState extends State<SFACSortMenuButton> {
   Widget build(BuildContext context) {
     return CustomPopupMenuButton<String>(
       constraints: BoxConstraints(maxWidth: widget.itemWidth),
-      offset: Offset(0, (widget.height/2) + 10),
-      color: SLColor.neutral[80],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
+      offset: widget.offset,
       padding: EdgeInsets.zero,
       child: Row(
         children: [
           Container(
             alignment: Alignment.centerLeft,
-            child: Text(
-              dropdownValue,
-              style: SLTextStyle.Text_S_Medium?.copyWith(color: SLColor.neutral[30])
-            ),
+            child: Text(dropdownValue,
+                style: SLTextStyle.Text_S_Medium?.copyWith(
+                    color: SLColor.neutral[30])),
           ),
           SizedBox(
             width: 5,
@@ -89,112 +87,45 @@ class _SFACSortMenuButtonState extends State<SFACSortMenuButton> {
         });
         widget.onItemSelected(value);
       },
-      itemBuilder: (BuildContext context) => widget.items.map((item) {
-        return CustomPopupMenuItem(
-          height: widget.itemHeight,
-          padding: EdgeInsets.zero,
-          value: item,
-          child: Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 27, vertical: 14),
-              decoration: BoxDecoration(
-                color: item == dropdownValue ? Colors.black : null,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(item == widget.items.first ? 10.0 : 0),
-                  bottom: Radius.circular(item == widget.items.last ? 10.0 : 0),
+      itemBuilder: (BuildContext context) {
+        List<CustomPopupMenuEntry<String>> entries = [];
+        for (var i = 0; i < widget.items.length; i++) {
+          entries.add(
+            CustomPopupMenuItem(
+              height: widget.itemHeight,
+              padding: EdgeInsets.zero,
+              value: widget.items[i],
+              child: Center(
+                child: Container(
+                  width: widget.itemWidth,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  decoration: BoxDecoration(
+                    color: widget.items[i] == dropdownValue
+                        ? Colors.black
+                        : SLColor.neutral[80],
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(
+                          widget.items[i] == widget.items.first ? 6.21 : 0),
+                      bottom: Radius.circular(
+                          widget.items[i] == widget.items.last ? 6.21 : 0),
+                    ),
+                  ),
+                  child: Text(
+                    widget.items[i],
+                    style: SLTextStyle.Text_S_Medium?.copyWith(
+                        color: Colors.white),
+                  ),
                 ),
               ),
-              child: Text(
-                item,
-                style: SLTextStyle.Text_S_Medium?.copyWith(color: Colors.white),
-              ),
             ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class SFACChatMenuButton extends StatefulWidget {
-  /// 메뉴 아이템 리스트
-  final List<String> items;
-
-  /// 버튼 높이
-  final double height;
-
-  /// 버튼 너비
-  final double width;
-
-  /// 아이템 높이
-  final double itemHeight;
-
-  /// 아이템 너비
-  final double itemWidth;
-
-  /// 아이콘
-  final Icon icon;
-
-  final ValueChanged<String> onItemSelected;
-
-  SFACChatMenuButton({
-    Key? key,
-    required this.items,
-    required this.onItemSelected,
-    this.height = 24,
-    this.width = 24,
-    this.itemWidth = 102,
-    this.itemHeight = 0,
-    this.icon = const Icon(
-      Icons.chat,
-    ),
-  }) : super(key: key);
-
-  @override
-  _SFACChatMenuButtonState createState() => _SFACChatMenuButtonState();
-}
-
-class _SFACChatMenuButtonState extends State<SFACChatMenuButton> {
-  @override
-  Widget build(BuildContext context) {
-    return CustomPopupMenuButton<String>(
-      constraints: BoxConstraints(maxWidth: widget.itemWidth),
-      offset: Offset(-70, (widget.height) + 13),
-      color: SLColor.neutral[80],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      padding: EdgeInsets.zero,
-      child: Container(
-          height: widget.height, width: widget.width, child: widget.icon),
-      onSelected: (String value) {
-        widget.onItemSelected(value);
+          );
+          if (i < widget.items.length - 1) {
+            entries.add(CustomPopupMenuDivider(height: 1.0));
+          }
+        }
+        return entries;
       },
-      itemBuilder: (BuildContext context) => widget.items.map((item) {
-        return CustomPopupMenuItem(
-          height: widget.itemHeight,
-          padding: EdgeInsets.zero,
-          value: item,
-          child: Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(item == widget.items.first ? 10.0 : 0),
-                  bottom: Radius.circular(item == widget.items.last ? 10.0 : 0),
-                ),
-              ),
-              child: Text(
-                item,
-                style: SLTextStyle.Text_M_Regular?.copyWith(color: SLColor.neutral[60]),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
     );
   }
 }
@@ -209,14 +140,14 @@ class SFACSelectMenuButton extends StatefulWidget {
   final Icon icon;
   final ValueChanged<String> onItemSelected;
   final double width;
-
-  SFACSelectMenuButton({
+  final Offset offset;
+  const SFACSelectMenuButton({
     Key? key,
     required this.items,
     required this.onItemSelected,
     this.height = 52,
     this.width = 312,
-    this.itemWidth = 86,
+    this.itemWidth = 312,
     this.itemHeight = 0,
     this.menuRadius = 20,
     this.icon = const Icon(
@@ -224,6 +155,7 @@ class SFACSelectMenuButton extends StatefulWidget {
       size: 20,
       color: Color(0xffababab),
     ),
+    this.offset = const Offset(-18, 59),
   }) : super(key: key);
 
   @override
@@ -242,137 +174,23 @@ class _SFACSelectMenuButtonState extends State<SFACSelectMenuButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
-      width: widget.width,
-      padding: EdgeInsets.symmetric(horizontal: 14),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: SLColor.neutral[80], borderRadius: BorderRadius.circular(7)),
-      child: CustomPopupMenuButton<String>(
-        constraints: BoxConstraints(maxWidth: widget.itemWidth),
-        offset: Offset(0, (widget.height) + 7),
-        color: SLColor.neutral[80],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        padding: EdgeInsets.zero,
-        child: Row(
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                dropdownValue,
-                style: SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white)
-              ),
-            ),
-            Spacer(),
-            widget.icon,
-          ],
-        ),
-        onSelected: (String value) {
-          setState(() {
-            dropdownValue = value;
-          });
-          widget.onItemSelected(value);
-        },
-        itemBuilder: (BuildContext context) => widget.items.map((item) {
-          return CustomPopupMenuItem(
-            height: widget.itemHeight,
-            padding: EdgeInsets.zero,
-            value: item,
-            child: Center(
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 27, vertical: 14),
-                decoration: BoxDecoration(
-                  color: item == dropdownValue
-                      ? Colors.black
-                      : SLColor.neutral[80],
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(item == widget.items.first ? 10.0 : 0),
-                    bottom:
-                        Radius.circular(item == widget.items.last ? 10.0 : 0),
-                  ),
-                ),
-                child: Text(
-                  item,
-                  style: SLTextStyle.Text_S_Medium?.copyWith(color: Colors.white)
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class SFACCategoryMenuButton extends StatefulWidget {
-  /// 메뉴 아이템 리스트
-  final List<String> items;
-  final double height;
-  final double itemHeight;
-  final double itemWidth;
-  final double menuRadius;
-  final Icon icon;
-  final ValueChanged<String> onItemSelected;
-  final double width;
-
-  SFACCategoryMenuButton({
-    Key? key,
-    required this.items,
-    required this.onItemSelected,
-    this.height = 24,
-    this.width = 232,
-    this.itemWidth = 232,
-    this.itemHeight = 0,
-    this.menuRadius = 20,
-    this.icon = const Icon(
-      Icons.keyboard_arrow_down_sharp,
-      size: 20,
-      color: Color(0xffababab),
-    ),
-  }) : super(key: key);
-
-  @override
-  _SFACCategoryMenuButtonState createState() => _SFACCategoryMenuButtonState();
-}
-
-class _SFACCategoryMenuButtonState extends State<SFACCategoryMenuButton> {
-  late String dropdownValue;
-
-  @override
-  void initState() {
-    super.initState();
-    dropdownValue = widget.items.first;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
       height: widget.height,
       width: widget.width,
-      padding: EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.symmetric(horizontal: 18),
       alignment: Alignment.center,
       decoration: BoxDecoration(
           color: SLColor.neutral[80], borderRadius: BorderRadius.circular(7)),
       child: CustomPopupMenuButton<String>(
         constraints: BoxConstraints(maxWidth: widget.itemWidth),
-        offset: Offset(0, (widget.height) + 7),
-        color: SLColor.neutral[80],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
+        offset: widget.offset,
         padding: EdgeInsets.zero,
         child: Row(
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              child: Text(
-                dropdownValue,
-                style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w700, height: 0.8),
-              ),
+              child: Text(dropdownValue,
+                  style:
+                      SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white)),
             ),
             Spacer(),
             widget.icon,
@@ -384,36 +202,43 @@ class _SFACCategoryMenuButtonState extends State<SFACCategoryMenuButton> {
           });
           widget.onItemSelected(value);
         },
-        itemBuilder: (BuildContext context) => widget.items.map((item) {
-          return CustomPopupMenuItem(
-            height: widget.itemHeight,
-            padding: EdgeInsets.zero,
-            value: item,
-            child: Center(
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 27, vertical: 14),
-                decoration: BoxDecoration(
-                  color: item == dropdownValue
-                      ? Colors.black
-                      : SLColor.neutral[80],
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(item == widget.items.first ? 10.0 : 0),
-                    bottom:
-                        Radius.circular(item == widget.items.last ? 10.0 : 0),
+        itemBuilder: (BuildContext context) {
+          List<CustomPopupMenuEntry<String>> entries = [];
+          for (var i = 0; i < widget.items.length; i++) {
+            entries.add(
+              CustomPopupMenuItem(
+                height: widget.itemHeight,
+                padding: EdgeInsets.zero,
+                value: widget.items[i],
+                child: Container(
+                  width: widget.itemWidth,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: widget.items[i] == dropdownValue
+                        ? Colors.black
+                        : SLColor.neutral[80],
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(
+                          widget.items[i] == widget.items.first ? 6.21 : 0),
+                      bottom: Radius.circular(
+                          widget.items[i] == widget.items.last ? 6.21 : 0),
+                    ),
+                  ),
+                  child: Text(
+                    widget.items[i],
+                    style: SLTextStyle.Text_M_Medium?.copyWith(
+                        color: Colors.white),
                   ),
                 ),
-                child: Text(
-                  item,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
-                ),
               ),
-            ),
-          );
-        }).toList(),
+            );
+            if (i < widget.items.length - 1) {
+              entries.add(CustomPopupMenuDivider(height: 1.0));
+            }
+          }
+          return entries;
+        },
       ),
     );
   }
@@ -1236,6 +1061,33 @@ class _CustomPopupMenuDefaultsM2 extends PopupMenuThemeData {
 
   static EdgeInsets menuHorizontalPadding =
       const EdgeInsets.symmetric(horizontal: 16.0);
+}
+
+class CustomPopupMenuDivider extends CustomPopupMenuEntry<Never> {
+  /// Creates a horizontal divider for a popup menu.
+  ///
+  /// By default, the divider has a height of 16 logical pixels.
+  const CustomPopupMenuDivider({super.key, this.height = _kMenuDividerHeight});
+
+  /// The height of the divider entry.
+  ///
+  /// Defaults to 16 pixels.
+  @override
+  final double height;
+
+  @override
+  bool represents(void value) => false;
+
+  @override
+  State<CustomPopupMenuDivider> createState() => _CustomPopupMenuDividerState();
+}
+
+class _CustomPopupMenuDividerState extends State<CustomPopupMenuDivider> {
+  @override
+  Widget build(BuildContext context) => Divider(
+        height: widget.height,
+        color: SLColor.neutral[70],
+      );
 }
 
 // BEGIN GENERATED TOKEN PROPERTIES - PopupMenu
