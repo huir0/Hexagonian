@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
-class SLCheckbox<T> extends StatefulWidget {
+class SLCheckbox extends StatefulWidget {
   const SLCheckbox({
     super.key,
     required this.onChange,
@@ -41,12 +41,12 @@ class _SLCheckboxState extends State<SLCheckbox> {
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(4),
-          color: _isChecked == true ? SLColor.primary : const Color(0xff404040),
+          color: _isChecked == true ? SLColor.primary : SLColor.neutral.shade70,
         ),
         child: SvgPicture.asset(
           'assets/icons/check.svg',
           colorFilter: ColorFilter.mode(
-            _isChecked == true ? Colors.white : SLColor.neutral.shade60,
+            _isChecked == true ? Colors.white : SLColor.neutral.shade70,
             BlendMode.srcIn,
           ),
           fit: BoxFit.scaleDown,
@@ -57,8 +57,8 @@ class _SLCheckboxState extends State<SLCheckbox> {
 }
 
 // how to use
-class Example extends StatelessWidget {
-  const Example({super.key});
+class SLCheckboxExample extends StatelessWidget {
+  const SLCheckboxExample({super.key});
 
   @override
   Widget build(BuildContext context) {
