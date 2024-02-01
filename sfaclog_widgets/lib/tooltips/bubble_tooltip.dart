@@ -8,7 +8,7 @@ class BubbleTooltip extends StatelessWidget {
     required this.tip,
     this.borderRadius = 6.11,
     this.textStyle,
-    this.color = const Color(0xff464646),
+    this.color,
     this.padding = const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
     this.left = 0,
     this.top,
@@ -18,7 +18,7 @@ class BubbleTooltip extends StatelessWidget {
   final String tip;
   final double borderRadius;
   final TextStyle? textStyle;
-  final Color color;
+  final Color? color;
   final EdgeInsetsGeometry? padding;
   final double? top;
   final double? left;
@@ -33,7 +33,7 @@ class BubbleTooltip extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(borderRadius),
-            color: color,
+            color: color ?? SLColor.neutral.shade70,
           ),
           padding: padding,
           child: Text(tip,
@@ -48,7 +48,7 @@ class BubbleTooltip extends StatelessWidget {
           child: SvgPicture.asset(
             'assets/icons/polygon.svg',
             colorFilter: ColorFilter.mode(
-              color,
+              color ?? SLColor.neutral.shade70,
               BlendMode.srcIn,
             ),
           ),
