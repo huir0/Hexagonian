@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog_widgets/textfields/sl_input.dart';
+import 'package:sfaclog_widgets/util/common.dart';
 
 enum ValidateInputType {
   name,
@@ -60,7 +61,14 @@ class ValidateInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        label == '' ? Container() : Text(label),
+        label == ''
+            ? Container()
+            : Text(
+                label,
+                style: SLTextStyle.Text_M_Bold?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
         SLInput(
           hintText: getHintText(),
           fillColor: Colors.transparent,
