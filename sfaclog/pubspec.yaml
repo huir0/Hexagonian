@@ -34,6 +34,8 @@ dependencies:
   equatable: ^2.0.5
   flutter:
     sdk: flutter
+  flutter_markdown: ^0.6.0
+
   flutter_riverpod: ^2.4.9
   flutter_svg: ^2.0.9
   freezed: ^2.4.6
@@ -42,6 +44,7 @@ dependencies:
   google_sign_in: ^6.2.1
   http: ^1.2.0
   json_serializable: ^6.7.1
+  markdown_toolbar: ^0.5.0
   pocketbase: ^0.18.0
   sfaclog_widgets:
     path: ../sfaclog_widgets
