@@ -32,10 +32,10 @@ dependencies:
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.6
   equatable: ^2.0.5
+  fleather: ^1.14.1
   flutter:
     sdk: flutter
   flutter_markdown: ^0.6.0
-
   flutter_riverpod: ^2.4.9
   flutter_svg: ^2.0.9
   freezed: ^2.4.6
@@ -43,6 +43,7 @@ dependencies:
   go_router: ^13.0.1
   google_sign_in: ^6.2.1
   http: ^1.2.0
+  image_picker: ^1.0.7
   json_serializable: ^6.7.1
   markdown_toolbar: ^0.5.0
   pocketbase: ^0.18.0
@@ -65,6 +66,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
     - assets/images/
     - assets/icons/
 
