@@ -71,6 +71,22 @@ class RemoteDataSource {
     }
   }
 
+  Future<void> uploadLog(String tableName, String log, String tagId) async {
+    try {
+      await pb.collection(tableName).update(
+        tagId,
+        files: [
+          http.MultipartFile.fromString(
+            'body',
+            log,
+          ),
+        ],
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<String> getImgURL(String tableName, String recordId, int index) async {
     try {
       String imgUrl = '';

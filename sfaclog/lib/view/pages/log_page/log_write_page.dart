@@ -101,7 +101,9 @@ class _LogWritePageState extends State<LogWritePage> {
                     }
                   }
                   var updatedContents = jsonEncode(data);
-                  print('UpdateContents : $updatedContents');
+                  print('UpdatedContents : $updatedContents');
+                  _remoteDataSource.uploadLog(
+                      'imageTest', updatedContents, logRecordId);
                 } catch (e) {}
               },
               child: const Text('완료'))
