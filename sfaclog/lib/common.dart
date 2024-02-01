@@ -10,6 +10,7 @@ enum SLStyle {
   Display_S_Regular,
   Heading_L_Regular,
   Heading_M_Regular,
+  Heading_M_Bold,
   Heading_S_Bold,
   Heading_S_Medium,
   Heading_S_Regular,
@@ -68,6 +69,10 @@ class SLTextStyle {
   static TextStyle? get Heading_M_Regular => const TextStyle(
         fontSize: _headingM,
         fontWeight: _regular,
+      );
+  static TextStyle? get Heading_M_Bold => const TextStyle(
+        fontSize: _headingM,
+        fontWeight: _bold,
       );
   static TextStyle? get Heading_S_Bold => const TextStyle(
         fontSize: _headingS,
@@ -155,6 +160,8 @@ class SLTextStyle {
         return Heading_L_Regular!;
       case SLStyle.Heading_M_Regular:
         return Heading_M_Regular!;
+      case SLStyle.Heading_M_Bold:
+        return Heading_M_Bold!;
       case SLStyle.Heading_S_Bold:
         return Heading_S_Bold!;
       case SLStyle.Heading_S_Medium:

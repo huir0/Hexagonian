@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 
 class PocketbaseAuth {
   PocketbaseAuth();
@@ -26,7 +26,7 @@ class PocketbaseAuth {
       final authData = await pb.collection('users').authWithOAuth2(
         provider,
         (url) async {
-          await launchUrl(url);
+          //await launchUrl(url);
         },
       );
       return authData;
