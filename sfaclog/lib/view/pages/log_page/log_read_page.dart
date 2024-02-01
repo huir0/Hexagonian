@@ -40,7 +40,6 @@ class _LogReadPageState extends State<LogReadPage> {
   Future<void> _initController() async {
     try {
       var logBody = await _remoteDataSource.getTableData('imageTest');
-      //print(logBody[0].toJson()['body']);
       final result = logBody[0].toJson()['body'];
       final heuristics = ParchmentHeuristics(
         formatRules: [],
