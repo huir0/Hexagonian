@@ -62,7 +62,7 @@ class _SLTabState extends State<SLTab> {
               style: menuStyle,
               duration: kThemeChangeDuration,
               child: widget.menu[index]!);
-          return InkWell(
+          return GestureDetector(
             onTap: () {
               if (widget.onTap != null) {
                 widget.onTap!(index);
