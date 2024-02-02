@@ -5,6 +5,7 @@ class SLTab extends StatefulWidget {
   const SLTab(
       {super.key,
       required this.menu,
+      this.currentIndex,
       this.focusedColor,
       this.width,
       required this.height,
@@ -29,14 +30,22 @@ class SLTab extends StatefulWidget {
   final ScrollPhysics? physics;
   final TextStyle? menuTextStyle;
   final Color? defaultMenuTextColor;
+
   /// 탭바 옆에 공간을 주고 싶을 경우 설정
   final double horizontalMargin;
+  /// 다른 곳으로 이동했다 넘어올 때 그대로 유지하고 싶을 경우 설정
+  final int? currentIndex;
   @override
   State<SLTab> createState() => _SLTabState();
 }
 
 class _SLTabState extends State<SLTab> {
-  int focused = 0;
+  late int focused;
+  @override
+  void initState() {
+    super.initState();
+    focused = widget.currentIndex ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +62,7 @@ class _SLTabState extends State<SLTab> {
           TextStyle? menuStyle;
           menuStyle = widget.menuTextStyle ??
               SLTextStyle.Text_M_Bold?.copyWith(
-                fontFamily: 'Pretendard',
+                  fontFamily: 'Pretendard',
                   color: focused == index
                       ? widget.focusedColor ?? SLColor.primary[100]
                       : widget.defaultMenuTextColor) ??
@@ -73,7 +82,8 @@ class _SLTabState extends State<SLTab> {
             },
             child: Container(
               width: widget.width != null
-                  ? (widget.width! - (widget.horizontalMargin * 2)) / widget.menu.length
+                  ? (widget.width! - (widget.horizontalMargin * 2)) /
+                      widget.menu.length
                   : (MediaQuery.of(context).size.width -
                           (widget.horizontalMargin * 2)) /
                       widget.menu.length,
