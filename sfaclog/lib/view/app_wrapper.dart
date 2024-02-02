@@ -19,7 +19,7 @@ class AppWrapper extends ConsumerWidget {
 
     List<Widget> pages = <Widget>[
       const MainPage(),
-      const CommunityPage(),
+      CommunityPage(),
       const LogPage(),
       const ChattingPage(),
       const MyPage(),
