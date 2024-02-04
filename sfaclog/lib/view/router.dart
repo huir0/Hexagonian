@@ -1,9 +1,12 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
+import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_reply_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_setting_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_thumbnail_page.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
@@ -29,9 +32,22 @@ final router = GoRouter(initialLocation: '/home', routes: [
       builder: (context, state) => const LogReadPage(),
     ),
     GoRoute(
-      path: 'write',
-      builder: (context, state) => const LogWritePage(),
-    ),
+        path: 'write',
+        builder: (context, state) => const LogWritePage(),
+        routes: [
+          GoRoute(
+            path: 'setting',
+            builder: (context, state) => const LogSettingPage(),
+          ),
+          GoRoute(
+            path: 'thumbnail',
+            builder: (context, state) => const LogThumbNailPage(),
+          ),
+          GoRoute(
+            path: 'category',
+            builder: (context, state) => const LogCategoryPage(),
+          ),
+        ]),
     GoRoute(
       path: 'search',
       builder: (context, state) => const LogSearchPage(),

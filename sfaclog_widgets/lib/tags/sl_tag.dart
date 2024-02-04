@@ -8,7 +8,7 @@ class SFACTag extends StatelessWidget {
   final Color backgroundColor;
 
   ///suffixIcon
-  final IconData? prefixIcon;
+  final Icon? prefixIcon;
   final VoidCallback? onPressed;
   const SFACTag(
       {super.key,
@@ -33,7 +33,14 @@ class SFACTag extends StatelessWidget {
           child: IntrinsicWidth(
             child: Row(
               children: [
-                prefixIcon != null ? Icon(prefixIcon) : const SizedBox(),
+                prefixIcon != null
+                    ? Row(children: [
+                        prefixIcon!,
+                        const SizedBox(
+                          width: 8,
+                        )
+                      ])
+                    : const SizedBox(),
                 text,
               ],
             ),
