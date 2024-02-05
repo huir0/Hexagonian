@@ -38,6 +38,17 @@ final router = GoRouter(initialLocation: '/home', routes: [
       },
     ),
     GoRoute(
+      path: 'write',
+      builder: (context, state) => const LogWritePage(),
+    ),
+    GoRoute(
+      path: 'read/:tagId',
+      builder: (context, state) {
+        final tagId = state.pathParameters['tagId'];
+        return LogReadPage(tagId: tagId ?? '');
+      },
+    ),
+    GoRoute(
         path: 'write',
         builder: (context, state) => const LogWritePage(),
         routes: [

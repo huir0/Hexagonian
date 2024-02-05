@@ -1,8 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
+import 'package:sfaclog/view/pages/community_page/com_sideproject_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/card1.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/com_listtile_wiget.dart';
@@ -33,7 +34,12 @@ class _CommunityPageState extends State<CommunityPage> {
             });
 
             if (index == 1) {
-              GoRouter.of(context).go('/sideproject');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ComSidePage(),
+                ),
+              );
             }
           },
           height: 42,
