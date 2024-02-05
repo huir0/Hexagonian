@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
+import 'package:sfaclog/view/pages/community_page/community_read.dart';
+import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
@@ -12,6 +14,7 @@ import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_page.dart';
+import 'package:sfaclog/view/widgets/com_read_wiget/com_read_header_wiget.dart';
 
 final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
@@ -68,6 +71,16 @@ final router = GoRouter(initialLocation: '/home', routes: [
     path: '/signup',
     builder: (context, state) => const JoinPage(),
   ),
+
+  GoRoute(
+    path: '/sideproject',
+    builder: (context, state) => ComSidePage(),
+  ),
+  GoRoute(
+    path: '/readqa',
+    builder: (context, state) => ComReadPage(),
+  ),
+
   // GoRoute(
   //   path: '/mypage',
   //   builder: (context, state) => MyPage(),
