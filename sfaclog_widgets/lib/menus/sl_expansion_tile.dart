@@ -11,6 +11,7 @@ class SLExpansionTile extends StatefulWidget {
     this.icon = Icons.expand_less,
     this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     required this.onChange,
+    this.value,
   });
 
   final String title;
@@ -19,6 +20,7 @@ class SLExpansionTile extends StatefulWidget {
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
   final void Function(bool) onChange;
+  final bool? value;
 
   @override
   State<SLExpansionTile> createState() => _SLExpansionTileState();
@@ -47,7 +49,7 @@ class _SLExpansionTileState extends State<SLExpansionTile> {
             child: Row(
               children: [
                 SLCheckbox(
-                  value: false,
+                  value: widget.value ?? false,
                   onChange: widget.onChange,
                 ),
                 const SizedBox(width: 12),
