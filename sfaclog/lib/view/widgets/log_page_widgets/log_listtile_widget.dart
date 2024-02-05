@@ -1,40 +1,77 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class LogListTileWidget extends StatelessWidget {
+class LogListTileWidget extends StatefulWidget {
+  final dynamic logData;
   const LogListTileWidget({
     super.key,
+    required this.logData,
   });
+
+  @override
+  State<LogListTileWidget> createState() => _LogListTileWidgetState();
+}
+
+class _LogListTileWidgetState extends State<LogListTileWidget> {
+  String? imgUrl;
+  List<Widget> chipList = [];
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  SFACLogModel? logModel;
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  @override
+  void didUpdateWidget(LogListTileWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // logData가 변경되었는지 확인합니다.
+    if (oldWidget.logData != widget.logData) {
+      // logData가 변경된 경우, 데이터 로딩 로직을 재실행합니다.
+      _loadData();
+    }
+  }
+
+  Future<void> _loadData() async {
+    logModel = SFACLogModel.fromJson(jsonDecode(widget.logData.toString()));
+
+    String imageUrl =
+        await _remoteDataSource.getThumbNailURL('log', logModel!.id, 0);
+
+    chipList = List.generate(
+      logModel!.tag.length,
+      (index) {
+        return SFACTag(
+          text: Text(
+            logModel!.tag[index],
+            style:
+                SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+                    .textStyle,
+          ),
+        );
+      },
+    );
+    if (!mounted) return;
+    setState(() {
+      imgUrl = imageUrl;
+    });
+    if (!mounted) return;
+  }
 
   @override
   Widget build(BuildContext context) {
     double listTileW = 313;
     double listTileH = 257;
     double imgH = 157;
-    List<Widget> chipList = [
-      SFACTag(
-        text: Text(
-          '#프론트앤드',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-      SFACTag(
-        text: Text(
-          '#개발자의삶',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-      SFACTag(
-        text: Text(
-          '#백앤드',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-    ];
+
     return SizedBox(
       width: listTileW,
       height: listTileH,
@@ -52,8 +89,8 @@ class LogListTileWidget extends StatelessWidget {
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
                     ),
-                    child: Image.asset(
-                      'assets/images/log_thumbnail_2.png',
+                    child: Image.network(
+                      imgUrl!,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -101,7 +138,7 @@ class LogListTileWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '개발자일상',
+                logModel!.category,
                 style: SLTextStyle(
                         style: SLStyle.Text_XS_Regular,
                         color: SLColor.neutral.shade50)
@@ -110,7 +147,7 @@ class LogListTileWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: Text(
-                  '개발자가 되고 싶은 이유',
+                  logModel!.title,
                   style: SLTextStyle(
                     style: SLStyle.Text_M_Bold,
                   ).textStyle,

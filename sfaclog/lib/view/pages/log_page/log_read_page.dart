@@ -7,6 +7,7 @@ import 'package:fleather/fleather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_appbar_widget.dart';
@@ -15,7 +16,8 @@ import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_header_widge
 import 'package:url_launcher/url_launcher.dart';
 
 class LogReadPage extends StatefulWidget {
-  const LogReadPage({super.key});
+  final String tagId;
+  const LogReadPage({super.key, required this.tagId});
 
   @override
   State<LogReadPage> createState() => _LogReadPageState();
@@ -24,6 +26,7 @@ class LogReadPage extends StatefulWidget {
 class _LogReadPageState extends State<LogReadPage> {
   FleatherController? _controller;
   final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  RecordModel? logData;
   @override
   void initState() {
     super.initState();
@@ -39,8 +42,8 @@ class _LogReadPageState extends State<LogReadPage> {
 
   Future<void> _initController() async {
     try {
-      var logBody = await _remoteDataSource.getTableData('imageTest');
-      final result = logBody[1].toJson()['body'];
+      logData = await _remoteDataSource.getLogData('log', widget.tagId);
+      final logBody = logData!.toJson()['body'];
       final heuristics = ParchmentHeuristics(
         formatRules: [],
         insertRules: [
@@ -49,7 +52,7 @@ class _LogReadPageState extends State<LogReadPage> {
         deleteRules: [],
       ).merge(ParchmentHeuristics.fallback);
       final doc = ParchmentDocument.fromJson(
-        jsonDecode(result),
+        jsonDecode(logBody),
         heuristics: heuristics,
       );
       _controller = FleatherController(document: doc);
@@ -74,7 +77,9 @@ class _LogReadPageState extends State<LogReadPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const LogReadHeaderWidget(),
+                        LogReadHeaderWidget(
+                          title: logData!.toJson()['title'],
+                        ),
                         Divider(
                           height: 1,
                           color: SLColor.neutral.shade80,

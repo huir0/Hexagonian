@@ -10,7 +10,8 @@ class LogSearchNotifier extends StateNotifier<LogSearchState> {
   Future<void> fetchData() async {
     try {
       RemoteDataSource remoteDataSource = RemoteDataSource();
-      List<dynamic> data = await remoteDataSource.getTableData('skills');
+      List<dynamic> data =
+          await remoteDataSource.getTableData(tableName: 'skills');
       List<SkillModel> skillList =
           data.map((item) => SkillModel.fromJson(item.toJson())).toList();
       if (skillList.isNotEmpty) {

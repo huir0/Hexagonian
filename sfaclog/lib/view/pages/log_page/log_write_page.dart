@@ -30,13 +30,19 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
-  final RemoteDataSource _remoteDataSource = RemoteDataSource();
   final SFACLogModel _logModel = SFACLogModel(
+      id: '',
+      collectionId: '',
+      collectionName: '',
+      created: '',
+      expand: '',
+      favorite: 0,
+      updated: '',
       title: '',
       category: '선택 안함',
       body: '',
-      imgList: [],
-      thumbNail: '',
+      images: [],
+      thumbnail: '',
       public: '',
       tag: [],
       user: '',
@@ -88,43 +94,10 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
                 SFACLogModel newValue = _logModel.copyWith(
                     title: _headerController.value.text,
                     body: contents,
-                    imgList: imageList,
+                    images: imageList,
                     tag: tagList);
-                print(newValue.body);
                 ref.read(logwriteProvider.notifier).setLog(newValue);
                 context.push('/log/write/setting');
-                // try {
-                //   String logRecordId = '';
-                //   if (imageList.isNotEmpty) {
-                //     for (int i = 0; i < imageList.length; i++) {
-                //       var imageItem = imageList[i];
-                //       //이미지 업로드
-                //       logRecordId = await _remoteDataSource.uploadFile(
-                //           'imageTest', imageItem['insert']['source'], 'Test2');
-                //       if (logRecordId != '') {
-                //         //기존 Source의 Path를 Local Path ==> Network Path로 변경
-                //         String url = await _remoteDataSource.getImgURL(
-                //             'imageTest', logRecordId, i);
-                //         for (var item in data) {
-                //           var insertData = item['insert'];
-                //           if (insertData is Map<String, dynamic> &&
-                //               insertData['_type'] == 'image' &&
-                //               insertData['source'] ==
-                //                   imageItem['insert']['source']) {
-                //             insertData['source'] = url;
-                //             break;
-                //           }
-                //         }
-                //       }
-                //     }
-                //     var updatedContents = jsonEncode(data);
-                //     _remoteDataSource.uploadLogWithImg(
-                //         'imageTest', updatedContents, logRecordId);
-                //   } else {
-                //     _remoteDataSource.uploadLog(
-                //         'imageTest', contents, logRecordId, 'Test');
-                //   }
-                // } catch (e) {}
               },
               child: const Text('완료'))
         ],
@@ -269,7 +242,7 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
                             onSubmitted: (value) {
                               if (value.isNotEmpty) {
                                 setState(() {
-                                  tagList.add(value);
+                                  tagList.add('#$value');
                                   _tagController.clear();
                                 });
                               }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -9,10 +10,8 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/view/widgets/common_widget.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
-import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_state.dart';
-import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
-import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogSettingPage extends ConsumerStatefulWidget {
   const LogSettingPage({super.key});
@@ -33,10 +32,6 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
   int selectedThumbNailIndex = -1;
   int selectedPublicIndex = -1;
   Image? thumbNailImg;
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<Image> thumbNailImages(String imgPath) async {
     File file = File(imgPath);
@@ -63,13 +58,35 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
         actions: [
           TextButton(
               onPressed: () async {
+                List<String> imgUrlList = [];
                 var tagId = await remoteDataSource.uploadThumbNail(
-                    'log',
-                    thumbNailList[selectedThumbNailIndex]['url'],
-                    state.logModel!.title,
-                    'thumbnail');
+                  'log',
+                  thumbNailList[selectedThumbNailIndex]['url'],
+                  state.logModel!.title,
+                );
+                if (state.logModel!.images.isNotEmpty) {
+                  imgUrlList = await remoteDataSource.uploadFile(
+                      'log', state.logModel!, tagId);
+                  // logModel의 body를 파싱하여 List<dynamic>으로 변환합니다.
+                  List<dynamic> body = jsonDecode(state.logModel!.body);
+                  int imgUrlIndex = 0;
+                  for (var item in body) {
+                    if (item['insert'] is Map<String, dynamic> &&
+                        item['insert']['_type'] == 'image') {
+                      // _type이 image인 항목의 source를 새로운 값으로 업데이트합니다.
+                      if (imgUrlIndex < imgUrlList.length) {
+                        item['insert']['source'] = imgUrlList[imgUrlIndex++];
+                      }
+                    }
+                  }
+                  var convertedBody = jsonEncode(body);
+                  var newLogData =
+                      state.logModel!.copyWith(body: convertedBody);
+                  ref.read(logwriteProvider.notifier).setLog(newLogData);
+                  print(state.logModel!.body);
+                  print(body);
+                }
                 await remoteDataSource.uploadLog('log', state.logModel!, tagId);
-                print(state.logModel);
               },
               child: const Text('게시'))
         ],
@@ -129,107 +146,36 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                     height: 22,
                     width: 320,
                     child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          bool isSelected = selectedPublicIndex == index;
-                          return Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (selectedPublicIndex == index) {
-                                    selectedPublicIndex = -1;
-                                  } else {
-                                    selectedPublicIndex = index;
-                                  }
-                                  setState(() {});
-                                },
-                                child: SLCheckbox(
-                                  onChange: (value) {
-                                    if (isSelected) {
-                                      publicOptionList[index]['value'] = value;
-                                    } else {
-                                      value = false;
-                                    }
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return LogCheckbox(
+                          isChecked: publicOptionList[index]['value'],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              for (int i = 0;
+                                  i < publicOptionList.length;
+                                  i++) {
+                                publicOptionList[i]['value'] = i == index;
+                              }
+                              selectedPublicIndex = value == true ? index : -1;
+                            });
 
-                                    setState(() {});
-                                    SFACLogModel newState = state.logModel!
-                                        .copyWith(
-                                            public: publicOptionList[index]
-                                                ['tableValue']);
-                                    ref
-                                        .read(logwriteProvider.notifier)
-                                        .setLog(newState);
-                                  },
-                                  value: false,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                publicOptionList[index]['option'],
-                                style: SLTextStyle(
-                                        style: SLStyle.Text_M_Medium,
-                                        color: SLColor.neutral.shade60)
-                                    .textStyle,
-                              ),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            width: 34,
-                          );
-                        },
-                        itemCount: publicOptionList.length),
+                            SFACLogModel newState = state.logModel!.copyWith(
+                                public: value == true
+                                    ? publicOptionList[index]['tableValue']
+                                    : '');
+                            ref
+                                .read(logwriteProvider.notifier)
+                                .setLog(newState);
+                          },
+                          label: publicOptionList[index]['option'],
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 34),
+                      itemCount: publicOptionList.length,
+                    ),
                   )
-
-                  // Row(
-                  //   children: [
-                  //     SLCheckbox(
-                  //       onChange: (value) {
-                  //         setState(() {
-                  //           publicOption = value ? 'public' : '';
-                  //         });
-                  //         SFACLogModel newState =
-                  //             state.logModel!.copyWith(public: publicOption);
-                  //         ref.read(logwriteProvider.notifier).setLog(newState);
-                  //       },
-                  //       value: publicOption == 'public',
-                  //     ),
-                  //     const SizedBox(
-                  //       width: 4,
-                  //     ),
-                  //     Text(
-                  //       '전체 공개',
-                  //       style: SLTextStyle(
-                  //               style: SLStyle.Text_M_Medium,
-                  //               color: SLColor.neutral.shade60)
-                  //           .textStyle,
-                  //     ),
-                  //     const SizedBox(
-                  //       width: 34,
-                  //     ),
-                  //     SLCheckbox(
-                  //       onChange: (value) {
-                  //         setState(() {
-                  //           publicOption = value ? 'private' : '';
-                  //         });
-                  //         SFACLogModel newState =
-                  //             state.logModel!.copyWith(public: publicOption);
-                  //         ref.read(logwriteProvider.notifier).setLog(newState);
-                  //       },
-                  //       value: publicOption == 'private',
-                  //     ),
-                  //     Text(
-                  //       '비공개',
-                  //       style: SLTextStyle(
-                  //               style: SLStyle.Text_M_Medium,
-                  //               color: SLColor.neutral.shade60)
-                  //           .textStyle,
-                  //     ),
-                  //   ],
-                  // )
                 ],
               ),
               const SizedBox(
@@ -247,7 +193,7 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
               ),
               Column(
                 children: [
-                  state.logModel!.imgList.isNotEmpty
+                  state.logModel!.images.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 16),
                           child: GestureDetector(
@@ -258,8 +204,7 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                                 final image =
                                     await thumbNailImages(value.toString());
                                 setState(() {
-                                  thumbNailImg =
-                                      image; // 이미지 로드 결과를 thumbNailImg에 저장합니다.
+                                  thumbNailImg = image;
                                 });
                               });
                             },
@@ -329,33 +274,6 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                       );
                     },
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(bottom: 16),
-                  //   child: GestureDetector(
-                  //     child: Container(
-                  //       width: 313,
-                  //       height: 157,
-                  //       decoration: BoxDecoration(
-                  //         color: SLColor.neutral.shade80,
-                  //         borderRadius: const BorderRadius.all(
-                  //           Radius.circular(10),
-                  //         ),
-                  //       ),
-                  //       child: Image.asset('assets/images/log_thumbnail_3.png'),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   width: 313,
-                  //   height: 157,
-                  //   decoration: BoxDecoration(
-                  //     color: SLColor.neutral.shade80,
-                  //     borderRadius: const BorderRadius.all(
-                  //       Radius.circular(10),
-                  //     ),
-                  //   ),
-                  //   child: Image.asset('assets/images/log_thumbnail_4.png'),
-                  // )
                 ],
               )
             ],

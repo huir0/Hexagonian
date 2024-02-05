@@ -40,7 +40,7 @@ class _LogThumbNailPageState extends ConsumerState<LogThumbNailPage> {
         actions: [
           TextButton(
               onPressed: () {
-                context.pop(state.logModel!.imgList[selectedThumbNailIndex]
+                context.pop(state.logModel!.images[selectedThumbNailIndex]
                     ['insert']['source']);
               },
               child: const Text('확인'))
@@ -54,11 +54,11 @@ class _LogThumbNailPageState extends ConsumerState<LogThumbNailPage> {
             onTap: () {},
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: state.logModel!.imgList.length,
+              itemCount: state.logModel!.images.length,
               itemBuilder: (context, index) {
                 bool isSelected = selectedThumbNailIndex == index;
                 return FutureBuilder<Widget>(
-                  future: thumbNailImages(state.logModel!.imgList[index]
+                  future: thumbNailImages(state.logModel!.images[index]
                       ['insert']['source']), // 비동기 함수 호출
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
