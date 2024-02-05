@@ -3,37 +3,29 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
-class UserInfo extends Equatable {
+class UserModel extends Equatable {
   final String? id;
   final String? username;
   final String? email;
   final String? name;
-  final DateTime? created;
-  final DateTime? updated;
-  const UserInfo({
+  const UserModel({
     this.id,
     this.username,
     this.email,
     this.name,
-    this.created,
-    this.updated,
   });
 
-  UserInfo copyWith({
+  UserModel copyWith({
     String? id,
     String? username,
     String? email,
     String? name,
-    DateTime? created,
-    DateTime? updated,
   }) {
-    return UserInfo(
+    return UserModel(
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
       name: name ?? this.name,
-      created: created ?? this.created,
-      updated: updated ?? this.updated,
     );
   }
 
@@ -43,30 +35,26 @@ class UserInfo extends Equatable {
       'username': username,
       'email': email,
       'name': name,
-      'created': created?.millisecondsSinceEpoch,
-      'updated': updated?.millisecondsSinceEpoch,
     };
   }
 
-  factory UserInfo.fromMap(Map<String, dynamic> map) {
-    return UserInfo(
-      id: map['id'] != null ? map['id'] as String : null,
-      username: map['username'] != null ? map['username'] as String : null,
-      email: map['email'] != null ? map['email'] as String : null,
-      name: map['name'] != null ? map['name'] as String : null,
-      created: map['created'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['created'] as int)
-          : null,
-      updated: map['updated'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updated'] as int)
-          : null,
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    print('id: ${map['id']}');
+    print('username: ${map['username']}');
+    print('email: ${map['email']}');
+    print('name: ${map['name']}');
+    return UserModel(
+      id: map['id'] as String?, // null일 경우도 허용
+      username: map['username'] as String?,
+      email: map['email'] as String?,
+      name: map['name'] as String?,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserInfo.fromJson(String source) =>
-      UserInfo.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool get stringify => true;
@@ -78,8 +66,6 @@ class UserInfo extends Equatable {
       username,
       email,
       name,
-      created,
-      updated,
     ];
   }
 }
