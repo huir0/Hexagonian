@@ -21,7 +21,7 @@ class UserState extends Equatable {
     UserStatus? userStatus,
   }) {
     return const UserState(
-      userInfo: null,
+      userInfo: UserInfo(),
       userStatus: UserStatus.init,
     );
   }
