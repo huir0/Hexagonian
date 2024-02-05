@@ -9,7 +9,7 @@ class JoinPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onboardingState = ref.read(onboardingProvider);
+    final onboardingState = ref.watch(onboardingProvider);
 
     int curIndex = onboardingState.currentPage;
     // int curIndex = 4;
@@ -21,10 +21,7 @@ class JoinPage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(
           horizontal: 24,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: ListView(
           children: [
             const SizedBox(height: 52),
             LinearProgressIndicator(
@@ -35,25 +32,10 @@ class JoinPage extends ConsumerWidget {
             ),
             const SizedBox(height: 34),
             IndexedStack(
-              index: curIndex,
+              key: ValueKey<int>(onboardingState.currentPage),
+              index: onboardingState.currentPage,
               children: joinSections,
             ),
-            // const Spacer(),
-            // SLButton(
-            //   text: curIndex == joinSections.length - 1 ? '스팩로그 시작하기' : '다음',
-            //   isActive: onboardingState.isButtonEnabled,
-            //   onTap: () {
-            //     ref.read(onboardingProvider.notifier).setButtonEnabled(true);
-            //   },
-            // ),
-            // onboardingState.isButtonEnabled
-            //     ? () {
-            //         ref
-            //             .read(onboardingProvider.notifier)
-            //             .setButtonEnabled(true);
-            //       }
-            //     : null,
-            // const SizedBox(height: 27),
           ],
         ),
       ),
