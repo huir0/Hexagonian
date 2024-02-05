@@ -16,11 +16,15 @@ class ValidateInput extends StatelessWidget {
     this.controller,
     required this.type,
     this.validator,
+    this.onSaved,
+    this.autovalidateMode,
   });
 
   final ValidateInputType type;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final FormFieldSetter? onSaved;
+  final AutovalidateMode? autovalidateMode;
 
   String getLabel() {
     switch (type) {
@@ -44,7 +48,7 @@ class ValidateInput extends StatelessWidget {
       case ValidateInputType.email:
         return '이메일을 입력해 주세요.';
       case ValidateInputType.emailConfirm:
-        return '이메일 주소를 입력해 주세요.';
+        return '인증번호를 입력해주세요.';
       case ValidateInputType.password:
         return '비밀번호를 입력해 주세요.';
       case ValidateInputType.passwordConfirm:
@@ -70,6 +74,8 @@ class ValidateInput extends StatelessWidget {
                 ),
               ),
         SLInput(
+          autovalidateMode: autovalidateMode,
+          onSaved: onSaved,
           hintText: getHintText(),
           fillColor: Colors.transparent,
           controller: controller,

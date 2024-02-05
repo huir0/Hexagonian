@@ -27,6 +27,8 @@ class SLInput extends StatefulWidget {
     this.contentPadding,
     this.counterStyle,
     this.suffix,
+    this.onSaved,
+    this.autovalidateMode,
   });
   final String? hintText;
   final TextStyle? hintStyle;
@@ -46,6 +48,8 @@ class SLInput extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
   final TextStyle? counterStyle;
   final Widget? suffix;
+  final FormFieldSetter? onSaved;
+  final AutovalidateMode? autovalidateMode;
 
   @override
   State<SLInput> createState() => _SLInputState();
@@ -105,6 +109,11 @@ class _SLInputState extends State<SLInput> {
     }
 
     return TextFormField(
+      onSaved: (newValue) {
+        widget.onSaved!(newValue);
+        // print(newValue);
+      },
+      autovalidateMode: widget.autovalidateMode,
       maxLines: widget.maxLines,
       controller: widget.controller,
       obscureText: widget.obscureText,
@@ -130,13 +139,13 @@ class _SLInputState extends State<SLInput> {
         border: inputBorder,
         enabledBorder: inputBorder,
         // counter
-        counterText: widget.maxLength != null
-            ? '${widget.controller!.text.length}/${widget.maxLength} 자'
-            : null,
-        counterStyle: widget.counterStyle ??
-            SLTextStyle.Text_S_Regular?.copyWith(
-              color: SLColor.neutral.shade50,
-            ),
+        // counterText: widget.maxLength != null
+        //     ? '${widget.controller!.text.length}/${widget.maxLength} 자'
+        //     : null,
+        // counterStyle: widget.counterStyle ??
+        //     SLTextStyle.Text_S_Regular?.copyWith(
+        //       color: SLColor.neutral.shade50,
+        //     ),
         // error style
         errorBorder: inputErrorBorder,
         focusedErrorBorder: inputErrorBorder,
@@ -145,6 +154,22 @@ class _SLInputState extends State<SLInput> {
         ),
       ),
       validator: widget.validator,
+      maxLength: widget.maxLength,
+      buildCounter: widget.maxLength != null
+          ? (context, {required currentLength, required isFocused, maxLength}) {
+              return Container(
+                child: Text(
+                  '${currentLength ?? 0}/${maxLength ?? 0} 자',
+                  style: widget.counterStyle ??
+                      SLTextStyle.Text_S_Regular?.copyWith(
+                        color: isFocused
+                            ? SLColor.primary
+                            : SLColor.neutral.shade50,
+                      ),
+                ),
+              );
+            }
+          : null,
     );
   }
 }
