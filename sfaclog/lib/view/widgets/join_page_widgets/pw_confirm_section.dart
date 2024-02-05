@@ -65,8 +65,7 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
         Form(
           key: formKey,
           onChanged: () {
-            if (formKey.currentState!.validate() &&
-                agreementState.contains('all')) {
+            if (formKey.currentState!.validate()) {
               onboardingNotifier.setButtonEnabled(true);
             } else {
               onboardingNotifier.setButtonEnabled(false);
@@ -114,9 +113,11 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
                 color: SLColor.neutral,
                 onChange: (newValue) {
                   if (newValue) {
-                    agreementState.add('all');
+                    agreementState = ['all'];
+                    setState(() {});
                   } else {
-                    agreementState.clear();
+                    agreementState = [];
+                    setState(() {});
                   }
                 },
                 children: [
@@ -140,24 +141,26 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
         ),
         SLButton(
           text: '다음',
-          isActive: onboardingState.isButtonEnabled,
-          onTap: onboardingState.isButtonEnabled
-              ? () async {
-                  try {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                      onboardingNotifier.uploadPasswordAndTerms(
-                        password: password,
-                        passwordConfirm: passwordConfirm,
-                        terms: agreementState,
-                      );
+          isActive:
+              onboardingState.isButtonEnabled && agreementState.contains('all'),
+          onTap:
+              onboardingState.isButtonEnabled && agreementState.contains('all')
+                  ? () async {
+                      try {
+                        if (formKey.currentState!.validate()) {
+                          formKey.currentState!.save();
+                          onboardingNotifier.uploadPasswordAndTerms(
+                            password: password,
+                            passwordConfirm: passwordConfirm,
+                            terms: agreementState,
+                          );
+                        }
+                        onboardingNotifier.moveNextSection();
+                      } catch (e) {
+                        print(e);
+                      }
                     }
-                    onboardingNotifier.moveNextSection();
-                  } catch (e) {
-                    print(e);
-                  }
-                }
-              : null,
+                  : null,
         ),
       ],
     );
@@ -191,7 +194,9 @@ class _buildExpansionChildState extends State<_buildExpansionChild> {
           title: widget.terms[index + 1],
           icon: Icons.chevron_right,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-          onChange: widget.onChange,
+          onChange: (newValue) {
+            widget.onChange(newValue);
+          },
           value: widget.value,
         );
       },
