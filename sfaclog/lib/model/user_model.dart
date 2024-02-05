@@ -39,12 +39,8 @@ class UserModel extends Equatable {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
-    print('id: ${map['id']}');
-    print('username: ${map['username']}');
-    print('email: ${map['email']}');
-    print('name: ${map['name']}');
     return UserModel(
-      id: map['id'] as String?, // null일 경우도 허용
+      id: map['id'] as String?,
       username: map['username'] as String?,
       email: map['email'] as String?,
       name: map['name'] as String?,
