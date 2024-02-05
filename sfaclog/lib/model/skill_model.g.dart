@@ -9,10 +9,10 @@ part of 'skill_model.dart';
 _$SkillModelImpl _$$SkillModelImplFromJson(Map<String, dynamic> json) =>
     _$SkillModelImpl(
       id: json['id'] as String,
-      created: json['created'] as String,
-      updated: json['updated'] as String,
-      collectionId: json['collectionId'] as String,
-      collectionName: json['collectionName'] as String,
+      created: json['created'] as String?,
+      updated: json['updated'] as String?,
+      collectionId: json['collectionId'] as String?,
+      collectionName: json['collectionName'] as String?,
       name: json['name'] as String,
     );
 
