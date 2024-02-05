@@ -27,9 +27,10 @@ class UserInfoNotifier extends StateNotifier<UserState> {
         passwordConfirm: passwordConfirm,
       );
 
-      String id = result.id; //@todo: id가 null로 들어오는 에러 발생. 다른 값은 제대로 잘 들어온다.
-      print(id);
-      UserModel user = UserModel.fromMap(result.data);
+      UserModel user = UserModel.fromMap({
+        'id': result.id,
+        ...result.data,
+      });
 
       state = state.copyWith(
         userInfo: state.userInfo!.copyWith(
@@ -37,8 +38,6 @@ class UserInfoNotifier extends StateNotifier<UserState> {
         ), // userInfo의 user만 세팅,
         userStatus: UserStatus.success,
       );
-
-      print('userInfo: ${state.userInfo}');
     } catch (e) {
       state = state.copyWith(userStatus: UserStatus.error);
       rethrow;
@@ -50,8 +49,7 @@ class UserInfoNotifier extends StateNotifier<UserState> {
     String? nickname,
     required List<String> agreement,
     List<SkillModel>? skill,
-    required String userModelId,
-    // required UserModel userModel,
+    required String userModel,
     String? picture,
     String? propose_state,
   }) async {
@@ -64,8 +62,7 @@ class UserInfoNotifier extends StateNotifier<UserState> {
         picture: picture,
         skill: skill,
         propose_state: propose_state,
-        user: userModelId,
-        // user: userModel,
+        user: userModel,
       );
 
       UserInfo user = UserInfo.fromJson(result.toJson());
