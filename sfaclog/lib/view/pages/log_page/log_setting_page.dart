@@ -1,348 +1,285 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:fleather/fleather.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:markdown_toolbar/markdown_toolbar.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:parchment_delta/parchment_delta.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/view/widgets/common_widget.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
-import 'package:sfaclog_widgets/chips/sl_chip.dart';
-import 'package:sfaclog_widgets/tags/sl_tag.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class LogWritePage extends ConsumerStatefulWidget {
-  const LogWritePage({super.key});
+class LogSettingPage extends ConsumerStatefulWidget {
+  const LogSettingPage({super.key});
 
   @override
-  ConsumerState<LogWritePage> createState() => _LogWritePageState();
+  ConsumerState<LogSettingPage> createState() => _LogSettingPageState();
 }
 
-class _LogWritePageState extends ConsumerState<LogWritePage> {
-  final FocusNode _focusNode = FocusNode();
-  final TextEditingController _headerController = TextEditingController();
-  final TextEditingController _tagController = TextEditingController();
-  final SFACLogModel _logModel = SFACLogModel(
-      id: '',
-      collectionId: '',
-      collectionName: '',
-      created: '',
-      expand: '',
-      favorite: 0,
-      updated: '',
-      title: '',
-      category: '선택 안함',
-      body: '',
-      images: [],
-      thumbnail: '',
-      public: '',
-      tag: [],
-      user: '',
-      view: 0,
-      like: 0);
-  FleatherController? _controller;
-  bool editorFocused = false;
-  List<String> tagList = [];
-  @override
-  void initState() {
-    super.initState();
-    if (kIsWeb) BrowserContextMenu.disableContextMenu();
-    _initController();
-  }
+class _LogSettingPageState extends ConsumerState<LogSettingPage> {
+  List publicOptionList = [
+    {'id': 0, 'value': false, 'option': '전체 공개', 'tableValue': 'public'},
+    {'id': 1, 'value': false, 'option': '비공개', 'tableValue': 'private'},
+  ];
+  List thumbNailList = [
+    {'id': 0, 'url': 'assets/images/log_thumbnail_3.png'},
+    {'id': 1, 'url': 'assets/images/log_thumbnail_4.png'}
+  ];
+  int selectedThumbNailIndex = -1;
+  int selectedPublicIndex = -1;
+  Image? thumbNailImg;
 
-  @override
-  void dispose() {
-    super.dispose();
-    if (kIsWeb) BrowserContextMenu.enableContextMenu();
-  }
-
-  Future<void> _initController() async {
-    try {
-      _controller = FleatherController();
-    } catch (err, st) {
-      print('Cannot read welcome.json: $err\n$st');
+  Future<Image> thumbNailImages(String imgPath) async {
+    File file = File(imgPath);
+    Uint8List imgData;
+    if (await file.exists()) {
+      imgData = await file.readAsBytes();
+    } else {
+      throw Exception('File does not exist');
     }
-    setState(() {});
+
+    return Image.memory(imgData);
   }
 
   @override
   Widget build(BuildContext context) {
+    var state = ref.watch(logwriteProvider);
+
+    final RemoteDataSource remoteDataSource = RemoteDataSource();
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: const Text('로그 쓰기'),
+        title: const Text('로그 설정'),
         centerTitle: true,
         actions: [
           TextButton(
               onPressed: () async {
-                var contents = jsonEncode(_controller!.document);
-                List<dynamic> data = json.decode(contents);
-                //이미지 유무 체크
-                List<dynamic> imageList = data.where((item) {
-                  var insertData = item['insert'];
-                  return insertData is Map<String, dynamic> &&
-                      insertData['_type'] == 'image';
-                }).toList();
-                SFACLogModel newValue = _logModel.copyWith(
-                    title: _headerController.value.text,
-                    body: contents,
-                    images: imageList,
-                    tag: tagList);
-                ref.read(logwriteProvider.notifier).setLog(newValue);
-                context.push('/log/write/setting');
+                List<String> imgUrlList = [];
+                var tagId = await remoteDataSource.uploadThumbNail(
+                  'log',
+                  thumbNailList[selectedThumbNailIndex]['url'],
+                  state.logModel!.title,
+                );
+                if (state.logModel!.images.isNotEmpty) {
+                  imgUrlList = await remoteDataSource.uploadFile(
+                      'log', state.logModel!, tagId);
+                  // logModel의 body를 파싱하여 List<dynamic>으로 변환합니다.
+                  List<dynamic> body = jsonDecode(state.logModel!.body);
+                  int imgUrlIndex = 0;
+                  for (var item in body) {
+                    if (item['insert'] is Map<String, dynamic> &&
+                        item['insert']['_type'] == 'image') {
+                      // _type이 image인 항목의 source를 새로운 값으로 업데이트합니다.
+                      if (imgUrlIndex < imgUrlList.length) {
+                        item['insert']['source'] = imgUrlList[imgUrlIndex++];
+                      }
+                    }
+                  }
+                  var convertedBody = jsonEncode(body);
+                  var newLogData =
+                      state.logModel!.copyWith(body: convertedBody);
+                  ref.read(logwriteProvider.notifier).setLog(newLogData);
+                  print(state.logModel!.body);
+                  print(body);
+                }
+                await remoteDataSource.uploadLog('log', state.logModel!, tagId);
               },
-              child: const Text('완료'))
+              child: const Text('게시'))
         ],
       ),
-      body: _controller == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (editorFocused)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FleatherToolbar.basic(
-                        leading: [
-                          InkWell(
-                            onTap: () async {
-                              final picker = ImagePicker();
-                              final image = await picker.pickImage(
-                                  source: ImageSource.gallery);
-                              if (image != null) {
-                                // await _remoteDataSource.uploadFile(
-                                //     'imageTest', image, '게시판');
-
-                                // print(url);
-                                final selection = _controller!.selection;
-                                _controller!.replaceText(
-                                  selection.baseOffset,
-                                  selection.extentOffset - selection.baseOffset,
-                                  EmbeddableObject('image',
-                                      inline: false,
-                                      data: {
-                                        'source_type': kIsWeb ? 'url' : 'file',
-                                        'source': image.path,
-                                      }),
-                                );
-                                _controller!.replaceText(
-                                  selection.baseOffset + 1,
-                                  0,
-                                  '\n',
-                                  selection: TextSelection.collapsed(
-                                      offset: selection.baseOffset + 2),
-                                );
-                              }
-                            },
-                            child: const Icon(Icons.picture_as_pdf),
-                          ),
-                        ],
-                        controller: _controller!,
-                      ),
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      Divider(height: 1, color: Colors.grey.shade200),
-                    ],
-                  )
-                else
-                  const SizedBox(
-                    height: 0,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '카테고리 설정',
+                    style: SLTextStyle(
+                            style: SLStyle.Text_L_Bold,
+                            color: SLColor.neutral.shade10)
+                        .textStyle,
                   ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextField(
-                    controller: _headerController,
-                    cursorColor: Colors.white,
-                    decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 1, color: SLColor.neutral.shade50),
+                  InkWell(
+                    onTap: () {
+                      context.push('/log/write/category');
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          state.logModel!.category,
+                          style: SLTextStyle(
+                                  style: SLStyle.Text_M_Medium,
+                                  color: SLColor.neutral.shade60)
+                              .textStyle,
                         ),
-                        hintText: '제목을 입력하세요.',
-                        hintStyle: SLTextStyle(
-                                style: SLStyle.Heading_S_Medium,
-                                color: SLColor.neutral.shade60)
-                            .textStyle),
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Expanded(
-                  child: FocusScope(
-                    child: Focus(
-                      onFocusChange: (focus) {
-                        editorFocused = focus;
-                        setState(() {});
-                      },
-                      child: FleatherField(
-                        decoration: const InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 24),
-                            hintText: '내용을 입력하세요.',
-                            border: InputBorder.none),
-                        controller: _controller!,
-                        focusNode: _focusNode,
-                        onLaunchUrl: _launchUrl,
-                        embedBuilder: _embedBuilder,
-                        spellCheckConfiguration: SpellCheckConfiguration(
-                            spellCheckService: DefaultSpellCheckService(),
-                            misspelledSelectionColor: Colors.red,
-                            misspelledTextStyle:
-                                DefaultTextStyle.of(context).style),
-                      ),
+                        const Icon(Icons.arrow_forward_ios_rounded)
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    spacing: 8.0, // 간격
-                    runSpacing: 4.0, // 줄 간격
-                    children: [
-                      ...tagList.map(
-                        (tag) => SFACTag(
-                          text: Text(tag),
-                          prefixIcon: const Icon(
-                            CupertinoIcons.xmark,
-                            size: 10,
-                          ),
-                          backgroundColor: SLColor.primary,
-                          onPressed: () {
-                            setState(() {
-                              tagList.remove(tag);
-                            });
-                          },
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: const Offset(0.0, -8.0),
-                        child: SizedBox(
-                          width: 120, // 최대 너비 설정, 태그 개수에 따라 조정될 수 있음
-                          child: TextField(
-                            style: const TextStyle(fontSize: 12),
-                            controller: _tagController,
-                            decoration: const InputDecoration(
-                              hintStyle: TextStyle(fontSize: 12),
-                              hintText: '태그를 입력하세요.',
-                              border: InputBorder.none, // 테두리 없앰
-                            ),
-                            onSubmitted: (value) {
-                              if (value.isNotEmpty) {
-                                setState(() {
-                                  tagList.add('#$value');
-                                  _tagController.clear();
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '공개설정',
+                    style: SLTextStyle(
+                            style: SLStyle.Text_L_Bold,
+                            color: SLColor.neutral.shade10)
+                        .textStyle,
                   ),
-                ),
-              ],
-            ),
-    );
-  }
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    height: 22,
+                    width: 320,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return LogCheckbox(
+                          isChecked: publicOptionList[index]['value'],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              for (int i = 0;
+                                  i < publicOptionList.length;
+                                  i++) {
+                                publicOptionList[i]['value'] = i == index;
+                              }
+                              selectedPublicIndex = value == true ? index : -1;
+                            });
 
-  Widget _embedBuilder(BuildContext context, EmbedNode node) {
-    if (node.value.type == 'icon') {
-      final data = node.value.data;
-      // Icons.rocket_launch_outlined
-      return Icon(
-        IconData(int.parse(data['codePoint']), fontFamily: data['fontFamily']),
-        color: Color(int.parse(data['color'])),
-        size: 18,
-      );
-    }
-
-    if (node.value.type == 'image') {
-      final sourceType = node.value.data['source_type'];
-      ImageProvider? image;
-      if (sourceType == 'assets') {
-        image = AssetImage(node.value.data['source']);
-      } else if (sourceType == 'file') {
-        image = FileImage(File(node.value.data['source']));
-      } else if (sourceType == 'url') {
-        image = NetworkImage(node.value.data['source']);
-      }
-      if (image != null) {
-        return Padding(
-          // Caret takes 2 pixels, hence not symmetric padding values.
-          padding: const EdgeInsets.only(left: 4, right: 2, top: 2, bottom: 2),
-          child: Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              image: DecorationImage(image: image, fit: BoxFit.cover),
-            ),
+                            SFACLogModel newState = state.logModel!.copyWith(
+                                public: value == true
+                                    ? publicOptionList[index]['tableValue']
+                                    : '');
+                            ref
+                                .read(logwriteProvider.notifier)
+                                .setLog(newState);
+                          },
+                          label: publicOptionList[index]['option'],
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 34),
+                      itemCount: publicOptionList.length,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Text(
+                '썸네일 선택',
+                style: SLTextStyle(
+                        style: SLStyle.Text_L_Bold,
+                        color: SLColor.neutral.shade10)
+                    .textStyle,
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Column(
+                children: [
+                  state.logModel!.images.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: GestureDetector(
+                            onTap: () {
+                              context
+                                  .push('/log/write/thumbnail')
+                                  .then((value) async {
+                                final image =
+                                    await thumbNailImages(value.toString());
+                                setState(() {
+                                  thumbNailImg = image;
+                                });
+                              });
+                            },
+                            child: Container(
+                              width: 313,
+                              height: 157,
+                              decoration: BoxDecoration(
+                                color: SLColor.neutral.shade80,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: const Icon(Icons.add),
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 18,
+                      );
+                    },
+                    shrinkWrap: true,
+                    itemCount: thumbNailList.length,
+                    itemBuilder: (context, index) {
+                      bool isSelected = selectedThumbNailIndex == index;
+                      return GestureDetector(
+                        onTap: () {
+                          if (selectedThumbNailIndex == index) {
+                            selectedThumbNailIndex = -1;
+                          } else {
+                            selectedThumbNailIndex = index;
+                          }
+                          setState(() {});
+                        },
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 313,
+                              height: 157,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Image.asset(thumbNailList[index]['url']),
+                            ),
+                            Container(
+                              width: 313,
+                              height: 157,
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? SLColor.primary.shade80.withOpacity(0.2)
+                                    : SLColor.neutral.shade80.withOpacity(0.2),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                border: isSelected
+                                    ? Border.all(color: SLColor.primary)
+                                    : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              )
+            ],
           ),
-        );
-      }
-    }
-
-    return defaultFleatherEmbedBuilder(context, node);
-  }
-
-  void _launchUrl(String? url) async {
-    if (url == null) return;
-    final uri = Uri.parse(url);
-    final canLaunch = await canLaunchUrl(uri);
-    if (canLaunch) {
-      await launchUrl(uri);
-    }
-  }
-}
-
-/// This is an example insert rule that will insert a new line before and
-/// after inline image embed.
-class ForceNewlineForInsertsAroundInlineImageRule extends InsertRule {
-  @override
-  Delta? apply(Delta document, int index, Object data) {
-    if (data is! String) return null;
-
-    final iter = DeltaIterator(document);
-    final previous = iter.skip(index);
-    final target = iter.next();
-    final cursorBeforeInlineEmbed = _isInlineImage(target.data);
-    final cursorAfterInlineEmbed =
-        previous != null && _isInlineImage(previous.data);
-
-    if (cursorBeforeInlineEmbed || cursorAfterInlineEmbed) {
-      final delta = Delta()..retain(index);
-      if (cursorAfterInlineEmbed && !data.startsWith('\n')) {
-        delta.insert('\n');
-      }
-      delta.insert(data);
-      if (cursorBeforeInlineEmbed && !data.endsWith('\n')) {
-        delta.insert('\n');
-      }
-      return delta;
-    }
-    return null;
-  }
-
-  bool _isInlineImage(Object data) {
-    if (data is EmbeddableObject) {
-      return data.type == 'image' && data.inline;
-    }
-    if (data is Map) {
-      return data[EmbeddableObject.kTypeKey] == 'image' &&
-          data[EmbeddableObject.kInlineKey];
-    }
-    return false;
+        ),
+      ),
+    );
   }
 }

@@ -133,6 +133,7 @@ class ComSidePage extends ConsumerWidget {
                     width: 57,
                     height: 30,
                     text: '전체',
+                    fontSize: 12,
                   )
                 ],
               ),

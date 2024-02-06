@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
+import 'package:sfaclog/view/pages/community_page/%08com_side_read_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_read.dart';
 import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
@@ -90,6 +91,14 @@ final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
     path: '/readqa',
     builder: (context, state) => ComReadPage(),
+  ),
+  GoRoute(
+    path: '/writecom',
+    builder: (context, state) => LogWritePage(),
+  ),
+  GoRoute(
+    path: '/comsideread',
+    builder: (context, state) => ComSideReadPage(),
   ),
 
   // GoRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sfaclog/view/pages/community_page/com_reply_page.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read.appbar.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_card.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_header_wiget.dart';
@@ -30,14 +31,21 @@ class ComReadPage extends StatelessWidget {
                   ComReple(),
                   Divider(height: 1, color: Color(0xFF333333)),
                   Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text('다른 질문 둘러보기'),
+                    padding: EdgeInsets.all(20),
+                    child: Text(
+                      '다른 질문 둘러보기',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                   Container(
                     // 수평적으로 대칭(symmetric)의 마진을 추가 -> 화면 위, 아래에 20픽세의 마진 삽입
                     margin: EdgeInsets.all(20),
                     // 컨테이너의 높이를 200으로 설정
-                    height: 200.0,
+                    height: 160.0,
                     // 리스트뷰 추가
                     child: ListView(
                       // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
@@ -69,9 +77,18 @@ class ComReadPage extends StatelessWidget {
                             height: 39,
                             imagePath: 'assets/images/Rectangle 1 (2).png'),
                         reviselabel(
-                          width: 160,
+                          width: 180,
                           height: 40,
                           text: '답변하기',
+                          fontSize: 14,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ComReplayPage(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

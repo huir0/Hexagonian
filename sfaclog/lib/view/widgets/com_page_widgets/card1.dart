@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog_widgets/labels/log_label.dart';
+import 'package:sfaclog_widgets/labels/sky_label.dart';
 
 class comCard extends StatelessWidget {
   const comCard({super.key});
@@ -180,6 +181,39 @@ class comCard extends StatelessWidget {
               child: Image.asset('assets/images/4.png'),
             ),
           ),
+          Positioned(
+              left: 20,
+              top: 149,
+              child: Row(
+                children: [
+                  reviselabel(
+                    width: 45.3,
+                    height: 20,
+                    text: 'HOT🔥',
+                    fontSize: 8,
+                  ),
+                ],
+              )),
+          Positioned(
+              left: 60,
+              top: 135,
+              child: // SkyLabel(
+
+                  SkyLabel(
+                text: '#Security',
+                width: 52,
+                height: 20,
+              )),
+          Positioned(
+              left: 118,
+              top: 135,
+              child: // SkyLabel(
+
+                  SkyLabel(
+                text: '#Terraform',
+                width: 58,
+                height: 20,
+              )),
         ],
       ),
     );

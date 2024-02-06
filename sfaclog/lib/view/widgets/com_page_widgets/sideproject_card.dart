@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog_widgets/buttons/follow_button.dart';
+import 'package:sfaclog_widgets/labels/log_label.dart';
+import 'package:sfaclog_widgets/labels/sky_label.dart';
 
 class SideProjectCard extends StatelessWidget {
   const SideProjectCard({super.key});
@@ -54,6 +57,50 @@ class SideProjectCard extends StatelessWidget {
                   ],
                 ),
               ),
+              Positioned(
+                  left: 14.92,
+                  top: 149,
+                  child: Row(
+                    children: [
+                      reviselabel(
+                        width: 45.3,
+                        height: 20,
+                        text: 'HOT🔥',
+                        fontSize: 8,
+                      ),
+                    ],
+                  )),
+              Positioned(
+                  left: 57.92,
+                  top: 135,
+                  child: // SkyLabel(
+
+                      SkyLabel(
+                    text: '#Security',
+                    width: 52,
+                    height: 20,
+                  )),
+              Positioned(
+                  left: 115.92,
+                  top: 135,
+                  child: // SkyLabel(
+
+                      SkyLabel(
+                    text: '#Terraform',
+                    width: 58,
+                    height: 20,
+                  )),
+              Positioned(
+                left: 179.92,
+                top: 135,
+                child: // SkyLabel(
+
+                    SkyLabel(
+                  text: '#Terraform',
+                  width: 58,
+                  height: 20,
+                ),
+              ),
             ],
           ),
           Positioned(
@@ -74,15 +121,96 @@ class SideProjectCard extends StatelessWidget {
             ),
           ),
           Positioned(
+            left: 20.92,
+            top: 85,
+            child: Row(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '현재 인원',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Bold,
+                          color: SLColor.primary.shade90,
+                        ).textStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '   기획자',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Medium,
+                          color: Color(0xFF020202),
+                        ).textStyle,
+                      ),
+                      TextSpan(
+                        text: '1 ',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Bold,
+                          color: SLColor.primary.shade90,
+                        ).textStyle,
+                      )
+                    ],
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '• 디자이너',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Medium,
+                          color: Color(0xFF020202),
+                        ).textStyle,
+                      ),
+                      TextSpan(
+                        text: '2',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Bold,
+                          color: SLColor.primary.shade90,
+                        ).textStyle,
+                      )
+                    ],
+                  ),
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: ' • 개발자',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Medium,
+                          color: Color(0xFF020202),
+                        ).textStyle,
+                      ),
+                      TextSpan(
+                        text: '1',
+                        style: SLTextStyle(
+                          style: SLStyle.Text_S_Bold,
+                          color: SLColor.primary.shade90,
+                        ).textStyle,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
               left: 20.92,
-              top: 85,
+              top: 115,
               child: Row(
                 children: [
                   RichText(
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '현재 인원',
+                          text: '모집 기간',
                           style: SLTextStyle(
                             style: SLStyle.Text_S_Bold,
                             color: SLColor.primary.shade90,
@@ -95,59 +223,12 @@ class SideProjectCard extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '   기획자',
+                          text: '   2024. 01. 25',
                           style: SLTextStyle(
                             style: SLStyle.Text_S_Medium,
                             color: Color(0xFF020202),
                           ).textStyle,
                         ),
-                        TextSpan(
-                          text: '1 ',
-                          style: SLTextStyle(
-                            style: SLStyle.Text_S_Bold,
-                            color: SLColor.primary.shade90,
-                          ).textStyle,
-                        )
-                      ],
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '• 디자이너',
-                          style: SLTextStyle(
-                            style: SLStyle.Text_S_Medium,
-                            color: Color(0xFF020202),
-                          ).textStyle,
-                        ),
-                        TextSpan(
-                          text: '2',
-                          style: SLTextStyle(
-                            style: SLStyle.Text_S_Bold,
-                            color: SLColor.primary.shade90,
-                          ).textStyle,
-                        )
-                      ],
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: ' • 개발자',
-                          style: SLTextStyle(
-                            style: SLStyle.Text_S_Medium,
-                            color: Color(0xFF020202),
-                          ).textStyle,
-                        ),
-                        TextSpan(
-                          text: '1',
-                          style: SLTextStyle(
-                            style: SLStyle.Text_S_Bold,
-                            color: SLColor.primary.shade90,
-                          ).textStyle,
-                        )
                       ],
                     ),
                   ),
@@ -155,7 +236,7 @@ class SideProjectCard extends StatelessWidget {
               )),
           Positioned(
             left: 150.92,
-            top: 60,
+            top: -65,
             child: SizedBox(
               width: 171.75,
               child: Image.asset('assets/images/4.png'),

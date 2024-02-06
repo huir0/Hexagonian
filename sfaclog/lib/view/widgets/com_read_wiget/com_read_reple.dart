@@ -113,7 +113,7 @@ class ComReple extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('답글'),
+                InkWell(onTap: () {}, child: Text('답글')),
                 Row(
                   children: [
                     Container(

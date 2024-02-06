@@ -10,6 +10,8 @@ import 'package:sfaclog/view/widgets/com_page_widgets/com_listtile_wiget.dart';
 
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
+final currentPageProvider = StateProvider<int>((ref) => 0);
+
 class CommunityPage extends StatefulWidget {
   @override
   State<CommunityPage> createState() => _CommunityPageState();

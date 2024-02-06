@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog_widgets/labels/log_label.dart';
+import 'package:sfaclog_widgets/tags/sl_tag.dart';
 
-class ComReadCard2 extends StatelessWidget {
-  const ComReadCard2({super.key});
+class ComSideReadCard extends StatelessWidget {
+  const ComSideReadCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +20,32 @@ class ComReadCard2 extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            children: [
+              reviselabel(
+                width: 38,
+                height: 22,
+                text: 'D-21',
+                onPressed: () {},
+                fontSize: 12,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              SFACTag(
+                text: Text(
+                  '#프론트엔드',
+                  style: TextStyle(
+                    color: Color(0xFF666666),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
           Text(
-            'IPTIME 포트포워딩 질문입니다.',
+            '비대면의료 닥터루시드 팀원 모집.',
             style: TextStyle(
               fontSize: 14,
               color: Colors.white,
@@ -36,22 +62,11 @@ class ComReadCard2 extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Text('안녕하세요 저는 의사입니다. 비대면의료 플랫폼 닥터루시드를 출시합니다.본문에\n소개 부분을 보여줄...',
+          Text('안녕하세요 저는 의사입니다. 비대면의료\n플랫폼 닥터루시드를 출시합니다.본문에\n소개 부분을 보여줌',
               style: SLTextStyle(
                 style: SLStyle.Text_S_Medium,
                 color: SLColor.neutral.shade30,
               ).textStyle),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(padding: EdgeInsets.only(top: 28)),
-              Text('답변7',
-                  style: SLTextStyle(
-                    style: SLStyle.Text_XS_Regular,
-                    color: SLColor.neutral.shade50,
-                  ).textStyle),
-            ],
-          ),
         ],
       ),
     );
