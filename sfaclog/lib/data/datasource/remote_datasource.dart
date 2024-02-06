@@ -75,11 +75,16 @@ class RemoteDataSource {
   Future<String> uploadThumbNail(
       String tableName, String imagePath, String title) async {
     String existId = '';
+    List<int> imageBytes = [];
     try {
-      ByteData data = await rootBundle.load(imagePath);
-      List<int> imageBytes = data.buffer.asUint8List();
-      //File imageFile = File(imagePath);
-      //List<int> imageBytes = await imageFile.readAsBytes();
+      if (imagePath.contains('cache')) {
+        File imageFile = File(imagePath);
+        imageBytes = await imageFile.readAsBytes();
+      } else {
+        ByteData data = await rootBundle.load(imagePath);
+        imageBytes = data.buffer.asUint8List();
+      }
+
       existId = await _getExistId(tableName, title);
       if (existId != '') {
         final record = await pb.collection(tableName).update(
@@ -145,21 +150,12 @@ class RemoteDataSource {
     }
   }
 
-  Future<void> uploadLogWithImg(
-      String tableName, String log, String tagId) async {
-    try {
-      await pb.collection(tableName).update(
-        tagId,
-        files: [
-          http.MultipartFile.fromString(
-            'body',
-            log,
-          ),
-        ],
-      );
-    } catch (e) {
-      print(e);
-    }
+  Future<void> updateLogData(
+    String tableName,
+    String tagId,
+    Map<String, dynamic> updates,
+  ) async {
+    await pb.collection(tableName).update(tagId, body: updates);
   }
 
   Future<String> getImgURL(

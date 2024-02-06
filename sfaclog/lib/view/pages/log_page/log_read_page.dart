@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:parchment_delta/parchment_delta.dart';
 import 'package:fleather/fleather.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
@@ -43,6 +40,8 @@ class _LogReadPageState extends State<LogReadPage> {
   Future<void> _initController() async {
     try {
       logData = await _remoteDataSource.getLogData('log', widget.tagId);
+      // 조회수를 업데이트하는 코드를 여기에 추가
+      await _updateViewCount(widget.tagId);
       final logBody = logData!.toJson()['body'];
       final heuristics = ParchmentHeuristics(
         formatRules: [],
@@ -61,6 +60,20 @@ class _LogReadPageState extends State<LogReadPage> {
       _controller = FleatherController();
     }
     setState(() {});
+  }
+
+  Future<void> _updateViewCount(String tagId) async {
+    try {
+      int currentViewCount = logData!.data['view'] ?? 0;
+
+      await _remoteDataSource.updateLogData(
+        'log',
+        tagId,
+        {'view': currentViewCount + 1},
+      );
+    } catch (e) {
+      print("Failed to update view count: $e");
+    }
   }
 
   @override

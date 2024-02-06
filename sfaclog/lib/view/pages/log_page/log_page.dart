@@ -78,13 +78,13 @@ class _LogPageState extends ConsumerState<LogPage> {
                   viewportFraction: 0.725,
                   enlargeCenterPage: true,
                 ),
-                items: List.generate(popularLogState!.length, (index) {
+                items: List.generate(popularLogState?.length ?? 0, (index) {
                   return InkWell(
                       onTap: () {
-                        context.push('/log/read/${popularLogState[index].id}');
+                        context.push('/log/read/${popularLogState?[index].id}');
                       },
                       child: LogPageCardWidget(
-                        logData: popularLogState[index],
+                        logData: popularLogState?[index],
                       ));
                 }).toList(),
               )
@@ -113,40 +113,34 @@ class _LogPageState extends ConsumerState<LogPage> {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '총 ${logModelListState!.length} 로그',
-                style: SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
-              ),
-              // TextButton(
-              //     onPressed: () async {
-              //       List<dynamic>? logData = await ref
-              //           .read(logProvider.notifier)
-              //           .getLogDataOrderBy('-like');
-              //       ref.read(logProvider.notifier).setLog(logData);
-              //       setState(() {});
-              //     },
-              //     child: const Text('변경')),
-              SFACMenuButton(
-                items: optionList,
-                onItemSelected: (value) async {
-                  String orderBy = value == '등록순' ? '-created' : '-like';
-                  List<dynamic>? logData = await ref
-                      .read(logProvider.notifier)
-                      .getLogDataOrderBy(orderBy);
-                  ref.read(logProvider.notifier).setLog(logData);
-                  // UI 업데이트를 위한 setState 호출
-                  setState(() {});
-                },
-              ),
-            ],
-          ),
-        ),
-        logModelListState.isNotEmpty
+        logModelListState?.isNotEmpty ?? false
+            ? Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '총 ${logModelListState!.length} 로그',
+                      style:
+                          SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
+                    ),
+                    SFACMenuButton(
+                      items: optionList,
+                      onItemSelected: (value) async {
+                        String orderBy = value == '등록순' ? '-created' : '-like';
+                        List<dynamic>? logData = await ref
+                            .read(logProvider.notifier)
+                            .getLogDataOrderBy(orderBy);
+                        ref.read(logProvider.notifier).setLog(logData);
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox(),
+        logModelListState?.isNotEmpty ?? false
             ? Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -159,10 +153,16 @@ class _LogPageState extends ConsumerState<LogPage> {
                     );
                   },
                   shrinkWrap: true,
-                  itemCount: logModelListState.length,
+                  itemCount: logModelListState!.length,
                   itemBuilder: (context, index) {
-                    return LogListTileWidget(
-                      logData: logModelListState[index],
+                    return GestureDetector(
+                      onTap: () {
+                        context
+                            .push('/log/read/${logModelListState[index].id}');
+                      },
+                      child: LogListTileWidget(
+                        logData: logModelListState[index],
+                      ),
                     );
                   },
                 ),

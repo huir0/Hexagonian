@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/skill_model.dart';
-import 'package:sfaclog/viewmodel/app_wrapper_viewModel/app_wrapper_state.dart';
 import 'package:sfaclog/viewmodel/log_search_viewmodel/log_search_state.dart';
 
 class LogSearchNotifier extends StateNotifier<LogSearchState> {
