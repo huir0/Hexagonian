@@ -160,7 +160,6 @@ class TopLoggerCard extends StatelessWidget {
                   text1: '팔로우',
                   text2: '팔로우 취소',
                   width: 189,
-                  padding: EdgeInsets.zero,
                 ),
               )
             ],
