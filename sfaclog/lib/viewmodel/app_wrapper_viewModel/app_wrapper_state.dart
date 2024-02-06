@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class AppWrapperState extends Equatable {
   final int page;
   final bool fabVisible;
-  const AppWrapperState({this.page = 0, this.fabVisible = true});
+  const AppWrapperState({this.page = 0, this.fabVisible = false});
 
   AppWrapperState copyWith({
     int? page,
