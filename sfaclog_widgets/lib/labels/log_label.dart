@@ -4,20 +4,22 @@ class reviselabel extends StatelessWidget {
   final String text;
   final double width;
   final double height;
-  final VoidCallback? onPressed; // onPressed 속성 추가
+  final double fontSize; // 추가: fontSize 속성
+  final VoidCallback? onPressed;
 
   const reviselabel({
     Key? key,
     required this.text,
     required this.width,
     this.height = 20,
+    this.fontSize = 14, // 변경: fontSize는 필수로 받도록 수정
     this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
+    return InkWell(
+      onTap: onPressed,
       child: Container(
         height: height,
         width: width,
@@ -42,7 +44,7 @@ class reviselabel extends StatelessWidget {
               text,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: fontSize, // 변경: fontSize 속성 사용
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
                 height: 0.14,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/chatting_page/chatting_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_page.dart';
+import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_page.dart';
@@ -19,7 +20,7 @@ class AppWrapper extends ConsumerWidget {
 
     List<Widget> pages = <Widget>[
       const MainPage(),
-      const CommunityPage(),
+      CommunityPage(),
       const LogPage(),
       const ChattingPage(),
       const MyPage(),

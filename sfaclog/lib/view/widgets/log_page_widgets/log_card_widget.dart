@@ -1,9 +1,53 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class LogPageCardWidget extends StatelessWidget {
-  const LogPageCardWidget({super.key});
+class LogPageCardWidget extends StatefulWidget {
+  final SFACLogModel logData;
+  const LogPageCardWidget({
+    super.key,
+    required this.logData,
+  });
+
+  @override
+  State<LogPageCardWidget> createState() => _LogPageCardWidgetState();
+}
+
+class _LogPageCardWidgetState extends State<LogPageCardWidget> {
+  String? imgUrl;
+  List<Widget> chipList = [];
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    String imageUrl =
+        await _remoteDataSource.getThumbNailURL('log', widget.logData.id, 0);
+    chipList = List.generate(
+      widget.logData.tag.length,
+      (index) {
+        return SFACTag(
+          backgroundColor: SLColor.neutral.shade90,
+          text: Text(
+            widget.logData.tag[index],
+            style:
+                SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
+                    .textStyle,
+          ),
+        );
+      },
+    );
+    setState(() {
+      imgUrl = imageUrl;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,32 +55,6 @@ class LogPageCardWidget extends StatelessWidget {
     double cardH = 200;
     double imgH = 105.5;
 
-    List<Widget> chipList = [
-      SFACTag(
-        backgroundColor: SLColor.neutral.shade90,
-        text: Text(
-          '#프론트앤드',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-      SFACTag(
-        backgroundColor: SLColor.neutral.shade90,
-        text: Text(
-          '#개발자의삶',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-      SFACTag(
-        backgroundColor: SLColor.neutral.shade90,
-        text: Text(
-          '#백앤드',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      )
-    ];
     return SizedBox(
       width: cardW,
       height: cardH,
@@ -44,17 +62,20 @@ class LogPageCardWidget extends StatelessWidget {
         borderRadius: const BorderRadius.all(
           Radius.circular(20),
         ),
-        child: Column(
+        child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             Stack(
               children: [
                 SizedBox(
                   width: cardW,
                   height: imgH,
-                  child: Image.asset(
-                    'assets/images/log_cover.png',
-                    fit: BoxFit.cover,
-                  ),
+                  child: imgUrl != null
+                      ? Image.network(
+                          imgUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : const CircularProgressIndicator(),
                 ),
                 Positioned(
                   left: 16,
@@ -124,7 +145,7 @@ class LogPageCardWidget extends StatelessWidget {
                       height: 8,
                     ),
                     Text(
-                      '앱 개발,누구나 할 수 있어요!',
+                      widget.logData.title,
                       style: SLTextStyle(style: SLStyle.Text_L_Bold).textStyle,
                     ),
                     RichText(

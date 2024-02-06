@@ -3,7 +3,8 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogReadHeaderWidget extends StatelessWidget {
-  const LogReadHeaderWidget({super.key});
+  final String title;
+  const LogReadHeaderWidget({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class LogReadHeaderWidget extends StatelessWidget {
               height: 4,
             ),
             Text(
-              '앱개발, 누구나 할 수 있어요!',
+              title,
               style: SLTextStyle(
                       style: SLStyle.Heading_M_Bold, color: Colors.white)
                   .textStyle,

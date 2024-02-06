@@ -1,9 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
+import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
+import 'package:sfaclog/view/pages/community_page/community_read.dart';
+import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_reply_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_setting_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_upload_done_page.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
@@ -25,13 +31,43 @@ final router = GoRouter(initialLocation: '/home', routes: [
       builder: (context, state) => const LogReplyPage(),
     ),
     GoRoute(
-      path: 'read',
-      builder: (context, state) => const LogReadPage(),
+      path: 'read/:tagId',
+      builder: (context, state) {
+        final tagId = state.pathParameters['tagId'];
+        return LogReadPage(tagId: tagId ?? '');
+      },
     ),
     GoRoute(
       path: 'write',
       builder: (context, state) => const LogWritePage(),
     ),
+    GoRoute(
+      path: 'read/:tagId',
+      builder: (context, state) {
+        final tagId = state.pathParameters['tagId'];
+        return LogReadPage(tagId: tagId ?? '');
+      },
+    ),
+    GoRoute(
+        path: 'write',
+        builder: (context, state) => const LogWritePage(),
+        routes: [
+          GoRoute(
+            path: 'setting',
+            builder: (context, state) => const LogSettingPage(),
+          ),
+          GoRoute(
+            path: 'category',
+            builder: (context, state) => const LogCategoryPage(),
+          ),
+          GoRoute(
+            path: 'upload/:tagId',
+            builder: (context, state) {
+              final tagId = state.pathParameters['tagId'];
+              return LogUploadDonePage(tagId: tagId ?? '');
+            },
+          ),
+        ]),
     GoRoute(
       path: 'search',
       builder: (context, state) => const LogSearchPage(),
@@ -49,6 +85,24 @@ final router = GoRouter(initialLocation: '/home', routes: [
     path: '/signup',
     builder: (context, state) => const JoinPage(),
   ),
+
+  GoRoute(
+    path: '/sideproject',
+    builder: (context, state) => ComSidePage(),
+  ),
+  GoRoute(
+    path: '/readqa',
+    builder: (context, state) => const ComReadPage(),
+  ),
+  GoRoute(
+    path: '/writecom',
+    builder: (context, state) => const LogWritePage(),
+  ),
+  GoRoute(
+    path: '/comsideread',
+    builder: (context, state) => const ComSideReadPage(),
+  ),
+
   // GoRoute(
   //   path: '/mypage',
   //   builder: (context, state) => MyPage(),

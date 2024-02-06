@@ -20,24 +20,26 @@ class SLSheet {
                     topRight: Radius.circular(20))),
             width: width,
             height: height,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 14,
-                ),
-                Container(
-                  height: 5,
-                  width: 36,
-                  decoration: BoxDecoration(
-                      color: SLColor.neutral.shade60,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(100))),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                child
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 14,
+                  ),
+                  Container(
+                    height: 5,
+                    width: 36,
+                    decoration: BoxDecoration(
+                        color: SLColor.neutral.shade60,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(100))),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  child
+                ],
+              ),
             ),
           );
         });

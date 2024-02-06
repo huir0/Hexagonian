@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/log_reply_widgets/log_reply_header_widget.dart';
 import 'package:sfaclog/view/widgets/log_reply_widgets/log_reply_listtile_widget.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';

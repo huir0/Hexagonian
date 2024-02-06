@@ -5,27 +5,48 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:markdown_toolbar/markdown_toolbar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:parchment_delta/parchment_delta.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LogWritePage extends StatefulWidget {
+class LogWritePage extends ConsumerStatefulWidget {
   const LogWritePage({super.key});
 
   @override
-  State<LogWritePage> createState() => _LogWritePageState();
+  ConsumerState<LogWritePage> createState() => _LogWritePageState();
 }
 
-class _LogWritePageState extends State<LogWritePage> {
+class _LogWritePageState extends ConsumerState<LogWritePage> {
   final FocusNode _focusNode = FocusNode();
-  FleatherController? _controller;
   final TextEditingController _headerController = TextEditingController();
+  final TextEditingController _tagController = TextEditingController();
+  final SFACLogModel _logModel = SFACLogModel(
+      id: '',
+      collectionId: '',
+      collectionName: '',
+      created: '',
+      expand: '',
+      favorite: 0,
+      updated: '',
+      title: '',
+      category: '선택 안함',
+      body: '',
+      images: [],
+      thumbnail: '',
+      public: '',
+      tag: [],
+      user: '',
+      view: 0,
+      like: 0);
+  FleatherController? _controller;
   bool editorFocused = false;
-  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  List<String> tagList = [];
   @override
   void initState() {
     super.initState();
@@ -41,22 +62,9 @@ class _LogWritePageState extends State<LogWritePage> {
 
   Future<void> _initController() async {
     try {
-      final result = await rootBundle.loadString('assets/welcome_.json');
-      final heuristics = ParchmentHeuristics(
-        formatRules: [],
-        insertRules: [
-          ForceNewlineForInsertsAroundInlineImageRule(),
-        ],
-        deleteRules: [],
-      ).merge(ParchmentHeuristics.fallback);
-      final doc = ParchmentDocument.fromJson(
-        jsonDecode(result),
-        heuristics: heuristics,
-      );
-      _controller = FleatherController(document: doc);
+      _controller = FleatherController();
     } catch (err, st) {
       print('Cannot read welcome.json: $err\n$st');
-      _controller = FleatherController();
     }
     setState(() {});
   }
@@ -66,100 +74,132 @@ class _LogWritePageState extends State<LogWritePage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: const Text('로그 쓰기'),
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+            onTap: () {
+              context.pop();
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20,
+            )),
+        title: Text(
+          '로그 쓰기',
+          style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
+        ),
         centerTitle: true,
         actions: [
           TextButton(
-              onPressed: () async {
-                var contents = jsonEncode(_controller!.document);
-                print('Contents : $contents');
-                List<dynamic> data = json.decode(contents);
-                List<dynamic> imageList = data.where((item) {
-                  var insertData = item['insert'];
-                  return insertData is Map<String, dynamic> &&
-                      insertData['_type'] == 'image';
-                }).toList();
-                try {
-                  String logRecordId = '';
-                  for (int i = 0; i < imageList.length; i++) {
-                    var imageItem = imageList[i];
-                    logRecordId = await _remoteDataSource.uploadFile(
-                        'imageTest', imageItem['insert']['source'], 'Test2');
-                    if (logRecordId != '') {
-                      String url = await _remoteDataSource.getImgURL(
-                          'imageTest', logRecordId, i);
-                      for (var item in data) {
-                        var insertData = item['insert'];
-                        if (insertData is Map<String, dynamic> &&
-                            insertData['_type'] == 'image' &&
-                            insertData['source'] ==
-                                imageItem['insert']['source']) {
-                          insertData['source'] = url; // 첫 번째 URL을 사용
-                          break;
-                        }
-                      }
-                    }
-                  }
-                  var updatedContents = jsonEncode(data);
-                  print('UpdatedContents : $updatedContents');
-                  _remoteDataSource.uploadLog(
-                      'imageTest', updatedContents, logRecordId);
-                } catch (e) {}
-              },
-              child: const Text('완료'))
+            onPressed: () async {
+              var contents = jsonEncode(_controller!.document);
+              List<dynamic> data = json.decode(contents);
+              //제목이 정상적으로 입력이 되었는가?
+              if (_headerController.value.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SLSnackbar(
+                    contentTextStyle: SLTextStyle(
+                            color: SLColor.primary.shade90,
+                            style: SLStyle.Text_M_Regular)
+                        .textStyle,
+                    description: '제목을 입력해주세요!',
+                    onTap: () {},
+                    imageRadius: 20,
+                  ),
+                );
+                return;
+              }
+              //내용이 정상적으로 입력이 되었는가?
+              if (data[0]["insert"] == '\n') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SLSnackbar(
+                    contentTextStyle: SLTextStyle(
+                            color: SLColor.primary.shade90,
+                            style: SLStyle.Text_M_Regular)
+                        .textStyle,
+                    description: '내용을 입력해주세요!',
+                    onTap: () {},
+                    imageRadius: 20,
+                  ),
+                );
+                return;
+              }
+              //이미지 유무 체크
+              List<dynamic> imageList = data.where((item) {
+                var insertData = item['insert'];
+                return insertData is Map<String, dynamic> &&
+                    insertData['_type'] == 'image';
+              }).toList();
+              SFACLogModel newValue = _logModel.copyWith(
+                  title: _headerController.value.text,
+                  body: contents,
+                  images: imageList,
+                  tag: tagList);
+              ref.read(logwriteProvider.notifier).setLog(newValue);
+              context.push('/log/write/setting');
+            },
+            child: Text(
+              '완료',
+              style: SLTextStyle(
+                      style: SLStyle.Text_L_Regular, color: Colors.white)
+                  .textStyle,
+            ),
+          ),
         ],
       ),
       body: _controller == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (editorFocused)
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FleatherToolbar.basic(
                         leading: [
                           InkWell(
-                              onTap: () async {
-                                final picker = ImagePicker();
-                                final image = await picker.pickImage(
-                                    source: ImageSource.gallery);
-                                if (image != null) {
-                                  // await _remoteDataSource.uploadFile(
-                                  //     'imageTest', image, '게시판');
-
-                                  // print(url);
-                                  final selection = _controller!.selection;
-                                  _controller!.replaceText(
-                                    selection.baseOffset,
-                                    selection.extentOffset -
-                                        selection.baseOffset,
-                                    EmbeddableObject('image',
-                                        inline: false,
-                                        data: {
-                                          'source_type':
-                                              kIsWeb ? 'url' : 'file',
-                                          'source': image.path,
-                                        }),
-                                  );
-                                  _controller!.replaceText(
-                                    selection.baseOffset + 1,
-                                    0,
-                                    '\n',
-                                    selection: TextSelection.collapsed(
-                                        offset: selection.baseOffset + 2),
-                                  );
-                                }
-                              },
-                              child: const Icon(Icons.picture_as_pdf))
+                            onTap: () async {
+                              final picker = ImagePicker();
+                              final image = await picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (image != null) {
+                                final selection = _controller!.selection;
+                                _controller!.replaceText(
+                                  selection.baseOffset,
+                                  selection.extentOffset - selection.baseOffset,
+                                  EmbeddableObject('image',
+                                      inline: false,
+                                      data: {
+                                        'source_type': kIsWeb ? 'url' : 'file',
+                                        'source': image.path,
+                                      }),
+                                );
+                                _controller!.replaceText(
+                                  selection.baseOffset + 1,
+                                  0,
+                                  '\n',
+                                  selection: TextSelection.collapsed(
+                                      offset: selection.baseOffset + 2),
+                                );
+                              }
+                            },
+                            child: const Icon(
+                              Icons.add_a_photo_outlined,
+                              size: 20,
+                            ),
+                          ),
                         ],
                         controller: _controller!,
+                      ),
+                      const SizedBox(
+                        height: 0,
                       ),
                       Divider(height: 1, color: Colors.grey.shade200),
                     ],
                   )
                 else
                   const SizedBox(
-                    height: 20,
+                    height: 0,
                   ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -179,7 +219,7 @@ class _LogWritePageState extends State<LogWritePage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 12,
                 ),
                 Expanded(
                   child: FocusScope(
@@ -205,6 +245,55 @@ class _LogWritePageState extends State<LogWritePage> {
                                 DefaultTextStyle.of(context).style),
                       ),
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    spacing: 8.0, // 간격
+                    runSpacing: 4.0, // 줄 간격
+                    children: [
+                      ...tagList.map(
+                        (tag) => SFACTag(
+                          text: Text(tag),
+                          prefixIcon: const Icon(
+                            CupertinoIcons.xmark,
+                            size: 10,
+                          ),
+                          backgroundColor: SLColor.primary,
+                          onPressed: () {
+                            setState(() {
+                              tagList.remove(tag);
+                            });
+                          },
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: const Offset(0.0, -8.0),
+                        child: SizedBox(
+                          width: 120, // 최대 너비 설정, 태그 개수에 따라 조정될 수 있음
+                          child: TextField(
+                            style: const TextStyle(fontSize: 12),
+                            controller: _tagController,
+                            decoration: const InputDecoration(
+                              hintStyle: TextStyle(fontSize: 12),
+                              hintText: '태그를 입력하세요.',
+                              border: InputBorder.none, // 테두리 없앰
+                            ),
+                            onSubmitted: (value) {
+                              if (value.isNotEmpty) {
+                                setState(() {
+                                  tagList.add('#$value');
+                                  _tagController.clear();
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

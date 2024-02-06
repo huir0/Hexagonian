@@ -4,16 +4,17 @@ class GrayLabel1 extends StatelessWidget {
   final String text;
   final double width;
   final double height;
+  final Color fontColor;
 
   final VoidCallback? onPressed;
 
-  const GrayLabel1({
-    super.key,
-    required this.text,
-    required this.width,
-    this.height = 24,
-    this.onPressed,
-  });
+  const GrayLabel1(
+      {super.key,
+      required this.text,
+      required this.width,
+      this.height = 24,
+      this.onPressed,
+      this.fontColor = Colors.white});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,6 @@ class GrayLabel1 extends StatelessWidget {
       child: Container(
         height: height,
         width: width,
-        padding: EdgeInsets.all(0),
         decoration: ShapeDecoration(
           color: Color(0xFF666666),
           shape: RoundedRectangleBorder(
@@ -42,7 +42,7 @@ class GrayLabel1 extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color: Color(0xFF0059FF),
+                color: fontColor,
                 fontSize: 10,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
