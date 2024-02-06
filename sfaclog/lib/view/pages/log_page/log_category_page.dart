@@ -21,7 +21,18 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: const Text('카테고리 추가'),
+        leading: GestureDetector(
+            onTap: () {
+              context.pop();
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20,
+            )),
+        title: Text(
+          '카테고리 추가',
+          style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
+        ),
         centerTitle: true,
         actions: [
           TextButton(
@@ -31,7 +42,12 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
                 ref.read(logwriteProvider.notifier).setLog(newLogModel);
                 context.pop();
               },
-              child: const Text('확인'))
+              child: Text(
+                '확인',
+                style: SLTextStyle(
+                        style: SLStyle.Text_L_Regular, color: Colors.white)
+                    .textStyle,
+              ))
         ],
       ),
       body: Padding(

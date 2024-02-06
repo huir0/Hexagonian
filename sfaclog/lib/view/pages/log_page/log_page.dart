@@ -78,13 +78,13 @@ class _LogPageState extends ConsumerState<LogPage> {
                   viewportFraction: 0.725,
                   enlargeCenterPage: true,
                 ),
-                items: List.generate(popularLogState!.length, (index) {
+                items: List.generate(popularLogState?.length ?? 0, (index) {
                   return InkWell(
                       onTap: () {
-                        context.push('/log/read/${popularLogState[index].id}');
+                        context.push('/log/read/${popularLogState?[index].id}');
                       },
                       child: LogPageCardWidget(
-                        logData: popularLogState[index],
+                        logData: popularLogState?[index],
                       ));
                 }).toList(),
               )
@@ -113,7 +113,7 @@ class _LogPageState extends ConsumerState<LogPage> {
             },
           ),
         ),
-        logModelListState!.isNotEmpty
+        logModelListState?.isNotEmpty ?? false
             ? Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -121,7 +121,7 @@ class _LogPageState extends ConsumerState<LogPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '총 ${logModelListState.length} 로그',
+                      '총 ${logModelListState!.length} 로그',
                       style:
                           SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
                     ),
@@ -140,7 +140,7 @@ class _LogPageState extends ConsumerState<LogPage> {
                 ),
               )
             : const SizedBox(),
-        logModelListState.isNotEmpty
+        logModelListState?.isNotEmpty ?? false
             ? Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -153,7 +153,7 @@ class _LogPageState extends ConsumerState<LogPage> {
                     );
                   },
                   shrinkWrap: true,
-                  itemCount: logModelListState.length,
+                  itemCount: logModelListState!.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
