@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SFACChip extends StatelessWidget {
   /// Chip의 Text
@@ -39,6 +40,61 @@ class SFACChip extends StatelessWidget {
               children: [
                 text,
                 suffixIcon != null ? Icon(suffixIcon) : const SizedBox(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SFACSkillChip extends StatelessWidget {
+  /// Chip의 Text
+  final Text text;
+
+  /// Chip 배경 색
+  final Color backgroundColor;
+
+  /// Chip Border 색
+  final Color borderColor;
+
+  ///suffixIcon
+  final IconData? suffixIcon;
+  final Widget? svgIconWidget;
+  final VoidCallback? onPressed;
+  final double? height;
+  final EdgeInsets? padding;
+  const SFACSkillChip({
+    super.key,
+    required this.text,
+    this.backgroundColor = const Color(0xFF0059FF),
+    this.borderColor = Colors.transparent,
+    this.suffixIcon,
+    this.onPressed,
+    this.height,
+    this.padding = const EdgeInsets.all(0),
+    this.svgIconWidget,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: SizedBox(
+        height: height,
+        child: Chip(
+          padding: padding,
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: borderColor),
+              borderRadius: const BorderRadius.all(Radius.circular(100))),
+          backgroundColor: backgroundColor,
+          label: IntrinsicWidth(
+            child: Row(
+              children: [
+                text,
+                suffixIcon != null ? Icon(suffixIcon) : const SizedBox(),
+                svgIconWidget ?? Container(),
               ],
             ),
           ),

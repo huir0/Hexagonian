@@ -21,10 +21,10 @@ SkillModel _$SkillModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SkillModel {
   String get id => throw _privateConstructorUsedError;
-  String get created => throw _privateConstructorUsedError;
-  String get updated => throw _privateConstructorUsedError;
-  String get collectionId => throw _privateConstructorUsedError;
-  String get collectionName => throw _privateConstructorUsedError;
+  String? get created => throw _privateConstructorUsedError;
+  String? get updated => throw _privateConstructorUsedError;
+  String? get collectionId => throw _privateConstructorUsedError;
+  String? get collectionName => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,10 +41,10 @@ abstract class $SkillModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String created,
-      String updated,
-      String collectionId,
-      String collectionName,
+      String? created,
+      String? updated,
+      String? collectionId,
+      String? collectionName,
       String name});
 }
 
@@ -62,10 +62,10 @@ class _$SkillModelCopyWithImpl<$Res, $Val extends SkillModel>
   @override
   $Res call({
     Object? id = null,
-    Object? created = null,
-    Object? updated = null,
-    Object? collectionId = null,
-    Object? collectionName = null,
+    Object? created = freezed,
+    Object? updated = freezed,
+    Object? collectionId = freezed,
+    Object? collectionName = freezed,
     Object? name = null,
   }) {
     return _then(_value.copyWith(
@@ -73,22 +73,22 @@ class _$SkillModelCopyWithImpl<$Res, $Val extends SkillModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      created: null == created
+      created: freezed == created
           ? _value.created
           : created // ignore: cast_nullable_to_non_nullable
-              as String,
-      updated: null == updated
+              as String?,
+      updated: freezed == updated
           ? _value.updated
           : updated // ignore: cast_nullable_to_non_nullable
-              as String,
-      collectionId: null == collectionId
+              as String?,
+      collectionId: freezed == collectionId
           ? _value.collectionId
           : collectionId // ignore: cast_nullable_to_non_nullable
-              as String,
-      collectionName: null == collectionName
+              as String?,
+      collectionName: freezed == collectionName
           ? _value.collectionName
           : collectionName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -107,10 +107,10 @@ abstract class _$$SkillModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String created,
-      String updated,
-      String collectionId,
-      String collectionName,
+      String? created,
+      String? updated,
+      String? collectionId,
+      String? collectionName,
       String name});
 }
 
@@ -126,10 +126,10 @@ class __$$SkillModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? created = null,
-    Object? updated = null,
-    Object? collectionId = null,
-    Object? collectionName = null,
+    Object? created = freezed,
+    Object? updated = freezed,
+    Object? collectionId = freezed,
+    Object? collectionName = freezed,
     Object? name = null,
   }) {
     return _then(_$SkillModelImpl(
@@ -137,22 +137,22 @@ class __$$SkillModelImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      created: null == created
+      created: freezed == created
           ? _value.created
           : created // ignore: cast_nullable_to_non_nullable
-              as String,
-      updated: null == updated
+              as String?,
+      updated: freezed == updated
           ? _value.updated
           : updated // ignore: cast_nullable_to_non_nullable
-              as String,
-      collectionId: null == collectionId
+              as String?,
+      collectionId: freezed == collectionId
           ? _value.collectionId
           : collectionId // ignore: cast_nullable_to_non_nullable
-              as String,
-      collectionName: null == collectionName
+              as String?,
+      collectionName: freezed == collectionName
           ? _value.collectionName
           : collectionName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -166,10 +166,10 @@ class __$$SkillModelImplCopyWithImpl<$Res>
 class _$SkillModelImpl implements _SkillModel {
   _$SkillModelImpl(
       {required this.id,
-      required this.created,
-      required this.updated,
-      required this.collectionId,
-      required this.collectionName,
+      this.created,
+      this.updated,
+      this.collectionId,
+      this.collectionName,
       required this.name});
 
   factory _$SkillModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -178,13 +178,13 @@ class _$SkillModelImpl implements _SkillModel {
   @override
   final String id;
   @override
-  final String created;
+  final String? created;
   @override
-  final String updated;
+  final String? updated;
   @override
-  final String collectionId;
+  final String? collectionId;
   @override
-  final String collectionName;
+  final String? collectionName;
   @override
   final String name;
 
@@ -230,10 +230,10 @@ class _$SkillModelImpl implements _SkillModel {
 abstract class _SkillModel implements SkillModel {
   factory _SkillModel(
       {required final String id,
-      required final String created,
-      required final String updated,
-      required final String collectionId,
-      required final String collectionName,
+      final String? created,
+      final String? updated,
+      final String? collectionId,
+      final String? collectionName,
       required final String name}) = _$SkillModelImpl;
 
   factory _SkillModel.fromJson(Map<String, dynamic> json) =
@@ -242,13 +242,13 @@ abstract class _SkillModel implements SkillModel {
   @override
   String get id;
   @override
-  String get created;
+  String? get created;
   @override
-  String get updated;
+  String? get updated;
   @override
-  String get collectionId;
+  String? get collectionId;
   @override
-  String get collectionName;
+  String? get collectionName;
   @override
   String get name;
   @override

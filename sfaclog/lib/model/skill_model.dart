@@ -7,10 +7,10 @@ part 'skill_model.g.dart';
 class SkillModel with _$SkillModel {
   factory SkillModel({
     required String id,
-    required String created,
-    required String updated,
-    required String collectionId,
-    required String collectionName,
+    String? created,
+    String? updated,
+    String? collectionId,
+    String? collectionName,
     required String name,
   }) = _SkillModel;
 
