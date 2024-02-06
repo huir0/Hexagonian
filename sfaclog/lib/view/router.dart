@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
-import 'package:sfaclog/view/pages/community_page/%08com_side_read_page.dart';
+import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_read.dart';
 import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
