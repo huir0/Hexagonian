@@ -70,6 +70,8 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/propose/
+    - assets/images/character/
+    - assets/images/logger/
     - assets/icons/
     - assets/avatars/
     - assets/logo/
