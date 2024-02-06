@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/model/skill_model.dart';
-import 'package:sfaclog/model/user_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PocketbaseAuth {
@@ -13,7 +12,6 @@ class PocketbaseAuth {
     String? nickname,
     required List<String> agreement,
     List<SkillModel>? skill,
-    // required UserModel user,
     required String user,
     String? picture,
     String? propose_state,
@@ -82,6 +80,30 @@ class PocketbaseAuth {
       'name': name,
     });
     return result;
+  }
+
+  Future<RecordAuth> loginWithPassword({
+    required String email,
+    required String password,
+  }) async {
+    final authData = await pb.collection('users').authWithPassword(
+          email,
+          password,
+        );
+    return authData;
+  }
+
+  void requestVerification({
+    required String email,
+  }) async {
+    await pb.collection('users').requestVerification(email);
+  }
+
+  void confirmVerification({
+    required String token,
+  }) async {
+    await pb.collection('users').confirmVerification(token);
+    await pb.collection('users').authRefresh();
   }
 
   Future<RecordAuth> signinWithOAuth2(String provider) async {
