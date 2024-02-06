@@ -62,7 +62,8 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
         borderRadius: const BorderRadius.all(
           Radius.circular(20),
         ),
-        child: Column(
+        child: ListView(
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             Stack(
               children: [

@@ -33,9 +33,7 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
   @override
   void didUpdateWidget(LogListTileWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // logData가 변경되었는지 확인합니다.
     if (oldWidget.logData != widget.logData) {
-      // logData가 변경된 경우, 데이터 로딩 로직을 재실행합니다.
       _loadData();
     }
   }
@@ -89,10 +87,17 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                     borderRadius: const BorderRadius.all(
                       Radius.circular(10),
                     ),
-                    child: Image.network(
-                      imgUrl!,
-                      fit: BoxFit.fill,
-                    ),
+                    child: imgUrl != null
+                        ? Image.network(
+                            imgUrl!,
+                            fit: BoxFit.fill,
+                          )
+                        : Container(
+                            color: Colors.grey, // 대체 이미지 또는 색상으로 로딩 상태 표시
+                            child: const Center(
+                              child: CircularProgressIndicator(), // 로딩 인디케이터
+                            ),
+                          ),
                   ),
                 ),
                 Positioned(

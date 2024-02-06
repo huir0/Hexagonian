@@ -6,7 +6,7 @@ import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_reply_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_setting_page.dart';
-import 'package:sfaclog/view/pages/log_page/log_thumbnail_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_upload_done_page.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
@@ -43,12 +43,15 @@ final router = GoRouter(initialLocation: '/home', routes: [
             builder: (context, state) => const LogSettingPage(),
           ),
           GoRoute(
-            path: 'thumbnail',
-            builder: (context, state) => const LogThumbNailPage(),
-          ),
-          GoRoute(
             path: 'category',
             builder: (context, state) => const LogCategoryPage(),
+          ),
+          GoRoute(
+            path: 'upload/:tagId',
+            builder: (context, state) {
+              final tagId = state.pathParameters['tagId'];
+              return LogUploadDonePage(tagId: tagId ?? '');
+            },
           ),
         ]),
     GoRoute(

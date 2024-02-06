@@ -5,18 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:parchment_delta/parchment_delta.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
-import 'package:sfaclog_widgets/chips/sl_chip.dart';
-import 'package:sfaclog_widgets/tags/sl_tag.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LogWritePage extends ConsumerStatefulWidget {
@@ -78,28 +74,76 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: const Text('로그 쓰기'),
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+            onTap: () {
+              context.pop();
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20,
+            )),
+        title: Text(
+          '로그 쓰기',
+          style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
+        ),
         centerTitle: true,
         actions: [
           TextButton(
-              onPressed: () async {
-                var contents = jsonEncode(_controller!.document);
-                List<dynamic> data = json.decode(contents);
-                //이미지 유무 체크
-                List<dynamic> imageList = data.where((item) {
-                  var insertData = item['insert'];
-                  return insertData is Map<String, dynamic> &&
-                      insertData['_type'] == 'image';
-                }).toList();
-                SFACLogModel newValue = _logModel.copyWith(
-                    title: _headerController.value.text,
-                    body: contents,
-                    images: imageList,
-                    tag: tagList);
-                ref.read(logwriteProvider.notifier).setLog(newValue);
-                context.push('/log/write/setting');
-              },
-              child: const Text('완료'))
+            onPressed: () async {
+              var contents = jsonEncode(_controller!.document);
+              List<dynamic> data = json.decode(contents);
+              //제목이 정상적으로 입력이 되었는가?
+              if (_headerController.value.text == '') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SLSnackbar(
+                    contentTextStyle: SLTextStyle(
+                            color: SLColor.primary.shade90,
+                            style: SLStyle.Text_M_Regular)
+                        .textStyle,
+                    description: '제목을 입력해주세요!',
+                    onTap: () {},
+                    imageRadius: 20,
+                  ),
+                );
+                return;
+              }
+              //내용이 정상적으로 입력이 되었는가?
+              if (data[0]["insert"] == '\n') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SLSnackbar(
+                    contentTextStyle: SLTextStyle(
+                            color: SLColor.primary.shade90,
+                            style: SLStyle.Text_M_Regular)
+                        .textStyle,
+                    description: '내용을 입력해주세요!',
+                    onTap: () {},
+                    imageRadius: 20,
+                  ),
+                );
+                return;
+              }
+              //이미지 유무 체크
+              List<dynamic> imageList = data.where((item) {
+                var insertData = item['insert'];
+                return insertData is Map<String, dynamic> &&
+                    insertData['_type'] == 'image';
+              }).toList();
+              SFACLogModel newValue = _logModel.copyWith(
+                  title: _headerController.value.text,
+                  body: contents,
+                  images: imageList,
+                  tag: tagList);
+              ref.read(logwriteProvider.notifier).setLog(newValue);
+              context.push('/log/write/setting');
+            },
+            child: Text(
+              '완료',
+              style: SLTextStyle(
+                      style: SLStyle.Text_L_Regular, color: Colors.white)
+                  .textStyle,
+            ),
+          ),
         ],
       ),
       body: _controller == null
@@ -119,10 +163,6 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
                               final image = await picker.pickImage(
                                   source: ImageSource.gallery);
                               if (image != null) {
-                                // await _remoteDataSource.uploadFile(
-                                //     'imageTest', image, '게시판');
-
-                                // print(url);
                                 final selection = _controller!.selection;
                                 _controller!.replaceText(
                                   selection.baseOffset,
@@ -143,7 +183,10 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
                                 );
                               }
                             },
-                            child: const Icon(Icons.picture_as_pdf),
+                            child: const Icon(
+                              Icons.add_a_photo_outlined,
+                              size: 20,
+                            ),
                           ),
                         ],
                         controller: _controller!,

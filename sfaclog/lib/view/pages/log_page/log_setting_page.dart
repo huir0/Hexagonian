@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
@@ -12,6 +9,7 @@ import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/view/widgets/common_widget.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogSettingPage extends ConsumerStatefulWidget {
   const LogSettingPage({super.key});
@@ -22,16 +20,19 @@ class LogSettingPage extends ConsumerStatefulWidget {
 
 class _LogSettingPageState extends ConsumerState<LogSettingPage> {
   List publicOptionList = [
-    {'id': 0, 'value': false, 'option': '전체 공개', 'tableValue': 'public'},
+    {'id': 0, 'value': true, 'option': '전체 공개', 'tableValue': 'public'},
     {'id': 1, 'value': false, 'option': '비공개', 'tableValue': 'private'},
   ];
   List thumbNailList = [
-    {'id': 0, 'url': 'assets/images/log_thumbnail_3.png'},
-    {'id': 1, 'url': 'assets/images/log_thumbnail_4.png'}
+    {'id': 0, 'url': 'assets/images/log_default_thumbnail.png'},
+    {'id': 1, 'url': 'assets/images/log_thumbnail_3.png'},
+    {'id': 2, 'url': 'assets/images/log_thumbnail_4.png'}
   ];
-  int selectedThumbNailIndex = -1;
   int selectedPublicIndex = -1;
   Image? thumbNailImg;
+  String imgPath = '';
+  Map<int, bool> selectedThumbNailIndices = {};
+  Map<int, bool> selectedImageIndices = {};
 
   Future<Image> thumbNailImages(String imgPath) async {
     File file = File(imgPath);
@@ -46,6 +47,14 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // 페이지가 로드될 때 첫 번째 썸네일을 기본적으로 선택된 상태로 설정합니다.
+    selectedThumbNailIndices[0] = true;
+    imgPath = thumbNailList[0]['url'];
+  }
+
+  @override
   Widget build(BuildContext context) {
     var state = ref.watch(logwriteProvider);
 
@@ -53,7 +62,18 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        title: const Text('로그 설정'),
+        leading: GestureDetector(
+            onTap: () {
+              context.pop();
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20,
+            )),
+        title: Text(
+          '로그 설정',
+          style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
+        ),
         centerTitle: true,
         actions: [
           TextButton(
@@ -61,7 +81,7 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                 List<String> imgUrlList = [];
                 var tagId = await remoteDataSource.uploadThumbNail(
                   'log',
-                  thumbNailList[selectedThumbNailIndex]['url'],
+                  imgPath,
                   state.logModel!.title,
                 );
                 if (state.logModel!.images.isNotEmpty) {
@@ -83,12 +103,26 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                   var newLogData =
                       state.logModel!.copyWith(body: convertedBody);
                   ref.read(logwriteProvider.notifier).setLog(newLogData);
-                  print(state.logModel!.body);
-                  print(body);
+
+                  await remoteDataSource
+                      .uploadLog('log', newLogData, tagId)
+                      .then((value) {
+                    context.push('/log/write/upload/$tagId');
+                  });
+                } else {
+                  await remoteDataSource
+                      .uploadLog('log', state.logModel!, tagId)
+                      .then((value) {
+                    context.push('/log/write/upload/$tagId');
+                  });
                 }
-                await remoteDataSource.uploadLog('log', state.logModel!, tagId);
               },
-              child: const Text('게시'))
+              child: Text(
+                '게시',
+                style: SLTextStyle(
+                        style: SLStyle.Text_L_Regular, color: Colors.white)
+                    .textStyle,
+              ))
         ],
       ),
       body: SingleChildScrollView(
@@ -97,6 +131,9 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(
+                height: 16,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -193,87 +230,175 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
               ),
               Column(
                 children: [
-                  state.logModel!.images.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
-                          child: GestureDetector(
-                            onTap: () {
-                              context
-                                  .push('/log/write/thumbnail')
-                                  .then((value) async {
-                                final image =
-                                    await thumbNailImages(value.toString());
-                                setState(() {
-                                  thumbNailImg = image;
-                                });
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 18.0),
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: 18,
+                        );
+                      },
+                      shrinkWrap: true,
+                      itemCount: thumbNailList.length,
+                      itemBuilder: (context, index) {
+                        bool isSelected =
+                            selectedThumbNailIndices[index] ?? false;
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedThumbNailIndices.forEach((key, value) {
+                                selectedThumbNailIndices[key] = false;
                               });
-                            },
-                            child: Container(
-                              width: 313,
-                              height: 157,
-                              decoration: BoxDecoration(
-                                color: SLColor.neutral.shade80,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
+                              if (state.logModel!.images.isNotEmpty) {
+                                selectedImageIndices.forEach((key, value) {
+                                  selectedImageIndices[key] = false;
+                                });
+                              }
+                              selectedThumbNailIndices[index] = !isSelected;
+                              imgPath = thumbNailList[index]['url'];
+                            });
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 313,
+                                height: 157,
+                                decoration: const BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Image.asset(thumbNailList[index]['url']),
+                              ),
+                              Container(
+                                width: 313,
+                                height: 157,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                  border: isSelected
+                                      ? Border.all(color: SLColor.primary)
+                                      : null,
                                 ),
                               ),
-                              child: const Icon(Icons.add),
-                            ),
+                              isSelected
+                                  ? const Positioned(
+                                      top: 12,
+                                      left: 14,
+                                      child: SFACTag(
+                                        text: Text(' 대표 '),
+                                        backgroundColor: SLColor.primary,
+                                      ))
+                                  : const SizedBox()
+                            ],
                           ),
+                        );
+                      },
+                    ),
+                  ),
+                  state.logModel!.images.isNotEmpty
+                      ? ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.logModel!.images.length,
+                          itemBuilder: (context, index) {
+                            bool isSelected =
+                                selectedImageIndices[index] ?? false;
+                            return FutureBuilder<Widget>(
+                              future: thumbNailImages(
+                                  state.logModel!.images[index]['insert']
+                                      ['source']), // 비동기 함수 호출
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  if (snapshot.hasData) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 18),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          // Map을 업데이트하여 선택 상태를 토글
+                                          setState(() {
+                                            // 모든 아이템의 선택 상태를 false로 설정
+                                            selectedImageIndices
+                                                .forEach((key, value) {
+                                              selectedImageIndices[key] = false;
+                                            });
+                                            selectedThumbNailIndices
+                                                .forEach((key, value) {
+                                              selectedThumbNailIndices[key] =
+                                                  false;
+                                            });
+                                            // 현재 탭된 아이템의 상태를 true로 설정
+                                            selectedImageIndices[index] =
+                                                !isSelected;
+                                            imgPath =
+                                                state.logModel!.images[index]
+                                                    ['insert']['source'];
+                                          });
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              width: 313,
+                                              height: 157,
+                                              decoration: BoxDecoration(
+                                                color: SLColor.neutral.shade80,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: snapshot
+                                                  .data!, // 비동기 작업의 결과로 받은 위젯
+                                            ),
+                                            Container(
+                                              width: 313,
+                                              height: 157,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                                border: isSelected
+                                                    ? Border.all(
+                                                        color: SLColor.primary)
+                                                    : null,
+                                              ),
+                                            ),
+                                            isSelected
+                                                ? const Positioned(
+                                                    top: 12,
+                                                    left: 14,
+                                                    child: SFACTag(
+                                                      text: Text(' 대표 '),
+                                                      backgroundColor:
+                                                          SLColor.primary,
+                                                    ))
+                                                : const SizedBox()
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  }
+                                }
+                                // 로딩 중에는 로딩 인디케이터를 표시
+                                return const SizedBox(
+                                  height: 200,
+                                  width: 200,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         )
                       : const SizedBox(),
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 18,
-                      );
-                    },
-                    shrinkWrap: true,
-                    itemCount: thumbNailList.length,
-                    itemBuilder: (context, index) {
-                      bool isSelected = selectedThumbNailIndex == index;
-                      return GestureDetector(
-                        onTap: () {
-                          if (selectedThumbNailIndex == index) {
-                            selectedThumbNailIndex = -1;
-                          } else {
-                            selectedThumbNailIndex = index;
-                          }
-                          setState(() {});
-                        },
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 313,
-                              height: 157,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Image.asset(thumbNailList[index]['url']),
-                            ),
-                            Container(
-                              width: 313,
-                              height: 157,
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? SLColor.primary.shade80.withOpacity(0.2)
-                                    : SLColor.neutral.shade80.withOpacity(0.2),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                border: isSelected
-                                    ? Border.all(color: SLColor.primary)
-                                    : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
                 ],
               )
             ],
