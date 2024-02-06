@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+
+import '../router.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String pageLabel;
@@ -22,9 +26,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.notifications),
+          icon: pageLabel == '마이페이지'
+              ? SvgPicture.asset('assets/icons/setting.svg')
+              : const Icon(Icons.notifications),
           onPressed: () {
+            if (pageLabel == '마이페이지') {
+              router.go('/my/setting');
+            } else {
+    
             print('Noti_Clicked');
+            }
           },
         )
       ],
