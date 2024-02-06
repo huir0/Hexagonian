@@ -6,8 +6,7 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/com_side_listtile_wiget.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/sideproject_card.dart';
-
-import 'package:sfaclog_widgets/labels/grey_label%20copy.dart';
+import 'package:sfaclog_widgets/labels/grey_label_copy.dart';
 import 'package:sfaclog_widgets/labels/log_label.dart';
 
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
@@ -35,7 +34,7 @@ class _ComSidePageState extends State<ComSidePage> {
           child: Scaffold(
             body: Column(
               children: [
-                SLTab(
+                const SLTab(
                   menu: [
                     Text('개발자 Q&A'),
                     Text('사이드프로젝트'),
@@ -59,7 +58,7 @@ class _ComSidePageState extends State<ComSidePage> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       CarouselSlider(
@@ -71,10 +70,10 @@ class _ComSidePageState extends State<ComSidePage> {
                         items: List.generate(
                           5, // Replace with the number of cards you want to display
                           (index) =>
-                              SideProjectCard(), // Replace comCard() with your card widget
+                              const SideProjectCard(), // Replace comCard() with your card widget
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Padding(
@@ -91,7 +90,7 @@ class _ComSidePageState extends State<ComSidePage> {
                                       SLTextStyle(style: SLStyle.Heading_S_Bold)
                                           .textStyle,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Image.asset('assets/images/Group.png')
@@ -114,10 +113,10 @@ class _ComSidePageState extends State<ComSidePage> {
                           onTap: () {},
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      SingleChildScrollView(
+                      const SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
@@ -162,7 +161,7 @@ class _ComSidePageState extends State<ComSidePage> {
                           context.push('/comsideread');
                         },
                       ),
-                      ComListTile(),
+                      const ComListTile(),
                     ],
                   ),
                 )),
