@@ -1,20 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class GrayLabel1 extends StatelessWidget {
+class SkyLabel extends StatelessWidget {
   final String text;
   final double width;
   final double height;
-  final Color fontColor;
-
   final VoidCallback? onPressed;
-
-  const GrayLabel1(
-      {super.key,
-      required this.text,
-      required this.width,
-      this.height = 24,
-      this.onPressed,
-      this.fontColor = Colors.white});
+  const SkyLabel({
+    Key? key,
+    required this.text,
+    required this.width,
+    this.height = 20,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +22,10 @@ class GrayLabel1 extends StatelessWidget {
       child: Container(
         height: height,
         width: width,
+        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
         decoration: ShapeDecoration(
-          color: Color(0xFF666666),
+          color: Color(0xFFE5EEFF),
           shape: RoundedRectangleBorder(
-            side: BorderSide(
-              width: 1,
-              strokeAlign: BorderSide.strokeAlignCenter,
-              color: Color(0xFF666666),
-            ),
             borderRadius: BorderRadius.circular(4),
           ),
         ),
@@ -42,10 +37,10 @@ class GrayLabel1 extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color: fontColor,
-                fontSize: 10,
+                color: Color(0xFF196AFF),
+                fontSize: 8,
                 fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 height: 0.14,
               ),
             ),
