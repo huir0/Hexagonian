@@ -9,18 +9,17 @@ import 'package:sfaclog/view/pages/my_page/my_link_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_setting_page.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/dash_divider.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
+import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/experience_card.dart';
+import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/link_card.dart';
 import 'package:sfaclog/viewmodel/mypage_state_viewmodel/mypage_states.dart';
 import 'package:sfaclog_widgets/chips/sl_chip.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
-import '../../../viewmodel/auth/oauth2_auth_notifier.dart';
-import 'package:pocketbase/pocketbase.dart';
-
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
 import '../../router.dart';
+import '../../widgets/mypage_widgets/resume_widgets/education_card.dart';
 
-final pb = PocketBase('http://43.202.59.218:8090');
 const List<Map<String, String>> qna = [
   {
     'collection': 'Q',
@@ -88,6 +87,37 @@ const List<Map<String, dynamic>> reviews = [
   },
 ];
 
+List<Map<String, dynamic>> resumes = [
+  {
+    'company': 'sniperfactory',
+    'title': 'mobile developer',
+    'period_start': DateTime.now(),
+    'period_end': DateTime.now(),
+    'content': '스나이퍼 앱 개발(Flutter)',
+    'institute': 'university',
+    'major': 'architecture',
+  },
+  {
+    'company': '스나이퍼 팩토리',
+    'title': 'mobile developer2',
+    'period_start': DateTime.now(),
+    'period_end': null,
+    'content': '스나이퍼 앱 개발(Flutter)',
+    'institute': '대학교',
+    'major': '건축',
+  },
+];
+List<Map<String, dynamic>> links = [
+  {
+    'url': 'https://github.com/huir0',
+    'title': '깃허브',
+  },
+  {
+    'url': 'https://github.com/huir0/Hexagonian',
+    'title': '육각형인재 프로젝트',
+  },
+];
+
 class MyProfilePage extends ConsumerStatefulWidget {
   const MyProfilePage({super.key});
 
@@ -97,9 +127,7 @@ class MyProfilePage extends ConsumerStatefulWidget {
 
 class _MyProfilePageState extends ConsumerState<MyProfilePage> {
   List<String> skills = ['javascript', 'css', 'html'];
-  List<String> resumes = [];
   List<String> experiences = [];
-  List<String> links = [];
   bool resumePublic = false;
 
   @override
@@ -137,6 +165,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                           width: 24,
                         ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // nickname
                             Container(
@@ -212,8 +241,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                           final skill = skills[index];
                           return SFACSkillChip(
                             height: 32,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 6),
                             text: Text(
                               skill,
                               style: SLTextStyle.Text_S_Bold?.copyWith(
@@ -393,22 +421,14 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                       // FIXME: 경력 계산해서 집어넣기
                       subText: '5개월',
                     ),
-                    SizedBox(
-                      height: 16,
-                    ),
                     // 경력 데이터
+                    // FIXME: experience나 resume에서 데이터 뽑아오기
                     resumes.length > 0
                         ? Container(
                             child: Column(
                               children: [
                                 for (var i = 0; i < resumes.length; i++) ...[
-                                  Container(
-                                    width: 278,
-                                    height: 67,
-                                    child: Column(
-                                      children: [],
-                                    ),
-                                  ),
+                                  ResumeExperienceCard(resume: resumes[i]),
                                   if (i < resumes.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
@@ -419,7 +439,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
                             alignment: Alignment.centerLeft,
                             child: Text(
                               '경력 사항을 추가해주세요.',
@@ -429,36 +450,28 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           ),
                     SizedBox(
-                      height: 20,
+                      height: 4,
                     ),
-                    SFACResumeButton(onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const MypageAddEducation(),
-                          ),
-                        );
-                    }, title: '학력/교육'),
-                    SizedBox(
-                      height: 16,
-                    ),
+                    SFACResumeButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const MypageAddEducation(),
+                            ),
+                          );
+                        },
+                        title: '학력/교육'),
                     // 교육 데이터
-                    experiences.length > 0
+                    // FIXME: resumes => education이나 resume에서 데이터 뽑아오기
+                    resumes.length > 0
                         ? Container(
                             child: Column(
                               children: [
-                                for (var i = 0;
-                                    i < experiences.length;
-                                    i++) ...[
-                                  Container(
-                                    width: 278,
-                                    height: 67,
-                                    child: Column(
-                                      children: [],
-                                    ),
-                                  ),
-                                  if (i < experiences.length - 1)
+                                for (var i = 0; i < resumes.length; i++) ...[
+                                  ResumeEducationCard(resume: resumes[i]),
+                                  if (i < resumes.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
                                       size: Size(280, 1),
@@ -468,7 +481,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
                             alignment: Alignment.centerLeft,
                             child: Text(
                               '학력/교육 사항을 추가해주세요.',
@@ -479,32 +493,25 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                           ),
 
                     SizedBox(
-                      height: 20,
+                      height: 4,
                     ),
-                    SFACResumeButton(onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const MypageAddLink(),
-                          ),
-                        );
-                    }, title: '링크'),
-                    SizedBox(
-                      height: 16,
-                    ),
+                    SFACResumeButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const MypageAddLink(),
+                            ),
+                          );
+                        },
+                        title: '링크'),
                     links.length > 0
                         ? Container(
                             child: Column(
                               children: [
                                 for (var i = 0; i < links.length; i++) ...[
-                                  Container(
-                                    width: 278,
-                                    height: 67,
-                                    child: Column(
-                                      children: [],
-                                    ),
-                                  ),
+                                  ResumeLinkCard(link: links[i]),
                                   if (i < links.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
@@ -515,7 +522,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 16),
                             alignment: Alignment.centerLeft,
                             child: Text(
                               '블로그, SNS등 다양한 링크로 나를 표현해주세요',
@@ -528,7 +536,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                 ),
               ),
               SizedBox(
-                height: 32,
+                height: 16,
               ),
               Container(
                 child: Row(
