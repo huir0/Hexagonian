@@ -60,8 +60,10 @@ class _SFACMenuButtonState extends State<SFACMenuButton> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialValue == null ) dropdownValue = widget.items.first;
-    else dropdownValue = widget.initialValue!;
+    if (widget.initialValue == null)
+      dropdownValue = widget.items.first;
+    else
+      dropdownValue = widget.initialValue!;
   }
 
   @override
@@ -81,7 +83,11 @@ class _SFACMenuButtonState extends State<SFACMenuButton> {
           SizedBox(
             width: 5,
           ),
-          widget.icon ?? SvgPicture.asset('assets/icons/arrow_down.svg', width: 8,),
+          widget.icon ??
+              SvgPicture.asset(
+                'assets/icons/arrow_down.svg',
+                width: 8,
+              ),
         ],
       ),
       onSelected: (String value) {
@@ -109,9 +115,9 @@ class _SFACMenuButtonState extends State<SFACMenuButton> {
                         : SLColor.neutral[80],
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(
-                          widget.items[i] == widget.items.first ? 6.21 : 0),
+                          widget.items[i] == widget.items.first ? 7 : 0),
                       bottom: Radius.circular(
-                          widget.items[i] == widget.items.last ? 6.21 : 0),
+                          widget.items[i] == widget.items.last ? 7 : 0),
                     ),
                   ),
                   child: Text(
@@ -169,8 +175,10 @@ class _SFACSelectMenuButtonState extends State<SFACSelectMenuButton> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialValue == null) dropdownValue = widget.items.first;
-    else dropdownValue = widget.initialValue!;
+    if (widget.initialValue == null)
+      dropdownValue = widget.items.first;
+    else
+      dropdownValue = widget.initialValue!;
   }
 
   @override
@@ -195,7 +203,10 @@ class _SFACSelectMenuButtonState extends State<SFACSelectMenuButton> {
                       SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white)),
             ),
             Spacer(),
-            widget.icon ?? SvgPicture.asset('assets/icons/arrow_down.svg',),
+            widget.icon ??
+                SvgPicture.asset(
+                  'assets/icons/arrow_down.svg',
+                ),
           ],
         ),
         onSelected: (String value) {
@@ -222,9 +233,9 @@ class _SFACSelectMenuButtonState extends State<SFACSelectMenuButton> {
                         : SLColor.neutral[80],
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(
-                          widget.items[i] == widget.items.first ? 6.21 : 0),
+                          widget.items[i] == widget.items.first ? 7 : 0),
                       bottom: Radius.circular(
-                          widget.items[i] == widget.items.last ? 6.21 : 0),
+                          widget.items[i] == widget.items.last ? 7 : 0),
                     ),
                   ),
                   child: Text(
@@ -1129,7 +1140,7 @@ class _CustomPopupMenuDefaultsM3 extends PopupMenuThemeData {
 
   @override
   ShapeBorder? get shape => const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(4.0)));
+      borderRadius: BorderRadius.all(Radius.circular(7.0)));
 
   // TODO(tahatesser): This is taken from https://m3.material.io/components/menus/specs
   // Update this when the token is available.
