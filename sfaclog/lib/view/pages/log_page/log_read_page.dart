@@ -40,7 +40,6 @@ class _LogReadPageState extends State<LogReadPage> {
   Future<void> _initController() async {
     try {
       logData = await _remoteDataSource.getLogData('log', widget.tagId);
-      // 조회수를 업데이트하는 코드를 여기에 추가
       await _updateViewCount(widget.tagId);
       final logBody = logData!.toJson()['body'];
       final heuristics = ParchmentHeuristics(
@@ -92,21 +91,25 @@ class _LogReadPageState extends State<LogReadPage> {
                       children: [
                         LogReadHeaderWidget(
                           title: logData!.toJson()['title'],
+                          category: logData!.toJson()['category'],
                         ),
                         Divider(
                           height: 1,
                           color: SLColor.neutral.shade80,
                         ),
-                        FleatherField(
-                          readOnly: true,
-                          controller: _controller!,
-                          onLaunchUrl: _launchUrl,
-                          embedBuilder: _embedBuilder,
-                          spellCheckConfiguration: SpellCheckConfiguration(
-                              spellCheckService: DefaultSpellCheckService(),
-                              misspelledSelectionColor: Colors.red,
-                              misspelledTextStyle:
-                                  DefaultTextStyle.of(context).style),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: FleatherField(
+                            readOnly: true,
+                            controller: _controller!,
+                            onLaunchUrl: _launchUrl,
+                            embedBuilder: _embedBuilder,
+                            spellCheckConfiguration: SpellCheckConfiguration(
+                                spellCheckService: DefaultSpellCheckService(),
+                                misspelledSelectionColor: Colors.red,
+                                misspelledTextStyle:
+                                    DefaultTextStyle.of(context).style),
+                          ),
                         ),
                       ],
                     ),

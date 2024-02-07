@@ -4,7 +4,9 @@ import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogReadHeaderWidget extends StatelessWidget {
   final String title;
-  const LogReadHeaderWidget({super.key, required this.title});
+  final String category;
+  const LogReadHeaderWidget(
+      {super.key, required this.title, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class LogReadHeaderWidget extends StatelessWidget {
               height: 4,
             ),
             Text(
-              '인기글',
+              category,
               style: SLTextStyle(
                       style: SLStyle.Text_M_Regular,
                       color: SLColor.neutral.shade50)
@@ -37,24 +39,53 @@ class LogReadHeaderWidget extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.people_outline),
-                    Text('Name'),
-                    Text('수료생'),
+                    const Icon(Icons.people_outline),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'Name',
+                      style: SLTextStyle(style: SLStyle.Text_S_Bold).textStyle,
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      '수료생',
+                      style: SLTextStyle(
+                              style: SLStyle.Text_XS_Medium,
+                              color: SLColor.primary)
+                          .textStyle,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '4시간 전',
+                      style:
+                          SLTextStyle(style: SLStyle.Text_XS_Medium).textStyle,
+                    ),
+                    const Text('·'),
+                    Text(
+                      '조회수 1',
+                      style:
+                          SLTextStyle(style: SLStyle.Text_XS_Medium).textStyle,
+                    ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Text('4시간 전'),
-                    Text('·'),
-                    Text('조회수 1'),
-                  ],
+
+                const reviselabel(
+                  fontSize: 10,
+                  width: 46,
+                  height: 32,
+                  text: '팔로우',
                 ),
-                ButtonSm(text: '팔로우'),
+
                 //ElevatedButton(onPressed: () {}, child: const Text('팔로우'))
               ],
             ),

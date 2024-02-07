@@ -3,12 +3,18 @@ import 'package:sfaclog/model/sfac_log_model.dart';
 
 class LogWriteState extends Equatable {
   final SFACLogModel? logModel;
-  const LogWriteState({this.logModel});
+  final List<String> categoryList;
 
-  LogWriteState copyWith({SFACLogModel? logModel}) {
-    return LogWriteState(logModel: logModel ?? this.logModel);
+  LogWriteState({this.logModel, List<String>? categoryList})
+      : categoryList = categoryList ?? ['선택 안함'];
+
+  LogWriteState copyWith({SFACLogModel? logModel, List<String>? categoryList}) {
+    return LogWriteState(
+      logModel: logModel ?? this.logModel,
+      categoryList: categoryList ?? this.categoryList,
+    );
   }
 
   @override
-  List<Object> get props => [logModel!];
+  List<Object?> get props => [logModel, categoryList];
 }

@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_category_add_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_read.dart';
 import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
@@ -57,9 +58,14 @@ final router = GoRouter(initialLocation: '/home', routes: [
             builder: (context, state) => const LogSettingPage(),
           ),
           GoRoute(
-            path: 'category',
-            builder: (context, state) => const LogCategoryPage(),
-          ),
+              path: 'category',
+              builder: (context, state) => const LogCategoryPage(),
+              routes: [
+                GoRoute(
+                  path: 'add',
+                  builder: (context, state) => const LogCategoryAddPage(),
+                ),
+              ]),
           GoRoute(
             path: 'upload/:tagId',
             builder: (context, state) {

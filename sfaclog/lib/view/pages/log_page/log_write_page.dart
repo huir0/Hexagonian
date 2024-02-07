@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:parchment_delta/parchment_delta.dart';
@@ -79,10 +80,7 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
             onTap: () {
               context.pop();
             },
-            child: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 20,
-            )),
+            child: SvgPicture.asset('assets/icons/arrow_back.svg')),
         title: Text(
           '로그 쓰기',
           style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,

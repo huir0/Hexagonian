@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
@@ -103,9 +104,9 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                       onPressed: () {
                         return;
                       },
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        size: 20,
+                      icon: SvgPicture.asset(
+                        'assets/icons/bookmark.svg',
+                        height: 18,
                       ),
                     ),
                   ),
@@ -164,9 +165,9 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.message,
-                          size: 12,
+                        SvgPicture.asset(
+                          'assets/icons/reply.svg',
+                          height: 14,
                         ),
                         const SizedBox(
                           width: 4,
@@ -184,9 +185,9 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                                 .textStyle,
                           ),
                         ),
-                        const Icon(
-                          Icons.thumb_up_alt_rounded,
-                          size: 12,
+                        SvgPicture.asset(
+                          'assets/icons/heart.svg',
+                          height: 14,
                         ),
                         const SizedBox(
                           width: 4,

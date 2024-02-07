@@ -29,6 +29,13 @@ class RemoteDataSource {
     }
   }
 
+  Future<void> createTableData(
+    String tableName,
+    Map<String, dynamic> creats,
+  ) async {
+    await pb.collection(tableName).create(body: creats);
+  }
+
   Future<RecordModel> getLogData(String tableName, String recordId) async {
     try {
       // 데이터를 가져옵니다.

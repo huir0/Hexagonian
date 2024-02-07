@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
@@ -66,10 +67,7 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
             onTap: () {
               context.pop();
             },
-            child: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 20,
-            )),
+            child: SvgPicture.asset('assets/icons/arrow_back.svg')),
         title: Text(
           '로그 설정',
           style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
