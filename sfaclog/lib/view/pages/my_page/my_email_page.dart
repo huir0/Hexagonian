@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sfaclog_widgets/buttons/answer_button.dart';
-import 'package:sfaclog_widgets/buttons/drop_button.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
