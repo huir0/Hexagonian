@@ -12,6 +12,7 @@ class SFACSearchBar extends StatelessWidget {
   ///
   ///false일 경우 readOnly가 true가 되어 textEdit 기능을 하지 않음
   final bool active;
+  final InputBorder? focusedBorder;
 
   ///SearchBar Tap시 실행 함수
   ///
@@ -47,6 +48,7 @@ class SFACSearchBar extends StatelessWidget {
     this.onTap,
     this.border,
     this.onSubmitted,
+    this.focusedBorder,
   });
 
   @override
@@ -83,6 +85,7 @@ class SFACSearchBar extends StatelessWidget {
             ),
             border: InputBorder.none,
             contentPadding: const EdgeInsets.only(bottom: 9, left: 15),
+            focusedBorder: focusedBorder,
           ),
         ),
       ),

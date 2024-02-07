@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.5 <4.0.0"
+  sdk: ">=3.2.2 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -51,6 +51,7 @@ dependencies:
     path: ../sfaclog_widgets
   table_calendar: ^3.0.9
   url_launcher: ^6.2.4
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_lints: ^3.0.0
@@ -69,7 +70,12 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/propose/
+    - assets/images/character/
+    - assets/images/logger/
     - assets/icons/
+    - assets/avatars/
+    - assets/logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

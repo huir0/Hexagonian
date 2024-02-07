@@ -22,7 +22,11 @@ class KakaoLoginButton extends ConsumerWidget {
           print('카카오로그인 실패: $e');
         }
       },
-      child: SizedBox(
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+        ),
         width: 50,
         height: 50,
         child: Image.asset(

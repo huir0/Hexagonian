@@ -29,6 +29,7 @@ class SFACPopUpDialog extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              clipBehavior: Clip.hardEdge,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 borderRadius:
@@ -42,7 +43,7 @@ class SFACPopUpDialog extends StatelessWidget {
                 ? Row(
                     children: [
                       Expanded(
-                        child: InkWell(
+                        child: GestureDetector(
                           onTap: onCanceled,
                           child: Container(
                             alignment: Alignment.center,
@@ -60,7 +61,7 @@ class SFACPopUpDialog extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: InkWell(
+                        child: GestureDetector(
                           onTap: onConfirmed,
                           child: Container(
                             alignment: Alignment.center,
@@ -80,7 +81,7 @@ class SFACPopUpDialog extends StatelessWidget {
                     ],
                   )
                 : Expanded(
-                    child: InkWell(
+                    child: GestureDetector(
                       onTap: onConfirmed,
                       child: Container(
                         alignment: Alignment.center,

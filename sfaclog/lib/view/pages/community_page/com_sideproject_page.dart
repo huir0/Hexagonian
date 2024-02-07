@@ -26,6 +26,7 @@ class _ComSidePageState extends State<ComSidePage> {
   Widget build(BuildContext context) {
     List<String> pagesLabel = ['홈', '커뮤니티', '로그', '채팅', '마이페이지'];
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'Pretendard',
@@ -34,13 +35,6 @@ class _ComSidePageState extends State<ComSidePage> {
           child: Scaffold(
             body: Column(
               children: [
-                const SLTab(
-                  menu: [
-                    Text('개발자 Q&A'),
-                    Text('사이드프로젝트'),
-                  ],
-                  height: 42,
-                ),
                 Expanded(
                     child: SingleChildScrollView(
                   child: Column(

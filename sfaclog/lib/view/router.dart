@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_add_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_read.dart';
-import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
@@ -15,7 +15,15 @@ import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_search_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_write_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_account_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_follow_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_notification_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_privacy_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_proposal_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_setting_page.dart';
+import 'package:sfaclog/view/pages/my_page/mye_terms_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_withdrawal_page.dart';
 
 final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
@@ -79,10 +87,47 @@ final router = GoRouter(initialLocation: '/home', routes: [
       builder: (context, state) => const LogSearchPage(),
     )
   ]),
-  GoRoute(
-    path: '/my',
-    builder: (context, state) => const MyPage(),
-  ),
+  GoRoute(path: '/my', builder: (context, state) => const MyPage(), routes: [
+    GoRoute(
+      path: 'setting',
+      builder: (context, state) => const MypageSetting(),
+      routes: [
+        GoRoute(
+          path: 'account',
+          builder: (context, state) => const MypageAccount(),
+        ),
+        GoRoute(
+          path: 'proposestate',
+          builder: (context, state) => const MypageProposal(),
+        ),
+        GoRoute(
+          path: 'notification',
+          builder: (context, state) => const MypageNotification(),
+        ),
+        GoRoute(
+          path: 'withdrawal',
+          builder: (context, state) => const MypageWithdrawal(),
+        ),
+        GoRoute(
+          path: 'terms',
+          builder: (context, state) => const MypageTerms(),
+        ),
+        GoRoute(
+          path: 'privacy',
+          builder: (context, state) => const MypagePrivacy(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: 'follow',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId'];
+        return MyFollowPage(
+          userName: userId ?? '닉네임',
+        );
+      },
+    ),
+  ]),
   GoRoute(
     path: '/login',
     builder: (context, state) => const LoginPage(),
@@ -93,16 +138,12 @@ final router = GoRouter(initialLocation: '/home', routes: [
   ),
 
   GoRoute(
-    path: '/sideproject',
-    builder: (context, state) => ComSidePage(),
-  ),
-  GoRoute(
     path: '/readqa',
     builder: (context, state) => const ComReadPage(),
   ),
   GoRoute(
     path: '/writecom',
-    builder: (context, state) => const LogWritePage(),
+    builder: (context, state) => const ComWritePage(),
   ),
   GoRoute(
     path: '/comsideread',

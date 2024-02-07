@@ -1,41 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:sfaclog_widgets/util/common.dart';
 
 class NoButton extends StatefulWidget {
   const NoButton({
-    Key? key,
+    super.key,
     this.backgroundColor,
     this.text,
     this.textColor,
     this.textStyle,
     this.image,
-  }) : super(key: key);
+    required this.onPressed,
+    required this.isPressed,
+  });
 
   final Color? backgroundColor;
   final String? text;
   final Color? textColor;
   final TextStyle? textStyle;
   final Image? image;
+  final VoidCallback onPressed;
+  final bool isPressed;
 
   @override
-  _NoButtonState createState() => _NoButtonState();
+  State<NoButton> createState() => _NoButtonState();
 }
 
 class _NoButtonState extends State<NoButton> {
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() {
-          _isPressed = !_isPressed;
-        });
+        widget.onPressed();
       },
       child: Container(
         decoration: ShapeDecoration(
-          color: _isPressed
-              ? (widget.backgroundColor ?? Color(0xFF0059FF))
-              : (widget.backgroundColor ?? Color(0xFF333333)),
+          color: widget.isPressed == true
+              ? SLColor.primary
+              : SLColor.neutral.shade80,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -45,7 +46,7 @@ class _NoButtonState extends State<NoButton> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
             Container(
@@ -54,10 +55,10 @@ class _NoButtonState extends State<NoButton> {
               color: widget.image?.color,
               child: widget.image ?? Image.asset('assets/images/no.png'),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
-            Container(
+            SizedBox(
               width: 168,
               height: 21,
               child: Text(
