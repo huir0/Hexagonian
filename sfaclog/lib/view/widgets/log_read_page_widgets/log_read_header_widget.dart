@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
@@ -44,7 +45,10 @@ class LogReadHeaderWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.people_outline),
+                    SvgPicture.asset(
+                      'assets/avatars/avatar_17.svg',
+                      height: 30,
+                    ),
                     const SizedBox(
                       width: 8,
                     ),
