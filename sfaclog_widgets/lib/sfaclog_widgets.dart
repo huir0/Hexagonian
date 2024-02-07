@@ -26,3 +26,5 @@ export 'package:sfaclog_widgets/buttons/follow_button.dart';
 export 'package:sfaclog_widgets/buttons/greydrop_button.dart';
 export 'package:sfaclog_widgets/buttons/onboarding_button/no_button.dart';
 export 'package:sfaclog_widgets/buttons/onboarding_button/self_box.dart';
+export 'package:sfaclog_widgets/buttons/sl_mypage_button.dart';
+export 'package:sfaclog_widgets/cards/sl_card.dart';
