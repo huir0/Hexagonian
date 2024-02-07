@@ -15,6 +15,10 @@ class SpecupReviewSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var logModelListState = ref.watch(logProvider).logModelList;
 
+    if (logModelListState == []) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

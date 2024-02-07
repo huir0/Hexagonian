@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/main_title.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/today_contents_widgets/today_log.dart';
+import 'package:sfaclog/view/widgets/main_page_widgets/today_contents_widgets/today_program.dart';
 import 'package:sfaclog_widgets/buttons/sl_main_tab_button.dart';
 
 class TodaysContents extends StatefulWidget {
@@ -47,7 +48,7 @@ class _TodaysContentsState extends State<TodaysContents> {
             TodayLog(), //로그
             TodayLog(), //프로젝트
             TodayLog(), //큐앤에이
-            TodayLog(), //스팩프로그램
+            TodayProgram(), //스팩프로그램
           ],
         ),
         const SizedBox(height: 40),
@@ -107,71 +108,3 @@ class _TabButtonsState extends State<TabButtons> {
     );
   }
 }
-
-// class TabButtons extends StatefulWidget {
-//   const TabButtons({
-//     super.key,
-//     required this.onTab,
-//   });
-//   final void Function(int) onTab;
-
-//   @override
-//   State<TabButtons> createState() => _TabButtonsState();
-// }
-
-// class _TabButtonsState extends State<TabButtons> {
-//   TabButtonType activeButton = TabButtonType.log;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         SLMainTabButton(
-//           type: TabButtonType.log,
-//           isActive: activeButton == TabButtonType.log,
-//           onTap: () {
-//             setState(() {
-//               activeButton = TabButtonType.log;
-//               widget.onTab(0);
-//             });
-//           },
-//         ),
-//         const SizedBox(width: 16),
-//         SLMainTabButton(
-//           type: TabButtonType.project,
-//           isActive: activeButton == TabButtonType.project,
-//           onTap: () {
-//             setState(() {
-//               activeButton = TabButtonType.project;
-//               widget.onTab(1);
-//             });
-//           },
-//         ),
-//         const SizedBox(width: 16),
-//         SLMainTabButton(
-//           type: TabButtonType.qna,
-//           isActive: activeButton == TabButtonType.qna,
-//           onTap: () {
-//             setState(() {
-//               activeButton = TabButtonType.qna;
-//               widget.onTab(2);
-//             });
-//           },
-//         ),
-//         const SizedBox(width: 16),
-//         SLMainTabButton(
-//           type: TabButtonType.sfacProgram,
-//           isActive: activeButton == TabButtonType.sfacProgram,
-//           onTap: () {
-//             setState(() {
-//               activeButton = TabButtonType.sfacProgram;
-//               widget.onTab(3);
-//             });
-//           },
-//         ),
-//       ],
-//     );
-//   }
-// }
