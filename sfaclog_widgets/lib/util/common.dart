@@ -10,9 +10,13 @@ enum SLStyle {
   Display_S_Regular,
   Heading_L_Regular,
   Heading_M_Regular,
+  Heading_M_Bold,
   Heading_S_Bold,
   Heading_S_Medium,
   Heading_S_Regular,
+  Text_XL_Bold,
+  Text_XL_Medium,
+  Text_XL_Regular,
   Text_L_Bold,
   Text_L_Medium,
   Text_L_Regular,
@@ -36,6 +40,7 @@ class SLTextStyle {
   static const double _headingL = 28.0;
   static const double _headingM = 24.0;
   static const double _headingS = 20.0;
+  static const double _textXL = 20.0;
   static const double _textL = 16.0;
   static const double _textM = 14.0;
   static const double _textS = 12.0;
@@ -69,6 +74,10 @@ class SLTextStyle {
         fontSize: _headingM,
         fontWeight: _regular,
       );
+  static TextStyle? get Heading_M_Bold => const TextStyle(
+        fontSize: _headingM,
+        fontWeight: _bold,
+      );
   static TextStyle? get Heading_S_Bold => const TextStyle(
         fontSize: _headingS,
         fontWeight: _bold,
@@ -79,6 +88,20 @@ class SLTextStyle {
       );
   static TextStyle? get Heading_S_Regular => const TextStyle(
         fontSize: _headingS,
+        fontWeight: _regular,
+      );
+
+  //Text XL Style
+  static TextStyle? get Text_XL_Bold => const TextStyle(
+        fontSize: _textXL,
+        fontWeight: _bold,
+      );
+  static TextStyle? get Text_XL_Medium => const TextStyle(
+        fontSize: _textXL,
+        fontWeight: _medium,
+      );
+  static TextStyle? get Text_XL_Regular => const TextStyle(
+        fontSize: _textXL,
         fontWeight: _regular,
       );
 
@@ -155,12 +178,20 @@ class SLTextStyle {
         return Heading_L_Regular!;
       case SLStyle.Heading_M_Regular:
         return Heading_M_Regular!;
+      case SLStyle.Heading_M_Bold:
+        return Heading_M_Bold!;
       case SLStyle.Heading_S_Bold:
         return Heading_S_Bold!;
       case SLStyle.Heading_S_Medium:
         return Heading_S_Meduim!;
       case SLStyle.Heading_S_Regular:
         return Heading_S_Regular!;
+      case SLStyle.Text_XL_Bold:
+        return Text_XL_Bold!;
+      case SLStyle.Text_XL_Medium:
+        return Text_XL_Medium!;
+      case SLStyle.Text_XL_Regular:
+        return Text_XL_Regular!;
       case SLStyle.Text_L_Bold:
         return Text_L_Bold!;
       case SLStyle.Text_L_Medium:
