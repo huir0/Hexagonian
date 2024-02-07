@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:sfaclog/view/widgets/log_page_widgets/log_card_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sfaclog/view/widgets/log_page_widgets/log_listtile_widget.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/main_title.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/more_button.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 
-class SpecupReviewSection extends StatelessWidget {
+class SpecupReviewSection extends ConsumerWidget {
   const SpecupReviewSection({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var logModelListState = ref.watch(logProvider).logModelList;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,7 +37,14 @@ class SpecupReviewSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return const LogPageCardWidget();
+              return GestureDetector(
+                onTap: () {
+                  context.push('/log/read/${logModelListState?[index].id}');
+                },
+                child: LogListTileWidget(
+                  logData: logModelListState?[index],
+                ),
+              );
             },
             separatorBuilder: (context, index) {
               return const SizedBox(width: 16);

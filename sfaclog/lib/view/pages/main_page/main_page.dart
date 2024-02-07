@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/view/widgets/main_page_widgets/blue_bg_container.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/line_deco_widget.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/log_card_grid_section.dart';
-import 'package:sfaclog/view/widgets/main_page_widgets/main_title.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/specup_review_section.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/top_logger_section.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/today_contents.dart';
-import 'package:sfaclog/view/widgets/main_page_widgets/top_logger_card.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -16,7 +13,6 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     late String username = '김개발';
     const String thumbnail = 'https://source.unsplash.com/random';
-    const String title = '국비 교육으로 백엔드 개발';
 
     return ListView(
       shrinkWrap: true,
