@@ -22,8 +22,9 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
-flutter: null
-# To add assets to your package, add an assets section, like this:
+flutter:
+  # To add assets to your package, add an assets section, like this:
+  uses-material-design: true
 assets:
   - assets/icons/
 #   - images/a_dot_ham.jpeg
