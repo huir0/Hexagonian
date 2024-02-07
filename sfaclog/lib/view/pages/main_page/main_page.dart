@@ -56,14 +56,14 @@ class MainPage extends StatelessWidget {
             ),
             color: SLColor.neutral.shade90,
           ),
-          child: const Column(
+          child: Column(
             children: [
-              LineDecoWidget(),
-              TodaysContents(),
-              Divider(),
-              LogCardGridSection(),
-              TopLoggerSection(),
-              LogCardGridSection(
+              const LineDecoWidget(),
+              const TodaysContents(),
+              const Divider(),
+              const LogCardGridSection(),
+              const TopLoggerSection(),
+              const LogCardGridSection(
                 subject: '#IOS',
                 subtitle: '개발자라면 주목!',
               ),
