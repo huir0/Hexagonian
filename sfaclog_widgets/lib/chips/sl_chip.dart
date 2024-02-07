@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SFACChip extends StatelessWidget {
   /// Chip의 Text
@@ -60,6 +61,7 @@ class SFACSkillChip extends StatelessWidget {
 
   ///suffixIcon
   final IconData? suffixIcon;
+  final Widget? svgIconWidget;
   final VoidCallback? onPressed;
   final double? height;
   final EdgeInsets? padding;
@@ -67,11 +69,12 @@ class SFACSkillChip extends StatelessWidget {
     super.key,
     required this.text,
     this.backgroundColor = const Color(0xFF0059FF),
-    this.borderColor = const Color(0x00000000),
+    this.borderColor = Colors.transparent,
     this.suffixIcon,
     this.onPressed,
     this.height,
     this.padding = const EdgeInsets.all(0),
+    this.svgIconWidget,
   });
 
   @override
@@ -82,7 +85,6 @@ class SFACSkillChip extends StatelessWidget {
         height: height,
         child: Chip(
           padding: padding,
-          visualDensity: const VisualDensity(horizontal: 0.0, vertical: -4),
           shape: RoundedRectangleBorder(
               side: BorderSide(color: borderColor),
               borderRadius: const BorderRadius.all(Radius.circular(100))),
@@ -92,6 +94,7 @@ class SFACSkillChip extends StatelessWidget {
               children: [
                 text,
                 suffixIcon != null ? Icon(suffixIcon) : const SizedBox(),
+                svgIconWidget ?? Container(),
               ],
             ),
           ),

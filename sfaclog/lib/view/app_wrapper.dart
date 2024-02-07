@@ -29,6 +29,7 @@ class AppWrapper extends ConsumerWidget {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: state.page == 0 ? SLColor.primary : null,
         appBar: AppBarWidget(pageLabel: pagesLabel[state.page]),
         body: pages[state.page],
         floatingActionButton: state.fabVisible
