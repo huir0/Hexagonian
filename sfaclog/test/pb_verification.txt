@@ -1,0 +1,68 @@
+    var pb = PocketBase('http://43.202.59.218:8090');
+    TextEditingController emailController = TextEditingController();
+    TextEditingController pwController = TextEditingController();
+
+
+TextField(
+            controller: pwController,
+            decoration: const InputDecoration(
+              labelText: 'pw',
+            ),
+          ),
+          TextField(
+            controller: emailController,
+            decoration: const InputDecoration(
+              labelText: 'E-mail',
+            ),
+          ),
+          isVerifiedEmail
+              ? const Text('인증이 완료되었습니다..')
+              : const Text('이메일이 인증되지 않았습니다.'),
+          ElevatedButton(
+            onPressed: () async {
+              try {
+                //User Table에 데이터를 생성함
+                //이유 :
+                await pb.collection('users').create(body: {
+                  'username': 'cocoadrinker',
+                  'email': emailController.value.text,
+                  'password': pwController.value.text,
+                  'passwordConfirm': pwController.value.text
+                });
+
+                //User Table에 등록한 곳에 인증 메일 전송
+                await pb
+                    .collection('users')
+                    .requestVerification(emailController.value.text);
+
+                //로그인을 하여 authStore의 데이터를 취득
+                await pb.collection('users').authWithPassword(
+                      emailController.value.text,
+                      pwController.value.text,
+                    );
+                //pb.authStore.model.id를 통해 해당 id가 변경이 되면 실행할 함수 설정
+                pb.collection("users").subscribe(pb.authStore.model.id,
+                    (e) async {
+                  await pb.collection('users').authRefresh();
+                  //로그아웃 될 시
+                  if (e.action == "delete") {
+                    pb.authStore.clear();
+                    //값이 변경 될시
+                  } else if (e.action == "update") {
+                    if (pb.authStore.model != null) {
+                      //bool 값을 통해 Verified가 되면 메시지 변경
+                      pb.authStore.model.data["verified"]
+                          ? isVerifiedEmail = true
+                          : isVerifiedEmail = false;
+                    }
+                    setState(() {});
+                  } else {
+                    pb.authStore.save(pb.authStore.token, e.record);
+                  }
+                });
+              } catch (e) {
+                print(e);
+              }
+            },
+            child: const Text('이메일 인증하기'),
+          ),
