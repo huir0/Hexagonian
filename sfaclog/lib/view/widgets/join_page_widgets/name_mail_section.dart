@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sfaclog/view/widgets/join_page_widgets/title_with_count.dart';
+import 'package:sfaclog_widgets/titles/title_with_count.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog_widgets/buttons/sl_button.dart';
 import 'package:sfaclog_widgets/textfields/validate_input.dart';

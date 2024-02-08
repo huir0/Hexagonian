@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/skill_model.dart';
-import 'package:sfaclog/view/widgets/join_page_widgets/title_with_count.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog/viewmodel/skills_viewmodel/skills_provider.dart';
 import 'package:sfaclog/viewmodel/skills_viewmodel/skills_state.dart';
