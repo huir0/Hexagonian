@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/line_deco_widget.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/log_card_grid_section.dart';
@@ -7,7 +8,6 @@ import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/sfac_pro
 import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/specup_review_section.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/sections_widgets/top_logger_section.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/today_contents.dart';
-import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog/viewmodel/programs_viewmodel/programs_provider.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -57,10 +57,10 @@ class _MainPageState extends ConsumerState<MainPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //@todo GestureDetector 삭제할것
                     GestureDetector(
                       onTap: () {
-                        _initProgram();
-                        print('tab initProgram');
+                        context.push('/login');
                       },
                       child: Text(
                         '오늘의 스팩업!',
