@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:sfaclog/model/skill_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PocketbaseAuth {
@@ -9,19 +8,19 @@ class PocketbaseAuth {
   final pb = PocketBase('http://43.202.59.218:8090');
 
   Future<RecordModel> createUserInfo({
-    String? nickname,
+    required String nickname,
     required List<String> agreement,
-    List<SkillModel>? skill,
+    required List<String> skill,
     required String user,
     String? picture,
-    String? propose_state,
+    required String propose_state,
   }) async {
     RecordModel result = await pb.collection('user').create(body: {
       'user': user,
       'agreement': agreement,
-      'nickname': nickname ?? '',
+      'nickname': nickname,
       'picture': picture ?? '',
-      'skill': skill ?? [],
+      'skill': skill,
       'propose_state': propose_state,
     });
 

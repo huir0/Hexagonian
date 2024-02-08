@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/model/skill_model.dart';
 import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/model/user_model.dart';
@@ -17,9 +18,16 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
     if (state.currentPage + 1 == state.totalPage) {
       return;
     }
-    print(state.currentPage);
     state = state.copyWith(
       currentPage: state.currentPage + 1,
+    );
+  }
+
+  void moveSpecifieSection({
+    required OnboardingStatus section,
+  }) {
+    state = state.copyWith(
+      currentPage: section.index,
     );
   }
 
@@ -53,16 +61,12 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
     state = state.copyWith(onboardingStatus: OnboardingStatus.section2);
   }
 
-  void uploadPasswordAndTerms({
-    required String password,
-    required String passwordConfirm,
+  void uploadTerms({
     required terms,
   }) {
     try {
       state = state.copyWith(
         onboardingStatus: OnboardingStatus.section2,
-        password: password,
-        passwordConfirm: passwordConfirm,
         userInfo: state.userInfo!.copyWith(
           agreementState: terms,
         ),
@@ -125,6 +129,20 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
       state = state.copyWith(onboardingStatus: OnboardingStatus.error);
       rethrow;
     }
+  }
+
+  void setNewUser(RecordModel res) {
+    UserModel user = UserModel.fromMap({
+      ...res.toJson(),
+      // 'id': res.id,
+    });
+
+    state = state.copyWith(
+      userInfo: state.userInfo!.copyWith(
+        user: user,
+      ),
+      onboardingStatus: OnboardingStatus.success,
+    );
   }
 
   void setOnboardingState(UserInfo? userInfo) {
