@@ -25,6 +25,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
       rethrow;
     }
   }
+
+  Future<RecordModel> signup({
+    required String name,
+    required String email,
+    required String password,
+    required String passwordConfirm,
+    required String nickname,
+  }) async {
+    try {
+      state = state.copyWith(authStatus: AuthStatus.authenticated);
+
+      RecordModel result = await PocketbaseAuth().setUserData(
+        name: name,
+        email: email,
+        password: password,
+        nickname: nickname,
+        passwordConfirm: passwordConfirm,
+      );
+
+      return result;
+    } catch (e) {
+      state = state.copyWith(authStatus: AuthStatus.unauthenticated);
+      rethrow;
+    }
+  }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
