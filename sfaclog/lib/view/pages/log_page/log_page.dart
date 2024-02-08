@@ -7,6 +7,7 @@ import 'package:sfaclog/view/widgets/log_page_widgets/log_card_widget.dart';
 import 'package:sfaclog/view/widgets/log_page_widgets/log_listtile_widget.dart';
 import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
+import 'package:shimmer/shimmer.dart';
 
 enum OptionList { created, like }
 
@@ -18,8 +19,6 @@ class LogPage extends ConsumerStatefulWidget {
 }
 
 bool isVerifiedEmail = false;
-
-List<String> itemList = ['1', '2', '3'];
 var optionList = ['등록순', '추천순'];
 String selectedOption = optionList[0];
 
@@ -88,7 +87,18 @@ class _LogPageState extends ConsumerState<LogPage> {
                       ));
                 }).toList(),
               )
-            : const CircularProgressIndicator(),
+            : Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  height: 200,
+                  margin: const EdgeInsets.symmetric(horizontal: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
         Padding(
           padding: const EdgeInsets.only(
             top: 32,
@@ -167,7 +177,25 @@ class _LogPageState extends ConsumerState<LogPage> {
                   },
                 ),
               )
-            : const CircularProgressIndicator()
+            : Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: List.generate(
+                        5,
+                        (index) => Container(
+                              height: 80,
+                              margin: const EdgeInsets.only(bottom: 20),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            )),
+                  ),
+                ),
+              ),
       ],
     );
   }

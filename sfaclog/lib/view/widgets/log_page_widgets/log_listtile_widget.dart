@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
@@ -127,9 +128,9 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                     onPressed: () {
                       return;
                     },
-                    icon: const Icon(
-                      Icons.favorite_border,
-                      size: 20,
+                    icon: SvgPicture.asset(
+                      'assets/icons/bookmark.svg',
+                      height: 18,
                     ),
                   ),
                 ),
@@ -162,7 +163,10 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.message, size: 12, color: SLColor.neutral.shade50),
+                  SvgPicture.asset(
+                    'assets/icons/reply.svg',
+                    height: 14,
+                  ),
                   const SizedBox(
                     width: 4,
                   ),
@@ -183,8 +187,10 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                           .textStyle,
                     ),
                   ),
-                  Icon(Icons.thumb_up_alt_rounded,
-                      size: 12, color: SLColor.neutral.shade50),
+                  SvgPicture.asset(
+                    'assets/icons/heart.svg',
+                    height: 14,
+                  ),
                   const SizedBox(
                     width: 4,
                   ),

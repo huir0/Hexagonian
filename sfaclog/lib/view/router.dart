@@ -3,6 +3,7 @@ import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
+import 'package:sfaclog/view/pages/log_page/log_category_add_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_read.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
@@ -36,8 +37,11 @@ final router = GoRouter(initialLocation: '/home', routes: [
   ),
   GoRoute(path: '/log', builder: (context, state) => const LogPage(), routes: [
     GoRoute(
-      path: 'reply',
-      builder: (context, state) => const LogReplyPage(),
+      path: 'reply/:tagId',
+      builder: (context, state) {
+        final tagId = state.pathParameters['tagId'];
+        return LogReplyPage(tagId: tagId ?? '');
+      },
     ),
     GoRoute(
       path: 'read/:tagId',
@@ -66,9 +70,14 @@ final router = GoRouter(initialLocation: '/home', routes: [
             builder: (context, state) => const LogSettingPage(),
           ),
           GoRoute(
-            path: 'category',
-            builder: (context, state) => const LogCategoryPage(),
-          ),
+              path: 'category',
+              builder: (context, state) => const LogCategoryPage(),
+              routes: [
+                GoRoute(
+                  path: 'add',
+                  builder: (context, state) => const LogCategoryAddPage(),
+                ),
+              ]),
           GoRoute(
             path: 'upload/:tagId',
             builder: (context, state) {
