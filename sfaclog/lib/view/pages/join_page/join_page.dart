@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/util/join_sections.dart';
+import 'package:sfaclog/util/onboarding_sections.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
@@ -12,8 +13,6 @@ class JoinPage extends ConsumerWidget {
     final onboardingState = ref.watch(onboardingProvider);
 
     int curIndex = onboardingState.currentPage;
-    // int curIndex = 4;
-    // print(curIndex + 1);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -34,7 +33,10 @@ class JoinPage extends ConsumerWidget {
             IndexedStack(
               key: ValueKey<int>(onboardingState.currentPage),
               index: onboardingState.currentPage,
-              children: joinSections,
+              children: [
+                ...joinSections,
+                ...onboardingSections,
+              ],
             ),
           ],
         ),
