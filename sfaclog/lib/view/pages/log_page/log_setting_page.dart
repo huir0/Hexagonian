@@ -11,6 +11,7 @@ import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/view/widgets/common_widget.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LogSettingPage extends ConsumerStatefulWidget {
   const LogSettingPage({super.key});
@@ -63,11 +64,12 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        leading: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: SvgPicture.asset('assets/icons/arrow_back.svg')),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
+        ),
         title: Text(
           '로그 설정',
           style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
@@ -385,11 +387,17 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                                   }
                                 }
                                 // 로딩 중에는 로딩 인디케이터를 표시
-                                return const SizedBox(
-                                  height: 200,
-                                  width: 200,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    height: 200,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 24),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                   ),
                                 );
                               },

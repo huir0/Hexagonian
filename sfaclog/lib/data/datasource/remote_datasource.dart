@@ -29,11 +29,30 @@ class RemoteDataSource {
     }
   }
 
-  Future<void> createTableData(
+  Future<String> createTableData(
     String tableName,
     Map<String, dynamic> creats,
   ) async {
-    await pb.collection(tableName).create(body: creats);
+    try {
+      var record = await pb.collection(tableName).create(body: creats);
+      return record.id;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<String> updateTableData(
+    String tableName,
+    String tagId,
+    Map<String, dynamic> updates,
+  ) async {
+    try {
+      var record = await pb.collection(tableName).update(tagId, body: updates);
+      return record.id;
+    } catch (e) {
+      print(e);
+      return '';
+    }
   }
 
   Future<RecordModel> getLogData(String tableName, String recordId) async {
@@ -155,14 +174,6 @@ class RemoteDataSource {
     } catch (e) {
       print(e);
     }
-  }
-
-  Future<void> updateLogData(
-    String tableName,
-    String tagId,
-    Map<String, dynamic> updates,
-  ) async {
-    await pb.collection(tableName).update(tagId, body: updates);
   }
 
   Future<String> getImgURL(

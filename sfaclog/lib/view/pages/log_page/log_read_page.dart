@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_appbar_widget.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_footer_widget.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_header_widget.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LogReadPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class _LogReadPageState extends State<LogReadPage> {
   FleatherController? _controller;
   final RemoteDataSource _remoteDataSource = RemoteDataSource();
   RecordModel? logData;
+  SFACLogModel? sfacLogModel;
   @override
   void initState() {
     super.initState();
@@ -39,9 +42,14 @@ class _LogReadPageState extends State<LogReadPage> {
 
   Future<void> _initController() async {
     try {
-      logData = await _remoteDataSource.getLogData('log', widget.tagId);
+      logData =
+          await _remoteDataSource.getLogData('log', widget.tagId).then((value) {
+        sfacLogModel = SFACLogModel.fromJson(value.toJson());
+        return null;
+      });
+
       await _updateViewCount(widget.tagId);
-      final logBody = logData!.toJson()['body'];
+      final logBody = sfacLogModel!.body;
       final heuristics = ParchmentHeuristics(
         formatRules: [],
         insertRules: [
@@ -63,9 +71,9 @@ class _LogReadPageState extends State<LogReadPage> {
 
   Future<void> _updateViewCount(String tagId) async {
     try {
-      int currentViewCount = logData!.data['view'] ?? 0;
+      int currentViewCount = sfacLogModel!.view;
 
-      await _remoteDataSource.updateLogData(
+      await _remoteDataSource.updateTableData(
         'log',
         tagId,
         {'view': currentViewCount + 1},
@@ -83,39 +91,67 @@ class _LogReadPageState extends State<LogReadPage> {
       body: Column(
         children: [
           _controller == null
-              ? const Center(child: CircularProgressIndicator())
-              : Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        LogReadHeaderWidget(
-                          title: logData!.toJson()['title'],
-                          category: logData!.toJson()['category'],
-                        ),
-                        Divider(
-                          height: 1,
-                          color: SLColor.neutral.shade80,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: FleatherField(
-                            readOnly: true,
-                            controller: _controller!,
-                            onLaunchUrl: _launchUrl,
-                            embedBuilder: _embedBuilder,
-                            spellCheckConfiguration: SpellCheckConfiguration(
-                                spellCheckService: DefaultSpellCheckService(),
-                                misspelledSelectionColor: Colors.red,
-                                misspelledTextStyle:
-                                    DefaultTextStyle.of(context).style),
-                          ),
-                        ),
-                      ],
+              ? Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: 200,
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                ),
-          const LogReadFooterWidget(),
+                )
+              : sfacLogModel == null
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        height: 200,
+                        margin: const EdgeInsets.symmetric(horizontal: 24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            LogReadHeaderWidget(
+                              sfacLogModel: sfacLogModel!,
+                            ),
+                            Divider(
+                              height: 1,
+                              color: SLColor.neutral.shade80,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              child: FleatherField(
+                                readOnly: true,
+                                controller: _controller!,
+                                onLaunchUrl: _launchUrl,
+                                embedBuilder: _embedBuilder,
+                                spellCheckConfiguration:
+                                    SpellCheckConfiguration(
+                                        spellCheckService:
+                                            DefaultSpellCheckService(),
+                                        misspelledSelectionColor: Colors.red,
+                                        misspelledTextStyle:
+                                            DefaultTextStyle.of(context).style),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+          sfacLogModel == null
+              ? const CircularProgressIndicator()
+              : LogReadFooterWidget(tagId: sfacLogModel!.id),
         ],
       ),
     ));

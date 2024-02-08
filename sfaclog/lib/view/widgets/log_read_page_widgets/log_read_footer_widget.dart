@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 
 class LogReadFooterWidget extends StatelessWidget {
-  const LogReadFooterWidget({super.key});
+  final String tagId;
+  const LogReadFooterWidget({super.key, required this.tagId});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class LogReadFooterWidget extends StatelessWidget {
             IconButton(
                 padding: const EdgeInsets.all(0),
                 onPressed: () {
-                  context.push('/log/reply');
+                  context.push('/log/reply/$tagId');
                 },
                 icon: SvgPicture.asset('assets/icons/reply.svg')),
             const Text('5'),

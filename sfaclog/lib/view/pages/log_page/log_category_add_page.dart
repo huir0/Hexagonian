@@ -27,11 +27,12 @@ class _LogCategoryAddPageState extends ConsumerState<LogCategoryAddPage> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        leading: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: SvgPicture.asset('assets/icons/arrow_back.svg')),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
+        ),
         title: Text(
           '카테고리 추가',
           style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,

@@ -76,11 +76,12 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        leading: GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: SvgPicture.asset('assets/icons/arrow_back.svg')),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
+        ),
         title: Text(
           '로그 쓰기',
           style: SLTextStyle(style: SLStyle.Heading_S_Bold).textStyle,
@@ -181,9 +182,9 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
                                 );
                               }
                             },
-                            child: const Icon(
-                              Icons.add_a_photo_outlined,
-                              size: 20,
+                            child: SvgPicture.asset(
+                              'assets/icons/add_picture.svg',
+                              height: 24,
                             ),
                           ),
                         ],

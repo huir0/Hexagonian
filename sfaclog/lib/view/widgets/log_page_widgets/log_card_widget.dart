@@ -76,7 +76,7 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                           imgUrl!,
                           fit: BoxFit.cover,
                         )
-                      : const CircularProgressIndicator(),
+                      : const SizedBox(),
                 ),
                 Positioned(
                   left: 16,

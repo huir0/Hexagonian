@@ -3,8 +3,10 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
 
 class LogReplyListTileWidget extends StatelessWidget {
+  final dynamic reply;
   const LogReplyListTileWidget({
     super.key,
+    this.reply,
   });
 
   @override
