@@ -2,9 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
+import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_read.dart';
-import 'package:sfaclog/view/pages/community_page/community_sideproject.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
@@ -137,16 +137,12 @@ final router = GoRouter(initialLocation: '/home', routes: [
   ),
 
   GoRoute(
-    path: '/sideproject',
-    builder: (context, state) => ComSidePage(),
-  ),
-  GoRoute(
     path: '/readqa',
     builder: (context, state) => const ComReadPage(),
   ),
   GoRoute(
     path: '/writecom',
-    builder: (context, state) => const LogWritePage(),
+    builder: (context, state) => const ComWritePage(),
   ),
   GoRoute(
     path: '/comsideread',

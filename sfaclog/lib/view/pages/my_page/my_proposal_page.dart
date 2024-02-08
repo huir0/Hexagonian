@@ -65,13 +65,16 @@ class _MypageProposalState extends State<MypageProposal> {
             ),
 
             // FIXME: change button style
-            NoButton(
-              text: '채용 제안만 받을래요.',
+            // NoButton(
+            //   text: '채용 제안만 받을래요.',
+
+            // ),
+            SizedBox(
+              height: 20,
             ),
-            SizedBox(height: 20,),
-            NoButton(
-              text: '프로젝트 제안만 받을래요.',
-            ),
+            // NoButton(
+            //   text: '프로젝트 제안만 받을래요.',
+            // ),
           ],
         ),
       ),
