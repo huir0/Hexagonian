@@ -20,7 +20,7 @@ _$UserInfoImpl _$$UserInfoImplFromJson(Map<String, dynamic> json) =>
           .toList(),
       user: json['user'] == null
           ? null
-          : UserModel.fromJson(json['user'] as String),
+          : UserModel.fromJson(json['user'] as Map<String, dynamic>),
       introduction: json['introduction'] as String?,
     );
 
