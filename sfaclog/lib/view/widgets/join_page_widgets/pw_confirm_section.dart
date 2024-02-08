@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sfaclog/view/widgets/join_page_widgets/title_with_count.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sfaclog/model/user_model.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
+import 'package:sfaclog_widgets/titles/title_with_count.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog_widgets/buttons/sl_button.dart';
 import 'package:sfaclog_widgets/textfields/validate_input.dart';
 import 'package:sfaclog_widgets/menus/sl_expansion_tile.dart';
 import 'package:sfaclog_widgets/util/common.dart';
-
-enum termsState {
-  all,
-}
 
 class PwConfirmSection extends ConsumerStatefulWidget {
   const PwConfirmSection({
@@ -43,6 +43,8 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
   Widget build(BuildContext context) {
     final onboardingState = ref.watch(onboardingProvider);
     final onboardingNotifier = ref.read(onboardingProvider.notifier);
+    final authNotifier = ref.read(authProvider.notifier);
+    final userInfoNotifier = ref.read(userInfoProvider.notifier);
 
     const String title = '회원가입';
 
@@ -56,6 +58,7 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
         TitleWithCount(
             title: title,
@@ -143,24 +146,38 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
           text: '다음',
           isActive:
               onboardingState.isButtonEnabled && agreementState.contains('all'),
-          onTap:
-              onboardingState.isButtonEnabled && agreementState.contains('all')
-                  ? () async {
-                      try {
-                        if (formKey.currentState!.validate()) {
-                          formKey.currentState!.save();
-                          onboardingNotifier.uploadPasswordAndTerms(
-                            password: password,
-                            passwordConfirm: passwordConfirm,
-                            terms: agreementState,
-                          );
-                        }
-                        onboardingNotifier.moveNextSection();
-                      } catch (e) {
-                        print(e);
-                      }
+          onTap: onboardingState.isButtonEnabled &&
+                  agreementState.contains('all')
+              ? () async {
+                  try {
+                    if (formKey.currentState!.validate()) {
+                      formKey.currentState!.save();
+                      onboardingNotifier.uploadTerms(
+                        terms: agreementState,
+                      );
+
+                      UserModel basicUserInfo = onboardingState.userInfo!.user!;
+
+                      var res = await authNotifier.signup(
+                        name: basicUserInfo.name!,
+                        email: basicUserInfo.email!,
+                        password: password,
+                        passwordConfirm: passwordConfirm,
+                        nickname: basicUserInfo.name!,
+                      );
+
+                      await userInfoNotifier.setBasicUserInfo(res);
+                      onboardingNotifier.setNewUser(res);
                     }
-                  : null,
+
+                    Future.delayed(Duration.zero, () {
+                      context.push('/welcome');
+                    });
+                  } catch (e) {
+                    print('pw_confirm_section error: $e');
+                  }
+                }
+              : null,
         ),
       ],
     );

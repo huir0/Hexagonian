@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_add_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
@@ -138,6 +139,10 @@ final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
     path: '/signup',
     builder: (context, state) => const JoinPage(),
+  ),
+  GoRoute(
+    path: '/welcome',
+    builder: (context, state) => const JoinCompletePage(),
   ),
 
   GoRoute(

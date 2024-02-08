@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/model/user_model.dart';
-import 'package:sfaclog/view/widgets/join_page_widgets/title_with_count.dart';
+import 'package:sfaclog/model/user_info.dart';
+import 'package:sfaclog_widgets/titles/title_with_count.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
 import 'package:sfaclog_widgets/buttons/onboarding_button/no_button.dart';
@@ -70,31 +71,43 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
         ),
         const SizedBox(height: 40),
         ...renderProposeButtons(),
+        const SizedBox(height: 40),
         SLButton(
           text: '스팩로그 시작하기',
           isActive: proposeState != null,
           onTap: proposeState != null
               ? () async {
                   try {
-                    UserModel basicUserInfo = onboardingState.userInfo!.user!;
-                    await userInfoNotifier.createUser(
-                      name: basicUserInfo.name!,
-                      email: basicUserInfo.email!,
-                      password: onboardingState.password,
-                      passwordConfirm: onboardingState.passwordConfirm,
-                      nickname: basicUserInfo.username!,
+                    if (onboardingState.userInfo != null &&
+                        userInfoState.userInfo!.user != null) {
+                      UserInfo userInfo = onboardingState.userInfo!;
+                      List<String> skillList = [
+                        ...userInfo.skill!.map((skill) => skill.id)
+                      ];
+                      var res = await userInfoNotifier.createUserInfo(
+                        nickname: userInfo.nickname!,
+                        agreement: userInfo.agreementState!,
+                        skill: skillList,
+                        userModelId: userInfo.user!.id!,
+                        propose_state: userInfo.proposeState!,
+                        picture: userInfo.picture,
+                      );
+
+                      userInfoNotifier.setUserInfo(
+                        res,
+                        skills: userInfo.skill!,
+                        user: userInfo.user!,
+                      );
+                    } else {
+                      print(
+                          'createUserInfo: ${onboardingState.userInfo!.user}가 null입니다.');
+                      return;
+                    }
+
+                    Future.delayed(
+                      Duration.zero,
+                      () => context.push('/home'),
                     );
-
-                    // if (userInfoState.userInfo != null) {
-                    //   String recordId = userInfoState.userInfo!.user!.id!;
-                    //   await userInfoNotifier.createUserInfo(
-                    //     agreement: onboardingState.agreementState!,
-                    //     userModelId: recordId,
-                    //   );
-                    // }
-
-                    print('성공');
-                    print(userInfoState.userInfo);
                   } catch (e) {
                     print('error: $e');
                   }
