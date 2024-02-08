@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog_widgets/util/common.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileSection extends ConsumerStatefulWidget {
   const ProfileSection({
@@ -19,7 +20,6 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
   TextEditingController controller = TextEditingController();
   bool isActive = false;
   String nickname = '';
-  String profileImg = '';
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +64,9 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
                 child: Stack(
                   children: [
                     SvgPicture.asset(
-                      profileImg != ''
-                          ? profileImg
-                          : 'assets/avatars/avatar_17.svg',
+                      onboardingState.userInfo?.picture != null
+                          ? onboardingState.userInfo!.picture!
+                          : 'assets/avatars/avatar_01.svg',
                       width: 150,
                       height: 150,
                       fit: BoxFit.cover,
@@ -75,6 +75,9 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
                       bottom: 0,
                       right: 0,
                       child: SLCircleIconButton(
+                        onTap: () {
+                          context.push('/profile');
+                        },
                         width: editbtnSize,
                         height: editbtnSize,
                         icon: const Icon(
@@ -123,10 +126,8 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
                       formKey.currentState!.save();
                       onboardingNotifier.uploadNicknameProfile(
                         nickname: nickname,
-                        profile: profileImg,
                       );
                     }
-                    print('$nickname, $profileImg');
                     onboardingNotifier.moveNextSection();
                   } catch (e) {
                     print(e);

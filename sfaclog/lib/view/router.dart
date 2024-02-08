@@ -24,6 +24,7 @@ import 'package:sfaclog/view/pages/my_page/my_proposal_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_setting_page.dart';
 import 'package:sfaclog/view/pages/my_page/mye_terms_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_withdrawal_page.dart';
+import 'package:sfaclog/view/pages/onboarding_page/profile_edit_page.dart';
 
 final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
@@ -130,6 +131,10 @@ final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
     path: '/signup',
     builder: (context, state) => const JoinPage(),
+  ),
+  GoRoute(
+    path: '/profile',
+    builder: (context, state) => const ProfileEditPage(),
   ),
   GoRoute(
     path: '/welcome',

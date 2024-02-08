@@ -79,8 +79,8 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
   }
 
   void uploadNicknameProfile({
-    required String nickname,
-    required String? profile,
+    String? nickname,
+    String? profile,
   }) {
     try {
       state = state.copyWith(

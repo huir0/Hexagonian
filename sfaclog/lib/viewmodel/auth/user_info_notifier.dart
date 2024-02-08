@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
@@ -44,6 +42,14 @@ class UserInfoNotifier extends StateNotifier<UserState> {
   }) async {
     try {
       state = state.copyWith(userStatus: UserStatus.fetching);
+
+      if (picture != null || picture != '') {
+        // http.MultipartFile.fromBytes(
+        //   'images',
+        //   imageBytes,
+        //   filename: picture,
+        // );
+      }
 
       var result = await PocketbaseAuth().createUserInfo(
         agreement: agreement,
