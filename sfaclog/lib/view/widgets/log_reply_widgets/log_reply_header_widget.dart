@@ -11,6 +11,7 @@ class LogReplyAppBarWidget extends StatelessWidget
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
       centerTitle: true,
       leading: IconButton(
         onPressed: () {

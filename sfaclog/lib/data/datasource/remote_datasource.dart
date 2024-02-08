@@ -11,14 +11,19 @@ class RemoteDataSource {
 
   final pb = PocketBase(pocketBaseURL);
   Future<List<dynamic>> getTableData(
-      {required String tableName, String? orderBy}) async {
+      {required String tableName, String? orderBy, String? filter = ''}) async {
     try {
-      // 데이터를 가져옵니다.
+      // 필터 문자열 구성
+      String finalFilter = 'created >= "2022-01-01 00:00:00"';
+      if (filter != '') {
+        finalFilter += "&&$filter";
+      }
+
       var data = await pb.collection(tableName).getList(
             page: 1,
             perPage: 50,
             sort: orderBy,
-            filter: 'created >= "2022-01-01 00:00:00"',
+            filter: finalFilter,
           );
 
       return data.items;

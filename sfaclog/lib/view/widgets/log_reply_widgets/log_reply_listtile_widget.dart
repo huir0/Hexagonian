@@ -1,65 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/log_reply_model.dart';
+import 'package:sfaclog/viewmodel/log_reply_viewmodel/log_reply_notifier.dart';
 import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
 
-class LogReplyListTileWidget extends StatelessWidget {
-  final dynamic reply;
+class LogReplyListTileWidget extends ConsumerWidget {
+  final LogReplyModel? reply;
   const LogReplyListTileWidget({
     super.key,
     this.reply,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var state = ref.watch(logReplyProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Row(
-              children: [Icon(Icons.people), Text('Name')],
-            ),
-            Row(
-              children: [
-                const Text('2024.02.02'),
-                InkWell(
-                    onTap: () {
-                      SLSheet.bottomSheet(
-                          context: context,
-                          child: Column(children: [
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  '신고하기',
-                                  style: SLTextStyle(
-                                          style: SLStyle.Text_L_Bold,
-                                          color: Colors.white)
-                                      .textStyle,
-                                )),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  '차단하기',
-                                  style: SLTextStyle(
-                                          style: SLStyle.Text_L_Bold,
-                                          color: Colors.white)
-                                      .textStyle,
-                                )),
-                          ]),
-                          height: 180,
-                          width: 360);
-                    },
-                    child: const Icon(Icons.more_vert_rounded))
-              ],
-            )
-          ],
-        ),
+        reply == null
+            ? const SizedBox()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [Icon(Icons.people), Text('Name')],
+                  ),
+                  Row(
+                    children: [
+                      reply!.created == null
+                          ? Text(DateTime.now().toString().split('.')[0])
+                          : Text(reply!.created!.split('.')[0]),
+                      InkWell(
+                          onTap: () {
+                            SLSheet.bottomSheet(
+                                context: context,
+                                child: Column(children: [
+                                  TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        '신고하기',
+                                        style: SLTextStyle(
+                                                style: SLStyle.Text_L_Bold,
+                                                color: Colors.white)
+                                            .textStyle,
+                                      )),
+                                  TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        '차단하기',
+                                        style: SLTextStyle(
+                                                style: SLStyle.Text_L_Bold,
+                                                color: Colors.white)
+                                            .textStyle,
+                                      )),
+                                ]),
+                                height: 180,
+                                width: 360);
+                          },
+                          child: SvgPicture.asset('assets/icons/menu_dots.svg'))
+                    ],
+                  )
+                ],
+              ),
         const SizedBox(
           height: 12,
         ),
         Text(
-          '좋은글 잘 보고 갑니다.',
+          reply!.content,
           style: SLTextStyle(
                   style: SLStyle.Text_M_Medium, color: SLColor.neutral.shade10)
               .textStyle,
@@ -71,7 +81,13 @@ class LogReplyListTileWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: () {},
+              onTap: () {
+                final currentParentId = state.parentReplyId;
+                final shouldClear = currentParentId == reply!.id;
+                ref
+                    .read(logReplyProvider.notifier)
+                    .setParentReplyId(shouldClear ? '' : reply!.id!);
+              },
               child: Text(
                 '답글',
                 style: SLTextStyle(
@@ -80,10 +96,13 @@ class LogReplyListTileWidget extends StatelessWidget {
                     .textStyle,
               ),
             ),
-            const Row(
+            Row(
               children: [
-                Icon(Icons.favorite),
-                Text('1'),
+                SvgPicture.asset('assets/icons/heart_red.svg'),
+                const SizedBox(
+                  width: 4,
+                ),
+                const Text('1'),
               ],
             ),
           ],

@@ -91,18 +91,7 @@ class _LogReadPageState extends State<LogReadPage> {
       body: Column(
         children: [
           _controller == null
-              ? Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
-                    height: 200,
-                    margin: const EdgeInsets.symmetric(horizontal: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                )
+              ? const SizedBox()
               : sfacLogModel == null
                   ? Shimmer.fromColors(
                       baseColor: Colors.grey[300]!,
@@ -136,13 +125,13 @@ class _LogReadPageState extends State<LogReadPage> {
                                 controller: _controller!,
                                 onLaunchUrl: _launchUrl,
                                 embedBuilder: _embedBuilder,
-                                spellCheckConfiguration:
-                                    SpellCheckConfiguration(
-                                        spellCheckService:
-                                            DefaultSpellCheckService(),
-                                        misspelledSelectionColor: Colors.red,
-                                        misspelledTextStyle:
-                                            DefaultTextStyle.of(context).style),
+                                // spellCheckConfiguration:
+                                //     SpellCheckConfiguration(
+                                //         spellCheckService:
+                                //             DefaultSpellCheckService(),
+                                //         misspelledSelectionColor: Colors.red,
+                                //         misspelledTextStyle:
+                                //             DefaultTextStyle.of(context).style),
                               ),
                             ),
                           ],
