@@ -129,6 +129,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
   List<String> skills = ['javascript', 'css', 'html'];
   List<String> experiences = [];
   bool resumePublic = false;
+  double progressValue = 1 / 3;
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +148,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               // 프로필 카드
               Container(
                 height: 272,
-                padding: EdgeInsets.only(top: 16, left: 21, right: 21),
+                padding: EdgeInsets.only(top: 16, left: 22, right: 22),
                 decoration: BoxDecoration(
                   color: SLColor.neutral[80],
                   borderRadius: BorderRadius.circular(10),
@@ -262,7 +263,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         children: [
                           SizedBox(
                             height: 30,
-                            width: 127,
+                            width: 130,
                             child: TextButton(
                               style: TextButton.styleFrom(
                                   shape: RoundedRectangleBorder(
@@ -305,10 +306,10 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           ),
                           SizedBox(
-                            width: 10,
+                            width: 8,
                           ),
                           SizedBox(
-                            width: 127,
+                            width: 130,
                             height: 30,
                             child: TextButton(
                               style: TextButton.styleFrom(
@@ -383,6 +384,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               Container(
                 height: 17,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       '👑 이력서 완성도',
@@ -390,6 +393,36 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                       style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white),
                     ),
+                    SizedBox(
+                      width: 9,
+                    ),
+                    // TODO: 레코드 중에 가장 최신인 걸로 뽑아서 now에서 시간 빼기
+                    Container(
+                      alignment: Alignment.center,
+                      width: 64,
+                      height: 17,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Color(0xffd6d6d6),
+                        ),
+                      ),
+                      child: Text(
+                        '업데이트 5달전',
+                        style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xffd6d6d6),
+                            letterSpacing: -0.08),
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      '${(progressValue * 100).roundToDouble().toStringAsFixed(0)}%',
+                      // FIXME: semibold
+                      style: SLTextStyle.Text_M_Medium?.copyWith(
+                          color: Color(0xFF397EFF)),
+                    )
                   ],
                 ),
               ),
@@ -399,7 +432,13 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               // progress indicator
               Container(
                 height: 6,
-                // child: ProgressIndicator(value: ,),
+                child: LinearProgressIndicator(
+                  // TODO: 채워진 만큼 밸류 바꿔주기
+                  value: progressValue,
+                  color: SLColor.primary[100],
+                  borderRadius: BorderRadius.circular(2.5),
+                  backgroundColor: SLColor.neutral[60],
+                ),
               ),
               SizedBox(
                 height: 20,
