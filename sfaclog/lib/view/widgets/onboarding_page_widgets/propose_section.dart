@@ -100,14 +100,14 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
                       );
                     } else {
                       print(
-                          'createUserInfo: ${onboardingState.userInfo!.user?.id}가 null입니다.');
+                          'createUserInfo: ${onboardingState.userInfo!.user}가 null입니다.');
                       return;
                     }
 
-                    // Future.delayed(
-                    //   Duration.zero,
-                    //   () => context.push('/home'),
-                    // );
+                    Future.delayed(
+                      Duration.zero,
+                      () => context.push('/home'),
+                    );
                   } catch (e) {
                     print('error: $e');
                   }
