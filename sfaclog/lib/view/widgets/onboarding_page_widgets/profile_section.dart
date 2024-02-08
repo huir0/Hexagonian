@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sfaclog/view/widgets/join_page_widgets/title_with_count.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog_widgets/util/common.dart';
@@ -111,29 +110,29 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
                   },
                 ),
               ),
-              SLButton(
-                text: '다음',
-                isActive: onboardingState.isButtonEnabled,
-                onTap: onboardingState.isButtonEnabled
-                    ? () async {
-                        try {
-                          if (formKey.currentState!.validate()) {
-                            formKey.currentState!.save();
-                            onboardingNotifier.uploadNicknameProfile(
-                              nickname: nickname,
-                              profile: profileImg,
-                            );
-                          }
-                          print('$nickname, $profileImg');
-                          onboardingNotifier.moveNextSection();
-                        } catch (e) {
-                          print(e);
-                        }
-                      }
-                    : null,
-              ),
             ],
           ),
+        ),
+        SLButton(
+          text: '다음',
+          isActive: onboardingState.isButtonEnabled,
+          onTap: onboardingState.isButtonEnabled
+              ? () async {
+                  try {
+                    if (formKey.currentState!.validate()) {
+                      formKey.currentState!.save();
+                      onboardingNotifier.uploadNicknameProfile(
+                        nickname: nickname,
+                        profile: profileImg,
+                      );
+                    }
+                    print('$nickname, $profileImg');
+                    onboardingNotifier.moveNextSection();
+                  } catch (e) {
+                    print(e);
+                  }
+                }
+              : null,
         ),
       ],
     );

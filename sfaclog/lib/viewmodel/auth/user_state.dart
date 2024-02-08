@@ -4,6 +4,7 @@ import 'package:sfaclog/model/user_info.dart';
 enum UserStatus {
   init,
   fetching,
+  setting,
   success,
   error,
 }

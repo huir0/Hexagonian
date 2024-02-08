@@ -2,16 +2,36 @@ import 'package:equatable/equatable.dart';
 import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/model/user_model.dart';
 import 'package:sfaclog/util/join_sections.dart';
+import 'package:sfaclog/util/onboarding_sections.dart';
 
 enum OnboardingStatus {
+  section1, // name + email
+  section2, // pw + terms
+  section3, // profile + nickname
+  section4, // skill
+  section5, // propose
   init,
-  section1,
-  section2,
-  section3,
-  section4,
-  section5,
   success,
   error,
+}
+
+extension OnboardingStatusExtension on OnboardingStatus {
+  int get index {
+    switch (this) {
+      case OnboardingStatus.section1:
+        return 0;
+      case OnboardingStatus.section2:
+        return 1;
+      case OnboardingStatus.section3:
+        return 2;
+      case OnboardingStatus.section4:
+        return 3;
+      case OnboardingStatus.section5:
+        return 4;
+      default:
+        return 0;
+    }
+  }
 }
 
 class OnboardingState extends Equatable {
@@ -20,8 +40,6 @@ class OnboardingState extends Equatable {
   final int currentPage;
   final int totalPage;
   final bool isButtonEnabled;
-  final String password;
-  final String passwordConfirm;
   final List<String>? agreementState;
 
   const OnboardingState({
@@ -30,8 +48,6 @@ class OnboardingState extends Equatable {
     required this.currentPage,
     required this.totalPage,
     required this.isButtonEnabled,
-    required this.password,
-    required this.passwordConfirm,
     this.agreementState,
   });
 
@@ -42,23 +58,22 @@ class OnboardingState extends Equatable {
     bool? isButtonEnabled,
   }) {
     return OnboardingState(
-        onboardingStatus: OnboardingStatus.init,
-        isButtonEnabled: false,
-        currentPage: 0,
-        totalPage: joinSections.length,
-        password: '',
-        passwordConfirm: '',
-        userInfo: const UserInfo(
-          user: UserModel(
-            name: '',
-            email: '',
-          ),
-          nickname: '',
-          picture: '',
-          skill: [],
-          proposeState: 'no_offer',
-          agreementState: [],
-        ));
+      onboardingStatus: OnboardingStatus.init,
+      isButtonEnabled: false,
+      currentPage: 0,
+      totalPage: onboardingSections.length + joinSections.length,
+      userInfo: const UserInfo(
+        user: UserModel(
+          name: '',
+          email: '',
+        ),
+        nickname: '',
+        picture: '',
+        skill: [],
+        proposeState: 'no_offer',
+        agreementState: [],
+      ),
+    );
   }
 
   @override
@@ -70,8 +85,6 @@ class OnboardingState extends Equatable {
     bool? isButtonEnabled,
     int? currentPage,
     int? totalPage,
-    String? password,
-    String? passwordConfirm,
     List<String>? agreementState,
   }) {
     return OnboardingState(
@@ -80,8 +93,6 @@ class OnboardingState extends Equatable {
       totalPage: totalPage ?? this.totalPage,
       isButtonEnabled: isButtonEnabled ?? this.isButtonEnabled,
       userInfo: userInfo ?? this.userInfo,
-      password: password ?? this.password,
-      passwordConfirm: passwordConfirm ?? this.passwordConfirm,
       agreementState: agreementState ?? this.agreementState,
     );
   }
