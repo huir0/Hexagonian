@@ -67,31 +67,19 @@ class UserInfoNotifier extends StateNotifier<UserState> {
     required UserModel user,
   }) async {
     try {
-      state = state.copyWith(userStatus: UserStatus.fetching);
-
-      var data = {
-        ...userInfo.data,
-        'id': userInfo.id,
-        'skill': skills.map((skill) => skill.toJson()).toList(),
-        'user': user.toJson(),
-      };
-
-      print('data: $data');
+      state = state.copyWith(userStatus: UserStatus.setting);
 
       UserInfo newUserInfo = UserInfo.fromJson({
         ...userInfo.data,
         'id': userInfo.id,
         'skill': skills.map((skill) => skill.toJson()).toList(),
-        'user': user
-            .toJson(), //여기서 타입에러. String(id)만 가는 것 같다. 아니다. 확인해보니 제대로 들어온다...
+        'user': user.toJson(),
       });
 
       state = state.copyWith(
         userInfo: newUserInfo,
         userStatus: UserStatus.success,
       );
-
-      print('state userInfo: ${state.userInfo}');
     } catch (e) {
       state = state.copyWith(userStatus: UserStatus.error);
       rethrow;

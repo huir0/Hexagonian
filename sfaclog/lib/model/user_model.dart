@@ -49,17 +49,8 @@ class UserModel extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  // factory UserModel.fromJson(String source) =>
-  //     UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  factory UserModel.fromJson(Map<String, dynamic> source) {
-    return UserModel(
-      id: source['id'] as String?,
-      username: source['username'] as String?,
-      email: source['email'] as String?,
-      name: source['name'] as String?,
-    );
-  }
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool get stringify => true;
