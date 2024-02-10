@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:sfaclog/view/pages/onboarding_page/profile_edit_page.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog_widgets/util/common.dart';
@@ -33,6 +37,35 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
     const String description = '스팩로그에서 사용할 프로필을 만들어보세요.';
     double editbtnSize = 35;
 
+    Widget profileImage() {
+      if (onboardingState.userInfo?.picture != null ||
+          onboardingState.userInfo?.picture != '') {
+        String imageString = onboardingState.userInfo!.picture!;
+        if (imageString.toLowerCase().endsWith('.svg')) {
+          return SLCircleAvatar(
+            diameter: 150,
+            imageWidget: SvgPicture.asset(imageString),
+          );
+        } else {
+          XFile file = XFile(imageString);
+          return SLCircleAvatar(
+            diameter: 150,
+            imageWidget: Image.file(
+              File(file.path),
+              fit: BoxFit.cover,
+            ),
+          );
+        }
+      } else {
+        return SvgPicture.asset(
+          'assets/avatars/avatar_01.svg',
+          width: 150,
+          height: 150,
+          fit: BoxFit.cover,
+        );
+      }
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,14 +96,7 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
                 alignment: Alignment.center,
                 child: Stack(
                   children: [
-                    SvgPicture.asset(
-                      onboardingState.userInfo?.picture != null
-                          ? onboardingState.userInfo!.picture!
-                          : 'assets/avatars/avatar_01.svg',
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
+                    profileImage(),
                     Positioned(
                       bottom: 0,
                       right: 0,

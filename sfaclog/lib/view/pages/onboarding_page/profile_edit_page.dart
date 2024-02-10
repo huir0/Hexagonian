@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileEditPage extends ConsumerStatefulWidget {
   const ProfileEditPage({super.key});
@@ -13,13 +16,42 @@ class ProfileEditPage extends ConsumerStatefulWidget {
 }
 
 class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
+  final ImagePicker _imagePicker = ImagePicker();
+  String profileImage = '';
+
   static const title = '프로필 변경';
   static const description = '프로필 이미지를 선택해주세요.';
-  late String? profileImage;
 
-  void tapImage(String image) {
-    profileImage = image;
+  void pickFromBasic(String imagePath) {
+    profileImage = imagePath;
     setState(() {});
+  }
+
+  Future<void> pickImageFromGallary({
+    required ImageSource source,
+  }) async {
+    final XFile? pickedFile = await _imagePicker.pickImage(source: source);
+    setState(() {
+      profileImage = pickedFile!.path;
+    });
+  }
+
+  Widget _buildProfileImage() {
+    if (profileImage.toLowerCase().endsWith('.svg')) {
+      return SLCircleAvatar(
+        diameter: 92,
+        imageWidget: SvgPicture.asset(profileImage),
+      );
+    } else {
+      XFile file = XFile(profileImage);
+      return SLCircleAvatar(
+        diameter: 92,
+        imageWidget: Image.file(
+          File(file.path),
+          fit: BoxFit.cover,
+        ),
+      );
+    }
   }
 
   @override
@@ -40,7 +72,8 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
           TextButton(
             onPressed: () {
               onboardingNotifier.uploadNicknameProfile(
-                profile: profileImage,
+                profile:
+                    profileImage, // @todo 이대로 올리면 svg인지 xfile인지 알 수 없다는 게 함정.
               );
               context.pop();
             },
@@ -67,10 +100,13 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
               ).textStyle,
             ),
             const SizedBox(height: 35),
-            SLCircleAvatar(
-              diameter: 92,
-              profileImage: profileImage ?? 'assets/avatars/avatar_01.svg',
-            ),
+            profileImage == ''
+                ? SLCircleAvatar(
+                    diameter: 92,
+                    imageWidget:
+                        SvgPicture.asset('assets/avatars/avatar_01.svg'),
+                  )
+                : _buildProfileImage(),
             const SizedBox(height: 50),
             GridView.builder(
               padding: const EdgeInsets.all(20),
@@ -86,11 +122,13 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                 return GestureDetector(
                   onTap: index != 0
                       ? () {
-                          tapImage(getAvatarImagePath(index));
+                          pickFromBasic(getAvatarImagePath(index));
                           setState(() {});
                         }
                       : () {
-                          print('프로필 내 사진에서 가져오기');
+                          pickImageFromGallary(
+                            source: ImageSource.gallery,
+                          );
                         },
                   child: Stack(
                     alignment: Alignment.center,
@@ -113,7 +151,9 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
                       ),
                       SLCircleAvatar(
                         diameter: 54,
-                        profileImage: getAvatarImagePath(index),
+                        imageWidget: SvgPicture.asset(
+                          getAvatarImagePath(index),
+                        ),
                       ),
                     ],
                   ),
@@ -136,11 +176,11 @@ class SLCircleAvatar extends StatelessWidget {
   const SLCircleAvatar({
     super.key,
     required this.diameter,
-    required this.profileImage,
+    required this.imageWidget,
   });
 
   final double diameter;
-  final String profileImage;
+  final Widget imageWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +191,7 @@ class SLCircleAvatar extends StatelessWidget {
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
       ),
-      child: SvgPicture.asset(profileImage),
+      child: imageWidget,
     );
   }
 }
