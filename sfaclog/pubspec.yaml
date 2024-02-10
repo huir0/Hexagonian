@@ -36,6 +36,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_markdown: ^0.6.0
+  flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^2.4.9
   flutter_svg: ^2.0.9
   freezed: ^2.4.6
@@ -51,7 +52,6 @@ dependencies:
     path: ../sfaclog_widgets
   table_calendar: ^3.0.9
   url_launcher: ^6.2.4
-  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_lints: ^3.0.0
