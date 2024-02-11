@@ -25,8 +25,14 @@ import 'package:sfaclog/view/pages/my_page/my_setting_page.dart';
 import 'package:sfaclog/view/pages/my_page/mye_terms_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_withdrawal_page.dart';
 import 'package:sfaclog/view/pages/onboarding_page/profile_edit_page.dart';
+import 'package:sfaclog/view/pages/splash_page/splash_page.dart';
 
-final router = GoRouter(initialLocation: '/home', routes: [
+// final router = GoRouter(initialLocation: '/home', routes: [
+final router = GoRouter(initialLocation: '/splash', routes: [
+  GoRoute(
+    path: '/splash',
+    builder: (context, state) => const SplashPage(),
+  ),
   GoRoute(
     path: '/home',
     builder: (context, state) => const AppWrapper(),
