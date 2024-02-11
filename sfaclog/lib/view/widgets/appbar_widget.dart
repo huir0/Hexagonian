@@ -59,7 +59,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: pageLabel == '마이페이지'
               ? SvgPicture.asset('assets/icons/setting.svg')
-              : const Icon(Icons.notifications),
+              : SvgPicture.asset(
+                  'assets/icons/notification.svg',
+                  height: 26,
+                ),
           onPressed: () {
             if (pageLabel == '마이페이지') {
               router.go('/my/setting');
