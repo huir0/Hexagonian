@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/view/widgets/log_page_widgets/log_card_widget.dart';
 import 'package:sfaclog/view/widgets/log_page_widgets/log_listtile_widget.dart';
 import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
@@ -20,11 +21,10 @@ class LogPage extends ConsumerStatefulWidget {
 
 bool isVerifiedEmail = false;
 var optionList = ['등록순', '추천순'];
-String selectedOption = optionList[0];
 
 class _LogPageState extends ConsumerState<LogPage> {
-  List<dynamic> popularLogList = [];
-  List<dynamic> newLogList = [];
+  List<SFACLogModel> popularLogList = [];
+  List<SFACLogModel> newLogList = [];
 
   @override
   void initState() {
@@ -40,10 +40,12 @@ class _LogPageState extends ConsumerState<LogPage> {
     try {
       popularLogList = await ref.read(logProvider.notifier).getPopularLog();
 
-      newLogList =
-          await ref.read(logProvider.notifier).getLogDataOrderBy('-created');
+      newLogList = await ref
+          .read(logProvider.notifier)
+          .getLogDataOrderBy(ref.watch(logProvider).orderBy);
       ref.read(logProvider.notifier).setPopularLog(popularLogList);
       ref.read(logProvider.notifier).setLog(newLogList);
+      setState(() {});
     } catch (error) {
       // 에러 처리 로직 추가
       print("Error loading popular logs: $error");
@@ -54,7 +56,7 @@ class _LogPageState extends ConsumerState<LogPage> {
   Widget build(BuildContext context) {
     var popularLogState = ref.watch(logProvider).popularLogModel;
     var logModelListState = ref.watch(logProvider).logModelList;
-
+    var state = ref.watch(logProvider);
     return ListView(
       children: [
         const SizedBox(
@@ -80,10 +82,10 @@ class _LogPageState extends ConsumerState<LogPage> {
                 items: List.generate(popularLogState?.length ?? 0, (index) {
                   return InkWell(
                       onTap: () {
-                        context.push('/log/read/${popularLogState?[index].id}');
+                        context.push('/log/read/${popularLogState[index].id}');
                       },
                       child: LogPageCardWidget(
-                        logData: popularLogState?[index],
+                        logData: popularLogState![index],
                       ));
                 }).toList(),
               )
@@ -136,14 +138,22 @@ class _LogPageState extends ConsumerState<LogPage> {
                           SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
                     ),
                     SFACMenuButton(
+                      initialValue: state.orderBy == '-created' ? '등록순' : '추천순',
                       items: optionList,
                       onItemSelected: (value) async {
                         String orderBy = value == '등록순' ? '-created' : '-like';
-                        List<dynamic>? logData = await ref
-                            .read(logProvider.notifier)
-                            .getLogDataOrderBy(orderBy);
-                        ref.read(logProvider.notifier).setLog(logData);
-                        setState(() {});
+                        // 상태 업데이트 후 getLogDataOrderBy 호출
+                        ref.read(logProvider.notifier).setOrderBy(orderBy,
+                            () async {
+                          List<SFACLogModel>? logData = await ref
+                              .read(logProvider.notifier)
+                              .getLogDataOrderBy(
+                                  orderBy); // 주의: state 대신 로컬 변수 사용
+
+                          setState(() {
+                            ref.read(logProvider.notifier).setLog(logData);
+                          });
+                        });
                       },
                     ),
                   ],
@@ -186,7 +196,7 @@ class _LogPageState extends ConsumerState<LogPage> {
                     children: List.generate(
                         5,
                         (index) => Container(
-                              height: 80,
+                              height: 257,
                               margin: const EdgeInsets.only(bottom: 20),
                               decoration: BoxDecoration(
                                 color: Colors.white,

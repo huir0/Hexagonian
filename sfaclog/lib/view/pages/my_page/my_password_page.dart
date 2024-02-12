@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sfaclog_widgets/buttons/drop_button.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
@@ -44,8 +42,8 @@ class _MypageChangePasswordState extends State<MypageChangePassword> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 20),
-              padding: EdgeInsets.only(
+              margin: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(
                 left: 23,
               ),
               height: 16,
@@ -54,34 +52,34 @@ class _MypageChangePasswordState extends State<MypageChangePassword> {
                 style: SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SLInput(
                 obscureText: true,
                 controller: passwordController,
                 hintText: '비밀번호를 입력해주세요',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
             Container(
-              padding: EdgeInsets.only(left: 23),
+              padding: const EdgeInsets.only(left: 23),
               height: 16,
               child: Text(
                 '변경할 비밀번호',
                 style: SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Container(
               height: 46,
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SLInput(
                 controller: newPasswordController,
                 hintText: '변경할 비밀번호를 입력해주세요',
@@ -95,12 +93,12 @@ class _MypageChangePasswordState extends State<MypageChangePassword> {
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Container(
               height: 46,
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SLInput(
                 controller: confirmPasswordController,
                 hintText: '비밀번호를 다시 입력해주세요',
@@ -116,9 +114,9 @@ class _MypageChangePasswordState extends State<MypageChangePassword> {
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Container(
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                 vertical: 28,
               ),
               alignment: Alignment.center,

@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/pages/my_page/my_education_add_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_experience_add_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_link_page.dart';
@@ -12,7 +10,6 @@ import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/experience_card.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/link_card.dart';
 import 'package:sfaclog/viewmodel/mypage_state_viewmodel/mypage_states.dart';
-import 'package:sfaclog_widgets/chips/sl_chip.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
@@ -141,13 +138,13 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 26,
               ),
               // 프로필 카드
               Container(
                 height: 272,
-                padding: EdgeInsets.only(top: 16, left: 21, right: 21),
+                padding: const EdgeInsets.only(top: 16, left: 21, right: 21),
                 decoration: BoxDecoration(
                   color: SLColor.neutral[80],
                   borderRadius: BorderRadius.circular(10),
@@ -157,22 +154,22 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     Row(
                       // profile picture
                       children: [
-                        Container(
+                        const SizedBox(
                           height: 92,
                           width: 92,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 24,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // nickname
-                            Container(
+                            const SizedBox(
                               height: 21,
                               child: Text('김개발'),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 12,
                             ),
                             Row(
@@ -184,7 +181,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                           .read(myFollowPageProvider.notifier)
                                           .tabChanged(0);
                                     },
-                                    child: Row(
+                                    child: const Row(
                                       children: [
                                         Text('팔로잉'),
                                         SizedBox(
@@ -193,7 +190,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                         Text('1'),
                                       ],
                                     )),
-                                SizedBox(
+                                const SizedBox(
                                   width: 20,
                                 ),
                                 GestureDetector(
@@ -203,7 +200,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                         .read(myFollowPageProvider.notifier)
                                         .tabChanged(1);
                                   },
-                                  child: Row(
+                                  child: const Row(
                                     children: [
                                       Text('팔로워'),
                                       SizedBox(
@@ -219,41 +216,41 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
-                    Container(
+                    const SizedBox(
                       height: 50,
                       child: Text('스나이퍼팩토리 x 웅진씽크빅 교육 수료완료'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
-                    Container(
+                    SizedBox(
                       width: 270,
                       height: 32,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: skills.length,
                         separatorBuilder: (context, index) =>
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                         itemBuilder: (context, index) {
                           final skill = skills[index];
                           return SFACSkillChip(
                             height: 32,
-                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
                             text: Text(
                               skill,
                               style: SLTextStyle.Text_S_Bold?.copyWith(
                                   fontFamily: 'Pretendard'),
                             ),
-                            borderColor: Color(0xff0059FF),
-                            backgroundColor: Color(0xff333333),
+                            borderColor: const Color(0xff0059FF),
+                            backgroundColor: const Color(0xff333333),
                           );
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 14,
                     ),
                     SizedBox(
@@ -268,7 +265,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(6)),
                                   backgroundColor: SLColor.neutral[90],
-                                  padding: EdgeInsets.all(0)),
+                                  padding: const EdgeInsets.all(0)),
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -286,7 +283,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                       height: 9.7,
                                       child: SvgPicture.asset(
                                           'assets/icons/pencil.svg')),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Column(
@@ -304,7 +301,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           SizedBox(
@@ -315,7 +312,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(6)),
                                   backgroundColor: SLColor.neutral[90],
-                                  padding: EdgeInsets.all(0)),
+                                  padding: const EdgeInsets.all(0)),
                               onPressed: () {},
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -325,7 +322,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                       height: 9.7,
                                       child: SvgPicture.asset(
                                           'assets/icons/share.svg')),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Column(
@@ -349,7 +346,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               // 이력서 공개
@@ -361,7 +358,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     color: SLColor.neutral[80]),
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     Text(
@@ -369,18 +366,18 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                       style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     MypageToggle(toggleProvider: resumePublicProvider),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
-              Container(
+              SizedBox(
                 height: 17,
                 child: Row(
                   children: [
@@ -393,7 +390,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               // progress indicator
@@ -401,7 +398,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                 height: 6,
                 // child: ProgressIndicator(value: ,),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -423,7 +420,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     // 경력 데이터
                     // FIXME: experience나 resume에서 데이터 뽑아오기
-                    resumes.length > 0
+                    resumes.isNotEmpty
                         ? Container(
                             child: Column(
                               children: [
@@ -432,14 +429,14 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   if (i < resumes.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
-                                      size: Size(280, 1),
+                                      size: const Size(280, 1),
                                     ),
                                 ]
                               ],
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 16),
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -449,7 +446,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   color: SLColor.neutral[40]),
                             ),
                           ),
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     SFACResumeButton(
@@ -465,7 +462,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         title: '학력/교육'),
                     // 교육 데이터
                     // FIXME: resumes => education이나 resume에서 데이터 뽑아오기
-                    resumes.length > 0
+                    resumes.isNotEmpty
                         ? Container(
                             child: Column(
                               children: [
@@ -474,14 +471,14 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   if (i < resumes.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
-                                      size: Size(280, 1),
+                                      size: const Size(280, 1),
                                     ),
                                 ]
                               ],
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 16),
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -492,7 +489,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           ),
 
-                    SizedBox(
+                    const SizedBox(
                       height: 4,
                     ),
                     SFACResumeButton(
@@ -506,7 +503,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                           );
                         },
                         title: '링크'),
-                    links.length > 0
+                    links.isNotEmpty
                         ? Container(
                             child: Column(
                               children: [
@@ -515,14 +512,14 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   if (i < links.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
-                                      size: Size(280, 1),
+                                      size: const Size(280, 1),
                                     ),
                                 ]
                               ],
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 16),
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -535,42 +532,42 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
                 child: Row(
                   children: [
                     Container(),
-                    Text('🌱 활동 내역'),
+                    const Text('🌱 활동 내역'),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               SFACExpandableButton(
                 text: 'QnA 답변',
                 count: qna.length.toString(),
-                posts: PostCard(posts: qna),
+                posts: const PostCard(posts: qna),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACExpandableButton(
                 text: '좋아요',
                 count: qna.length.toString(),
-                posts: PostCard(posts: qna),
+                posts: const PostCard(posts: qna),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACExpandableButton(
                 text: '협업후기',
                 count: reviews.length.toString(),
-                posts: ReviewCard(reviews: reviews),
+                posts: const ReviewCard(reviews: reviews),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
             ],

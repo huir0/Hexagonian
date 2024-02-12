@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sfaclog/view/pages/community_page/com_reply_page.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read.appbar.dart';
 import 'package:sfaclog/view/widgets/com_side_read_wigets/com_side_read_body.dart';
-import 'package:sfaclog/view/widgets/com_side_read_wigets/com_side_read_card.dart';
 import 'package:sfaclog/view/widgets/com_side_read_wigets/com_side_read_footer.dart';
 import 'package:sfaclog_widgets/buttons/edit_button.dart';
 import 'package:sfaclog_widgets/labels/log_label.dart';
@@ -16,13 +15,13 @@ class ComSideReadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: ComReadAppBarWidget(),
+        appBar: const ComReadAppBarWidget(),
         body: Expanded(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 20, left: 20)),
                     Text(
@@ -56,13 +55,13 @@ class ComSideReadPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 20),
@@ -75,16 +74,16 @@ class ComSideReadPage extends StatelessWidget {
                         )),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
-                    Padding(padding: EdgeInsets.only(top: 20, left: 20)),
+                    const Padding(padding: EdgeInsets.only(top: 20, left: 20)),
                     Container(
                       width: 30,
                       height: 30,
-                      decoration: ShapeDecoration(
+                      decoration: const ShapeDecoration(
                         image: DecorationImage(
                           image:
                               AssetImage('assets/images/basic_profile_sm.png'),
@@ -97,7 +96,7 @@ class ComSideReadPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     RichText(
@@ -131,10 +130,10 @@ class ComSideReadPage extends StatelessWidget {
                         ).textStyle,
                       ),
                     ])),
-                    SizedBox(
+                    const SizedBox(
                       width: 40,
                     ),
-                    Container(
+                    SizedBox(
                         width: 14,
                         height: 13,
                         child: Image.asset('assets/images/Vector.png')),
@@ -145,10 +144,10 @@ class ComSideReadPage extends StatelessWidget {
                         color: SLColor.neutral.shade30,
                       ).textStyle,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
-                    Container(
+                    SizedBox(
                         width: 14,
                         height: 13,
                         child: Image.asset(
@@ -162,11 +161,11 @@ class ComSideReadPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                ComSideReadBody(),
-                SizedBox(
+                const ComSideReadBody(),
+                const SizedBox(
                   height: 10,
                 ),
-                Column(
+                const Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(padding: EdgeInsetsDirectional.all(10)),
@@ -259,7 +258,7 @@ class ComSideReadPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
+                const Row(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 50, left: 30)),
                     Text(
@@ -277,12 +276,12 @@ class ComSideReadPage extends StatelessWidget {
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: DateTime.now(),
                 ),
-                ComSideReadFooter(),
+                const ComSideReadFooter(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      EditButton(
+                      const EditButton(
                           text: '북마크',
                           width: 125,
                           height: 39,
@@ -296,7 +295,7 @@ class ComSideReadPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ComReplayPage(),
+                              builder: (context) => const ComReplayPage(),
                             ),
                           );
                         },

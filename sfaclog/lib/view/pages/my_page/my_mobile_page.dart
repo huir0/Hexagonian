@@ -1,9 +1,7 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sfaclog_widgets/buttons/drop_button.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
@@ -46,8 +44,8 @@ class _MypageChangeMobileState extends State<MypageChangeMobile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 20),
-              padding: EdgeInsets.only(
+              margin: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(
                 left: 23,
               ),
               height: 16,
@@ -56,11 +54,11 @@ class _MypageChangeMobileState extends State<MypageChangeMobile> {
                 style: SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SLInput(
                 controller: mobileNumber,
                 hintText: '변경할 휴대폰 번호를 입력해주세요',
@@ -74,12 +72,12 @@ class _MypageChangeMobileState extends State<MypageChangeMobile> {
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
             codeSent
                 ? Container(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                       left: 23,
                     ),
                     child: Text(
@@ -88,13 +86,13 @@ class _MypageChangeMobileState extends State<MypageChangeMobile> {
                           color: Colors.white),
                     ),
                   )
-                : Text(''),
-            SizedBox(
+                : const Text(''),
+            const SizedBox(
               height: 14,
             ),
             codeSent
                 ? Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     // FIXME: textfieldform 바꾸거나 validator관련된 거 바꿔야할듯?
                     child: SLInput(
                       controller: codeNumber,
@@ -109,8 +107,8 @@ class _MypageChangeMobileState extends State<MypageChangeMobile> {
                       },
                     ),
                   )
-                : SizedBox(),
-            SizedBox(
+                : const SizedBox(),
+            const SizedBox(
               height: 16,
             ),
             codeSent
@@ -125,10 +123,10 @@ class _MypageChangeMobileState extends State<MypageChangeMobile> {
                           ),
                         )),
                   )
-                : SizedBox(),
-            Spacer(),
+                : const SizedBox(),
+            const Spacer(),
             Container(
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                 vertical: 28,
               ),
               alignment: Alignment.center,

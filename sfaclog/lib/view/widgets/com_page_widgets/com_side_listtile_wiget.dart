@@ -51,7 +51,7 @@ class ComListTile extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Row(
+                      const Row(
                         children: [
                           Text(
                             'D-21',
@@ -95,7 +95,7 @@ class ComListTile extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
                             'NEW',
                             style: TextStyle(
@@ -109,7 +109,7 @@ class ComListTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(
@@ -117,7 +117,7 @@ class ComListTile extends StatelessWidget {
                         style:
                             SLTextStyle(style: SLStyle.Text_S_Medium).textStyle,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       SizedBox(
@@ -136,10 +136,10 @@ class ComListTile extends StatelessWidget {
                           },
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Divider(
+                      const Divider(
                         thickness: 1,
                         height: 1,
                         color: Color(0xFF333333),

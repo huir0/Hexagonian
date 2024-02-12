@@ -172,7 +172,6 @@ class TopLoggerCard extends StatelessWidget {
 
 class _SkillItem extends StatelessWidget {
   const _SkillItem({
-    super.key,
     required this.text,
     required this.image,
   });
@@ -211,7 +210,6 @@ class _SkillItem extends StatelessWidget {
 
 class _ImageCenterText extends StatelessWidget {
   const _ImageCenterText({
-    super.key,
     required this.image,
     required this.text,
   });

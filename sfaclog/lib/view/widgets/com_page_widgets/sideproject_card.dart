@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog_widgets/buttons/follow_button.dart';
 import 'package:sfaclog_widgets/labels/log_label.dart';
 import 'package:sfaclog_widgets/labels/sky_label.dart';
 
@@ -9,7 +8,7 @@ class SideProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 270,
       height: 200,
       child: Stack(
@@ -20,7 +19,7 @@ class SideProjectCard extends StatelessWidget {
                 width: 270,
                 height: 200,
                 decoration: ShapeDecoration(
-                  color: Color(0xFFF5F8FF),
+                  color: const Color(0xFFF5F8FF),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -48,7 +47,7 @@ class SideProjectCard extends StatelessWidget {
                             text: '  구하고 있어요',
                             style: SLTextStyle(
                               style: SLStyle.Text_S_Medium,
-                              color: Color(0xFF020202),
+                              color: const Color(0xFF020202),
                             ).textStyle,
                           )
                         ],
@@ -57,7 +56,7 @@ class SideProjectCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(
+              const Positioned(
                   left: 14.92,
                   top: 149,
                   child: Row(
@@ -70,7 +69,7 @@ class SideProjectCard extends StatelessWidget {
                       ),
                     ],
                   )),
-              Positioned(
+              const Positioned(
                   left: 57.92,
                   top: 135,
                   child: // SkyLabel(
@@ -80,7 +79,7 @@ class SideProjectCard extends StatelessWidget {
                     width: 52,
                     height: 20,
                   )),
-              Positioned(
+              const Positioned(
                   left: 115.92,
                   top: 135,
                   child: // SkyLabel(
@@ -90,7 +89,7 @@ class SideProjectCard extends StatelessWidget {
                     width: 58,
                     height: 20,
                   )),
-              Positioned(
+              const Positioned(
                 left: 179.92,
                 top: 135,
                 child: // SkyLabel(
@@ -103,7 +102,7 @@ class SideProjectCard extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
+          const Positioned(
             left: 20.92,
             top: 67,
             child: SizedBox(
@@ -145,7 +144,7 @@ class SideProjectCard extends StatelessWidget {
                         text: '   기획자',
                         style: SLTextStyle(
                           style: SLStyle.Text_S_Medium,
-                          color: Color(0xFF020202),
+                          color: const Color(0xFF020202),
                         ).textStyle,
                       ),
                       TextSpan(
@@ -165,7 +164,7 @@ class SideProjectCard extends StatelessWidget {
                         text: '• 디자이너',
                         style: SLTextStyle(
                           style: SLStyle.Text_S_Medium,
-                          color: Color(0xFF020202),
+                          color: const Color(0xFF020202),
                         ).textStyle,
                       ),
                       TextSpan(
@@ -185,7 +184,7 @@ class SideProjectCard extends StatelessWidget {
                         text: ' • 개발자',
                         style: SLTextStyle(
                           style: SLStyle.Text_S_Medium,
-                          color: Color(0xFF020202),
+                          color: const Color(0xFF020202),
                         ).textStyle,
                       ),
                       TextSpan(
@@ -226,7 +225,7 @@ class SideProjectCard extends StatelessWidget {
                           text: '   2024. 01. 25',
                           style: SLTextStyle(
                             style: SLStyle.Text_S_Medium,
-                            color: Color(0xFF020202),
+                            color: const Color(0xFF020202),
                           ).textStyle,
                         ),
                       ],

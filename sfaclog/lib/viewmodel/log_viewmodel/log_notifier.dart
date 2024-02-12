@@ -9,31 +9,62 @@ class LogNotifier extends StateNotifier<LogState> {
   LogNotifier() : super(const LogState());
   final RemoteDataSource _remoteDataSource = RemoteDataSource();
 
-  Future<List<dynamic>> getPopularLog() async {
-    List<dynamic> logList = await getLogDataOrderBy('-view');
-    List<dynamic> tempPopularLogList = [];
-    for (var log in logList) {
-      if (tempPopularLogList.length >= 3) {
-        break;
-      }
-      var logData = SFACLogModel.fromJson(jsonDecode(log.toString()));
-      tempPopularLogList.add(logData);
+  Future<List<SFACLogModel>> getPopularLog() async {
+    try {
+      List<SFACLogModel> logList = await getLogDataOrderBy('-view');
+      return logList.take(3).toList();
+    } catch (e) {
+      print(e);
+      return [];
     }
-    return tempPopularLogList;
   }
 
-  Future<List<dynamic>> getLogDataOrderBy(String orderBy) async {
-    List<dynamic> logList = await _remoteDataSource.getTableData(
-        tableName: 'log', orderBy: orderBy);
-
-    return logList;
+  Future<List<SFACLogModel>> getLogDataOrderBy(String orderBy) async {
+    try {
+      List<dynamic> logList = await _remoteDataSource.getTableData(
+          tableName: 'log', orderBy: orderBy);
+      List<SFACLogModel> tempList = [];
+      for (var log in logList) {
+        log = SFACLogModel.fromJson(jsonDecode(log.toString()));
+        final thumbnail = await getThumbNailUrl(log.id);
+        final replyCnt = await getReplyCnt(log.id);
+        SFACLogModel updatedLog =
+            log.copyWith(thumbnail: thumbnail, replyCnt: replyCnt);
+        tempList.add(updatedLog);
+      }
+      return tempList;
+    } catch (e) {
+      print(e);
+      return [];
+    }
   }
 
-  void setPopularLog(List<dynamic>? logModel) {
+  Future<int> getReplyCnt(String tagId) async {
+    var data = await _remoteDataSource.getTableData(
+        tableName: 'log_reply', filter: 'log="$tagId"');
+    int replyCnt = data.length;
+
+    return replyCnt;
+  }
+
+  Future<String> getThumbNailUrl(String tagId) async {
+    String imageUrl = await _remoteDataSource.getThumbNailURL('log', tagId, 0);
+    return imageUrl;
+  }
+
+  // StateNotifier 내부
+  void setOrderBy(String newOrderBy, Function callback) {
+    // 상태 업데이트 로직
+    state = state.copyWith(orderBy: newOrderBy);
+    // 상태 업데이트 후 콜백 실행
+    callback();
+  }
+
+  void setPopularLog(List<SFACLogModel> logModel) {
     state = state.copyWith(popularLogModel: logModel);
   }
 
-  void setLog(List<dynamic>? logModel) {
+  void setLog(List<SFACLogModel> logModel) {
     state = state.copyWith(logModelList: logModel);
   }
 }

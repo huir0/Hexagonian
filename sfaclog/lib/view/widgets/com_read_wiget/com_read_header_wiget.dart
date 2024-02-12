@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog_widgets/labels/log_label.dart';
 
 class ComReadingHeader extends StatelessWidget {
   const ComReadingHeader({super.key});
@@ -11,7 +10,7 @@ class ComReadingHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SizedBox(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
+          const Text(
             'IPTIME 포트포워딩',
             style: TextStyle(
               color: Colors.white,
@@ -19,7 +18,7 @@ class ComReadingHeader extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -27,7 +26,7 @@ class ComReadingHeader extends StatelessWidget {
               Container(
                 width: 30,
                 height: 30,
-                decoration: ShapeDecoration(
+                decoration: const ShapeDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/basic_profile_sm.png'),
                     fit: BoxFit.cover,
@@ -39,7 +38,7 @@ class ComReadingHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               RichText(
@@ -73,10 +72,10 @@ class ComReadingHeader extends StatelessWidget {
                   ).textStyle,
                 ),
               ])),
-              SizedBox(
+              const SizedBox(
                 width: 40,
               ),
-              Container(
+              SizedBox(
                   width: 14,
                   height: 13,
                   child: Image.asset('assets/images/Vector.png')),
@@ -87,10 +86,10 @@ class ComReadingHeader extends StatelessWidget {
                   color: SLColor.neutral.shade30,
                 ).textStyle,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
-              Container(
+              SizedBox(
                   width: 14,
                   height: 13,
                   child: Image.asset(
@@ -104,11 +103,11 @@ class ComReadingHeader extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Divider(),
-          SizedBox(
+          const Divider(),
+          const SizedBox(
             height: 20,
           ),
           RichText(
@@ -154,11 +153,11 @@ class ComReadingHeader extends StatelessWidget {
               Container(
                 height: 22,
                 width: 92,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 decoration: ShapeDecoration(
-                  color: Color(0xFF020202),
+                  color: const Color(0xFF020202),
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
+                    side: const BorderSide(
                       width: 1,
                       strokeAlign: BorderSide.strokeAlignCenter,
                       color: Color(0xFF666666),
@@ -166,7 +165,7 @@ class ComReadingHeader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,17 +183,17 @@ class ComReadingHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Container(
                 height: 22,
                 width: 54,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 decoration: ShapeDecoration(
-                  color: Color(0xFF020202),
+                  color: const Color(0xFF020202),
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
+                    side: const BorderSide(
                       width: 1,
                       strokeAlign: BorderSide.strokeAlignCenter,
                       color: Color(0xFF666666),
@@ -202,7 +201,7 @@ class ComReadingHeader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -220,17 +219,17 @@ class ComReadingHeader extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Container(
                 height: 22,
                 width: 94,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 decoration: ShapeDecoration(
-                  color: Color(0xFF020202),
+                  color: const Color(0xFF020202),
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
+                    side: const BorderSide(
                       width: 1,
                       strokeAlign: BorderSide.strokeAlignCenter,
                       color: Color(0xFF666666),
@@ -238,7 +237,7 @@ class ComReadingHeader extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,7 +257,7 @@ class ComReadingHeader extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ]),

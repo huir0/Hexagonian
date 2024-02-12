@@ -102,7 +102,6 @@ class LogCardMini extends StatelessWidget {
 
 class _ImageSection extends StatelessWidget {
   const _ImageSection({
-    super.key,
     required this.image,
     required this.profileImage,
     required this.isBooked,
@@ -208,7 +207,6 @@ List<Widget> buildTags(List<String> tags, {int maxLen = 2}) {
 
 class _TagWidget extends StatelessWidget {
   const _TagWidget({
-    super.key,
     required this.label,
   });
   final String label;

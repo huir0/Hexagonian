@@ -26,12 +26,12 @@ class _MyFollowPageState extends ConsumerState<MyFollowPage> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 7),
+            padding: const EdgeInsets.only(top: 7),
             child: SLTab(
               currentIndex: ref.watch(myFollowPageProvider).tab,
               horizontalMargin: 24,
               height: 43,
-              menu: [
+              menu: const [
                 Text('팔로잉'),
                 Text('팔로워'),
               ],
@@ -40,7 +40,7 @@ class _MyFollowPageState extends ConsumerState<MyFollowPage> {
               },
             ),
           ),
-          Expanded(
+          const Expanded(
             child: MyFollowPageBody(),
           ),
         ],
@@ -58,9 +58,9 @@ class MyFollowPageBody extends ConsumerWidget {
 
     switch (selectedTab) {
       case 0:
-        return MyFollowingPage();
+        return const MyFollowingPage();
       case 1:
-        return MyFollowerPage();
+        return const MyFollowerPage();
       default:
         return Container();
     }

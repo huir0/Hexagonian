@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sfaclog/model/log_reply_model.dart';
+import 'package:sfaclog/viewmodel/log_read_viewmodel/log_read_notifier.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 
-class LogReplyAppBarWidget extends StatelessWidget
+class LogReplyAppBarWidget extends ConsumerWidget
     implements PreferredSizeWidget {
-  const LogReplyAppBarWidget({super.key});
+  final int replyCnt;
+  const LogReplyAppBarWidget({super.key, required this.replyCnt});
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var state = ref.watch(logReadProvider);
+
     return AppBar(
       automaticallyImplyLeading: false,
       surfaceTintColor: Colors.transparent,
       centerTitle: true,
       leading: IconButton(
         onPressed: () {
-          context.pop();
+          context.pop(replyCnt);
         },
         icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
       ),
-      title: const Row(
+      title: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('댓글'),
-          Text('2'),
+          const Text('댓글'),
+          Text('$replyCnt'),
         ],
       ),
       actions: [

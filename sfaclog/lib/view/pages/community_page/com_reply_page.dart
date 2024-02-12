@@ -1,9 +1,10 @@
-import 'package:fleather/fleather.dart';
 import 'package:flutter/material.dart';
 import 'package:sfaclog/view/widgets/com_reply_wigets/com_reply_appbars.dart';
 
 class ComReplayPage extends StatelessWidget {
-  const ComReplayPage({Key? key});
+  const ComReplayPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +12,10 @@ class ComReplayPage extends StatelessWidget {
     double screenWidth = 195; // Set your desired value
     double OptionFontSize = 14;
 
-    return Scaffold(
+    return const Scaffold(
       appBar: ComReplyAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -147,12 +147,12 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
                 padding:
-                    EdgeInsets.only(top: 12, bottom: 11, left: 25, right: 33),
+                    const EdgeInsets.only(top: 12, bottom: 11, left: 25, right: 33),
                 width: 360,
                 height: 42,
                 child: Row(
@@ -161,7 +161,7 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                   children: [
                     Container(
                       width: 67,
-                      padding: EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -181,12 +181,12 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                                     letterSpacing: -0.14),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Container(
                                 width: 9,
-                                padding: EdgeInsets.all(0),
+                                padding: const EdgeInsets.all(0),
                                 alignment: Alignment.center,
                                 child: SvgPicture.asset(
                                     'assets/icons/arrow_down.svg')),
@@ -194,8 +194,8 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                         ),
                       ),
                     ),
-                    Spacer(),
-                    Container(
+                    const Spacer(),
+                    SizedBox(
                       width: 15,
                       child: GestureDetector(
                         onTap: () {
@@ -208,10 +208,10 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                             : 'assets/icons/menu_burger_on.svg'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
-                    Container(
+                    SizedBox(
                       width: 15,
                       child: GestureDetector(
                         onTap: () {
@@ -224,7 +224,7 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                             : 'assets/icons/menu_tile_off.svg'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                   ],
@@ -235,7 +235,7 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                 width: 360,
                 height: 480,
                 padding: tiled
-                    ? EdgeInsets.symmetric(horizontal: 24)
+                    ? const EdgeInsets.symmetric(horizontal: 24)
                     : EdgeInsets.zero,
                 child: tiled
                     ? SingleChildScrollView(
@@ -251,7 +251,7 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                     : ListView.separated(
                         itemCount: logs.length,
                         separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 8,
                           );
                         },

@@ -28,10 +28,10 @@ class TodayLogState extends ConsumerState<TodayLog> {
       items: List.generate(popularLogState?.length ?? 0, (index) {
         return InkWell(
             onTap: () {
-              context.push('/log/read/${popularLogState?[index].id}');
+              context.push('/log/read/${popularLogState[index].id}');
             },
             child: LogPageCardWidget(
-              logData: popularLogState?[index],
+              logData: popularLogState![index],
             ));
       }).toList(),
     );

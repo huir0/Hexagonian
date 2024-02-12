@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';

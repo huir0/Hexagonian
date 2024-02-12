@@ -17,12 +17,12 @@ class MyPage extends ConsumerWidget {
     return Container(
       child: Column(children: [
         Container(
-          padding: EdgeInsets.only(top: 7),
+          padding: const EdgeInsets.only(top: 7),
           child: SLTab(
             currentIndex: ref.watch(myPageProvider).tab,
             horizontalMargin: 9,
             height: 43,
-            menu: [
+            menu: const [
               Text('프로필'),
               Text('나의 로그'),
               Text('북마크'),
@@ -33,7 +33,7 @@ class MyPage extends ConsumerWidget {
             },
           ),
         ),
-        Expanded(
+        const Expanded(
           child: MyPageBody(),
         ),
       ]),
@@ -42,6 +42,8 @@ class MyPage extends ConsumerWidget {
 }
 
 class MyPageBody extends ConsumerWidget {
+  const MyPageBody({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final selectedTab = ref.watch(selectedTabProvider);
@@ -49,11 +51,11 @@ class MyPageBody extends ConsumerWidget {
 
     switch (selectedTab) {
       case 0:
-        return MyProfilePage();
+        return const MyProfilePage();
       case 1:
-        return MyLogPage();
+        return const MyLogPage();
       case 2:
-        return MyBookmarkPage();
+        return const MyBookmarkPage();
       default:
         return Container();
     }
