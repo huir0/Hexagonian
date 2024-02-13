@@ -6,8 +6,6 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/com_side_listtile_wiget.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/sideproject_card.dart';
-import 'package:sfaclog_widgets/labels/grey_label_copy.dart';
-import 'package:sfaclog_widgets/labels/log_label.dart';
 
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 

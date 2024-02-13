@@ -44,7 +44,8 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
       tag: [],
       user: '',
       view: 0,
-      like: 0);
+      like: 0,
+      replyCnt: 0);
   FleatherController? _controller;
   bool editorFocused = false;
   List<String> tagList = [];

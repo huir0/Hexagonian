@@ -43,7 +43,8 @@ class _ComWritePageState extends ConsumerState<ComWritePage> {
       tag: [],
       user: '',
       view: 0,
-      like: 0);
+      like: 0,
+      replyCnt: 0);
   FleatherController? _controller;
   bool editorFocused = false;
   List<String> tagList = [];

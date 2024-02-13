@@ -5,17 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:markdown_toolbar/markdown_toolbar.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:parchment_delta/parchment_delta.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
-import 'package:sfaclog_widgets/chips/sl_chip.dart';
 import 'package:sfaclog_widgets/tags/sl_tag.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,7 +42,8 @@ class _ComWritePageState extends ConsumerState<ComWritePage> {
       tag: [],
       user: '',
       view: 0,
-      like: 0);
+      like: 0,
+      replyCnt: 0);
   FleatherController? _controller;
   bool editorFocused = false;
   List<String> tagList = [];

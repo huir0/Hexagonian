@@ -14,7 +14,7 @@ class ComSideReadCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-        side: BorderSide(width: 1, color: Color(0xFF333333)),
+        side: const BorderSide(width: 1, color: Color(0xFF333333)),
         borderRadius: BorderRadius.circular(10),
       )),
       child: Column(
@@ -29,10 +29,10 @@ class ComSideReadCard extends StatelessWidget {
                 onPressed: () {},
                 fontSize: 12,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
-              SFACTag(
+              const SFACTag(
                 text: Text(
                   '#프론트엔드',
                   style: TextStyle(
@@ -44,7 +44,7 @@ class ComSideReadCard extends StatelessWidget {
               ),
             ],
           ),
-          Text(
+          const Text(
             '비대면의료 닥터루시드 팀원 모집.',
             style: TextStyle(
               fontSize: 14,
@@ -52,14 +52,14 @@ class ComSideReadCard extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          Text(
+          const Text(
             'NEW',
             style: TextStyle(
                 color: Color(0xFF196AFF),
                 fontSize: 12,
                 fontWeight: FontWeight.w700),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text('안녕하세요 저는 의사입니다. 비대면의료\n플랫폼 닥터루시드를 출시합니다.본문에\n소개 부분을 보여줌',

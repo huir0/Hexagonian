@@ -10,7 +10,7 @@ class MypageAddCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryName = TextEditingController();
-    final bool select = false;
+    const bool select = false;
 
     return Scaffold(
       appBar: MyAppbar(
@@ -35,15 +35,15 @@ class MypageAddCategory extends StatelessWidget {
       ),
       body: Container(
         // width: 360,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 21,
             ),
             Container(
               height: 49,
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               child: Row(
                 children: [
                   Text(
@@ -51,7 +51,7 @@ class MypageAddCategory extends StatelessWidget {
                     style: SLTextStyle.Text_M_Medium?.copyWith(
                         color: Colors.white),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   SizedBox(
                     width: 65,
                     child: TextField(
@@ -74,28 +74,28 @@ class MypageAddCategory extends StatelessWidget {
               height: 1,
               color: SLColor.neutral[80],
             ),
-            SizedBox(height: 4,),
+            const SizedBox(height: 4,),
             Container(
               height: 49,
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
                 '공개설정',
                 style: SLTextStyle.Text_M_Medium?.copyWith(color: Colors.white),
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 16),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: Row(
                 // TODO: 둘 중 하나만 선택되게
                 children: [
                   SLCheckbox(onChange: (e) {print(e);}, value: select),
-                  SizedBox(width: 4,),
-                  Text('전체공개'),
-                  SizedBox(width: 34,),
+                  const SizedBox(width: 4,),
+                  const Text('전체공개'),
+                  const SizedBox(width: 34,),
                   SLCheckbox(onChange: (e) {}, value: select),
-                  SizedBox(width: 4,),
-                  Text('비공개'),
+                  const SizedBox(width: 4,),
+                  const Text('비공개'),
                 ],
               ),
             ),

@@ -17,15 +17,15 @@ class _MyFollowingPageState extends ConsumerState<MyFollowingPage> {
     return Container(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          SFACSearchBar(
+          const SFACSearchBar(
             height: 38,
             width: 312,
             hintText: '닉네임을 검색하세요.',
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           SingleChildScrollView(

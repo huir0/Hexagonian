@@ -7,7 +7,7 @@ class comCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 270,
       height: 200,
       child: Stack(
@@ -18,7 +18,7 @@ class comCard extends StatelessWidget {
                 width: 270,
                 height: 200,
                 decoration: ShapeDecoration(
-                  color: Color(0xFFF5F8FF),
+                  color: const Color(0xFFF5F8FF),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -30,7 +30,7 @@ class comCard extends StatelessWidget {
                 child: Container(
                   width: 20,
                   height: 20,
-                  decoration: ShapeDecoration(
+                  decoration: const ShapeDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/1.png'),
                       fit: BoxFit.cover,
@@ -51,7 +51,7 @@ class comCard extends StatelessWidget {
                 child: Container(
                   width: 20,
                   height: 20,
-                  decoration: ShapeDecoration(
+                  decoration: const ShapeDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/2.png'),
                       fit: BoxFit.cover,
@@ -72,7 +72,7 @@ class comCard extends StatelessWidget {
                 child: Container(
                   width: 20,
                   height: 20,
-                  decoration: ShapeDecoration(
+                  decoration: const ShapeDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/3.png'),
                       fit: BoxFit.cover,
@@ -87,7 +87,7 @@ class comCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
+              const Positioned(
                 left: 70.43,
                 top: 25.11,
                 child: Row(
@@ -111,7 +111,7 @@ class comCard extends StatelessWidget {
               ),
             ],
           ),
-          Positioned(
+          const Positioned(
             left: 54.92,
             top: 67,
             child: SizedBox(
@@ -129,7 +129,7 @@ class comCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          const Positioned(
             left: 54.92,
             top: 85,
             child: SizedBox(
@@ -147,7 +147,7 @@ class comCard extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          const Positioned(
             left: 54.92,
             top: 103,
             child: SizedBox(
@@ -181,7 +181,7 @@ class comCard extends StatelessWidget {
               child: Image.asset('assets/images/4.png'),
             ),
           ),
-          Positioned(
+          const Positioned(
               left: 20,
               top: 149,
               child: Row(
@@ -194,7 +194,7 @@ class comCard extends StatelessWidget {
                   ),
                 ],
               )),
-          Positioned(
+          const Positioned(
               left: 60,
               top: 135,
               child: // SkyLabel(
@@ -204,7 +204,7 @@ class comCard extends StatelessWidget {
                 width: 52,
                 height: 20,
               )),
-          Positioned(
+          const Positioned(
               left: 118,
               top: 135,
               child: // SkyLabel(

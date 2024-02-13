@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog_widgets/buttons/drop_button.dart';
-import 'package:sfaclog_widgets/buttons/follow_button.dart';
 
 class MyFollowCard extends ConsumerStatefulWidget {
   const MyFollowCard({
@@ -22,7 +20,7 @@ class MyFollowCard extends ConsumerStatefulWidget {
 class _MyFollowCardState extends ConsumerState<MyFollowCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 312,
       height: 52,
       child: Row(
@@ -32,11 +30,11 @@ class _MyFollowCardState extends ConsumerState<MyFollowCard> {
             height: 52,
             clipBehavior: Clip.hardEdge,
             decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
             // TODO: 플픽 연결
             child: widget.profilePicture,
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           Container(
@@ -50,7 +48,7 @@ class _MyFollowCardState extends ConsumerState<MyFollowCard> {
               ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {},
