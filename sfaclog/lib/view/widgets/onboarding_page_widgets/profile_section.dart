@@ -38,7 +38,7 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
     double editbtnSize = 35;
 
     Widget profileImage() {
-      if (onboardingState.userInfo?.picture != null ||
+      if (onboardingState.userInfo?.picture != null &&
           onboardingState.userInfo?.picture != '') {
         String imageString = onboardingState.userInfo!.picture!;
         if (imageString.toLowerCase().endsWith('.svg')) {
@@ -65,6 +65,8 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
         );
       }
     }
+
+    print('프로필섹션: ${onboardingState.userInfo}');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,6 +154,7 @@ class ProfileSectionState extends ConsumerState<ProfileSection> {
                       formKey.currentState!.save();
                       onboardingNotifier.uploadNicknameProfile(
                         nickname: nickname,
+                        // profile: onboardingState.userInfo?.picture,
                       );
                     }
                     onboardingNotifier.moveNextSection();

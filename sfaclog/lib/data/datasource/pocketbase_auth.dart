@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -6,6 +7,21 @@ class PocketbaseAuth {
   PocketbaseAuth();
 
   final pb = PocketBase('http://43.202.59.218:8090');
+
+  Future<String?> uploadProfileImage(
+    String tableName,
+    List<MultipartFile> files,
+  ) async {
+    try {
+      final record = await pb.collection(tableName).create(
+            files: files,
+          );
+      return record.id;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 
   Future<RecordModel> createUserInfo({
     required String nickname,

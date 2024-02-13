@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/kakao_login_button.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:sfaclog_widgets/buttons/sl_button.dart';
 import 'package:sfaclog_widgets/textfields/sl_input.dart';
 
@@ -34,7 +35,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authNotifier = ref.watch(authProvider.notifier);
+    final authNotifier = ref.read(authProvider.notifier);
+    final authStatus = ref.watch(authProvider).authStatus;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -115,6 +118,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         email: emailController.text,
                         password: passwordController.text,
                       );
+                      if (authStatus == AuthStatus.authenticated) {
+                        context.push('/home');
+                      }
                     }
                   : null,
             ),

@@ -72,8 +72,7 @@ class _ProfileEditPageState extends ConsumerState<ProfileEditPage> {
           TextButton(
             onPressed: () {
               onboardingNotifier.uploadNicknameProfile(
-                profile:
-                    profileImage, // @todo 이대로 올리면 svg인지 xfile인지 알 수 없다는 게 함정.
+                profile: profileImage,
               );
               context.pop();
             },

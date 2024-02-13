@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
@@ -5,6 +7,7 @@ import 'package:sfaclog/model/skill_model.dart';
 import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/model/user_model.dart';
 import 'package:sfaclog/viewmodel/auth/user_state.dart';
+import 'package:http/http.dart' as http;
 
 class UserInfoNotifier extends StateNotifier<UserState> {
   UserInfoNotifier() : super(UserState.init());
@@ -42,14 +45,30 @@ class UserInfoNotifier extends StateNotifier<UserState> {
   }) async {
     try {
       state = state.copyWith(userStatus: UserStatus.fetching);
+      // String? pictureId;
 
-      if (picture != null || picture != '') {
-        // http.MultipartFile.fromBytes(
-        //   'images',
-        //   imageBytes,
-        //   filename: picture,
-        // );
-      }
+      // if (picture != null || picture != '') {
+      //   List<int> imageBytes = [];
+      //   if (picture!.contains('cache')) {
+      //     File imageFile = File(picture);
+      //     imageBytes = await imageFile.readAsBytes();
+      //   } else {
+      //     ByteData data = await rootBundle.load(picture);
+      //     imageBytes = data.buffer.asUint8List();
+      //   }
+
+      //   pictureId = await PocketbaseAuth().uploadProfileImage(
+      //     'user',
+      //     [
+      //       http.MultipartFile.fromBytes(
+      //         'picture',
+      //         imageBytes,
+      //         filename: 'picture_${DateTime.now()}.${picture.split('.').last}',
+      //       ),
+      //     ],
+      //   );
+      // }
+      // print('$pictureId: $picture');
 
       var result = await PocketbaseAuth().createUserInfo(
         agreement: agreement,
