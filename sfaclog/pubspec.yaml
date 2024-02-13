@@ -51,6 +51,7 @@ dependencies:
   pocketbase: ^0.18.0
   sfaclog_widgets:
     path: ../sfaclog_widgets
+  shared_preferences: ^2.2.2
   table_calendar: ^3.0.9
   url_launcher: ^6.2.4
 

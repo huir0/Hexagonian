@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
-import 'package:sfaclog/view/pages/main_page/main_page.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:lottie/lottie.dart';
@@ -19,7 +19,6 @@ class _SplashPageState extends ConsumerState<SplashPage>
   @override
   void initState() {
     super.initState();
-
     controller = AnimationController(vsync: this);
   }
 
@@ -35,7 +34,7 @@ class _SplashPageState extends ConsumerState<SplashPage>
       context,
       MaterialPageRoute(
         builder: (context) => authStatus == AuthStatus.authenticated
-            ? const MainPage()
+            ? const AppWrapper()
             : const LoginPage(),
       ),
       (route) => route.isFirst,
