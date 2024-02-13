@@ -39,6 +39,26 @@ class LogNotifier extends StateNotifier<LogState> {
     }
   }
 
+  Future<List<SFACLogModel>> getLogDataFilter(String filter) async {
+    try {
+      List<dynamic> logList = await _remoteDataSource.getTableData(
+          tableName: 'log', filter: filter);
+      List<SFACLogModel> tempList = [];
+      for (var log in logList) {
+        log = SFACLogModel.fromJson(jsonDecode(log.toString()));
+        final thumbnail = await getThumbNailUrl(log.id);
+        final replyCnt = await getReplyCnt(log.id);
+        SFACLogModel updatedLog =
+            log.copyWith(thumbnail: thumbnail, replyCnt: replyCnt);
+        tempList.add(updatedLog);
+      }
+      return tempList;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<int> getReplyCnt(String tagId) async {
     var data = await _remoteDataSource.getTableData(
         tableName: 'log_reply', filter: 'log="$tagId"');

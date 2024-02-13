@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -50,6 +52,16 @@ class _LogPageCardWidgetState extends ConsumerState<LogPageCardWidget> {
       },
     );
     setState(() {});
+  }
+
+  String? getElipsisText(String bodyText) {
+    var data = jsonDecode(bodyText);
+    for (var item in data) {
+      if (item['insert'].runtimeType == String) {
+        return item['insert'];
+      }
+    }
+    return null;
   }
 
   @override
@@ -155,8 +167,7 @@ class _LogPageCardWidgetState extends ConsumerState<LogPageCardWidget> {
                       text: TextSpan(
                           style: SLTextStyle(style: SLStyle.Text_XS_Regular)
                               .textStyle,
-                          text:
-                              '개발이라는 분야가 생소하고 어렵게 느껴지지만 사실 어쩌구저쩌구 해서 개발은 누구나 도전할 수 있는 그런 분야'),
+                          text: getElipsisText(widget.logData.body)),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

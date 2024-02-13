@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/log_category_model.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
 
 class LogCategoryPage extends ConsumerStatefulWidget {
@@ -16,7 +17,9 @@ class LogCategoryPage extends ConsumerStatefulWidget {
 
 class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
   int selectedIndex = 0;
-  List<String> categoryList = ['선택 안함'];
+  List<LogCategoryModel> categoryList = [
+    LogCategoryModel(name: '선택안함', log: '', user: '', public: 'public')
+  ];
 
   final RemoteDataSource _remoteDataSource = RemoteDataSource();
   @override
@@ -30,7 +33,8 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
         tableName: 'category') as List<RecordModel>;
     setState(() {
       for (RecordModel item in categoryData) {
-        categoryList.add(item.data['name']);
+        LogCategoryModel data = LogCategoryModel.fromJson(item.data);
+        categoryList.add(data);
       }
     });
     ref.read(logwriteProvider.notifier).setCategory(categoryList);
@@ -57,7 +61,7 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
           TextButton(
               onPressed: () {
                 var newLogModel = state.logModel!
-                    .copyWith(category: categoryList[selectedIndex]);
+                    .copyWith(category: categoryList[selectedIndex].name);
                 ref.read(logwriteProvider.notifier).setLog(newLogModel);
                 context.pop();
               },
@@ -88,14 +92,24 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            state.categoryList[index],
-                            style: SLTextStyle(
-                                    style: SLStyle.Text_M_Medium,
-                                    color: selectedIndex == index
-                                        ? SLColor.primary
-                                        : SLColor.neutral.shade50)
-                                .textStyle,
+                          Row(
+                            children: [
+                              Text(
+                                state.categoryList[index].name,
+                                style: SLTextStyle(
+                                        style: SLStyle.Text_M_Medium,
+                                        color: selectedIndex == index
+                                            ? SLColor.primary
+                                            : SLColor.neutral.shade50)
+                                    .textStyle,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              state.categoryList[index].public == 'public'
+                                  ? const SizedBox()
+                                  : SvgPicture.asset('assets/icons/lock.svg'),
+                            ],
                           ),
                           selectedIndex == index
                               ? const Icon(

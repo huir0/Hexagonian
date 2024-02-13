@@ -187,22 +187,25 @@ class _LogPageState extends ConsumerState<LogPage> {
                   },
                 ),
               )
-            : Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Column(
-                    children: List.generate(
-                        5,
-                        (index) => Container(
-                              height: 257,
-                              margin: const EdgeInsets.only(bottom: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            )),
+            : Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      children: List.generate(
+                          5,
+                          (index) => Container(
+                                height: 257,
+                                margin: const EdgeInsets.only(bottom: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              )),
+                    ),
                   ),
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/log_category_model.dart';
 import 'package:sfaclog/view/widgets/common_widget.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
 
@@ -41,15 +42,16 @@ class _LogCategoryAddPageState extends ConsumerState<LogCategoryAddPage> {
         actions: [
           TextButton(
               onPressed: () async {
-                await _remoteDataSource.createTableData('category', {
-                  "name": _texteditingController.value.text,
-                  "log": "",
-                  "users": "",
-                  "public": publicOptionList[selectedPublicIndex]['tableValue']
-                }).then((value) {
-                  ref
-                      .read(logwriteProvider.notifier)
-                      .addCategory(_texteditingController.value.text);
+                LogCategoryModel newData = LogCategoryModel(
+                    name: _texteditingController.value.text,
+                    log: "",
+                    user: "",
+                    public: publicOptionList[selectedPublicIndex]
+                        ['tableValue']);
+                await _remoteDataSource
+                    .createTableData('category', newData.toJson())
+                    .then((value) {
+                  ref.read(logwriteProvider.notifier).addCategory(newData);
                   context.pop();
                 });
               },
