@@ -8,6 +8,15 @@ class PocketbaseAuth {
 
   final pb = PocketBase('http://43.202.59.218:8090');
 
+  Future<void> authRefresh() async {
+    try {
+      await pb.collection('users').authRefresh();
+    } catch (e) {
+      print('authRefresh error: $e');
+      rethrow;
+    }
+  }
+
   Future<String?> uploadProfileImage(
     String tableName,
     List<MultipartFile> files,
@@ -19,7 +28,7 @@ class PocketbaseAuth {
       return record.id;
     } catch (e) {
       print(e);
-      return null;
+      rethrow;
     }
   }
 
@@ -43,40 +52,49 @@ class PocketbaseAuth {
     return result;
   }
 
-  void updateUser({
+  Future<RecordModel> updateUser({
     required String nickname,
     required String password,
     required String passwordConfirm,
     required String name,
-    required String recordId,
+    required String userId,
   }) async {
-    final record = await pb.collection('users').update('RECORD_ID', body: {
+    final record = await pb.collection('users').update(userId, body: {
       "username": nickname,
       "emailVisibility": false,
       "password": password,
       "passwordConfirm": passwordConfirm,
-      "oldPassword": "12345678",
+      "oldPassword": "1234qwer!",
       "name": name,
     });
+
+    return record;
   }
 
   void deleteTempUser(String id) async {
-    await pb.collection('users').delete('RECORD_ID');
+    await pb.collection('users').delete(id);
   }
 
   Future<RecordModel> createTempUser({
     required String name,
     required String email,
   }) async {
-    final record = await pb.collection('users').create(body: {
-      "username": name,
-      "email": email,
-      "emailVisibility": true,
-      "password": "12345678",
-      "passwordConfirm": "12345678",
-      "name": name,
-    });
-    return record;
+    try {
+      final record = await pb.collection('users').create(body: {
+        "username": name,
+        "email": email,
+        "emailVisibility": true,
+        "password": "1234qwer!",
+        "passwordConfirm": "1234qwer!",
+        "name": name,
+      });
+
+      print('temp user info!!!!!: $record');
+      return record;
+    } catch (e) {
+      print('cant create tempuser: $e');
+      rethrow;
+    }
   }
 
   Future<RecordModel> setUserData({

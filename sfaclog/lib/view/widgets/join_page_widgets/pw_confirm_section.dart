@@ -4,11 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/model/user_model.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
-import 'package:sfaclog_widgets/titles/title_with_count.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
-import 'package:sfaclog_widgets/buttons/sl_button.dart';
-import 'package:sfaclog_widgets/textfields/validate_input.dart';
-import 'package:sfaclog_widgets/menus/sl_expansion_tile.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
 class PwConfirmSection extends ConsumerStatefulWidget {
@@ -158,9 +155,17 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
 
                       UserModel basicUserInfo = onboardingState.userInfo!.user!;
 
-                      var res = await authNotifier.signup(
+                      // var res = await authNotifier.signup(
+                      // name: basicUserInfo.name!,
+                      // email: basicUserInfo.email!,
+                      // password: password,
+                      // passwordConfirm: passwordConfirm,
+                      // nickname: basicUserInfo.name!,
+                      // );
+
+                      var res = await authNotifier.updateUser(
+                        userId: basicUserInfo.id!,
                         name: basicUserInfo.name!,
-                        email: basicUserInfo.email!,
                         password: password,
                         passwordConfirm: passwordConfirm,
                         nickname: basicUserInfo.name!,
