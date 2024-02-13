@@ -25,19 +25,6 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () {
-        return _initProgram();
-      },
-    );
-  }
-
-  Future<void> _initProgram() async {
-    try {
-      await ref.read(programsProvider.notifier).getPrograms();
-    } catch (e) {
-      print('main page initData fail: $e');
-    }
   }
 
   @override

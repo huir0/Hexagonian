@@ -7,6 +7,7 @@ import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
+import 'package:sfaclog/viewmodel/programs_viewmodel/programs_provider.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
@@ -31,6 +32,8 @@ class _SplashPageState extends ConsumerState<SplashPage>
   }
 
   Future<void> setInitData() async {
+    await ref.read(programsProvider.notifier).getPrograms();
+
     popularLogList = await ref.read(logProvider.notifier).getPopularLog();
     ref.read(logProvider.notifier).setPopularLog(popularLogList);
   }
