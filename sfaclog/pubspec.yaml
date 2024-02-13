@@ -36,6 +36,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_markdown: ^0.6.0
+  flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^2.4.9
   flutter_svg: ^2.0.9
   freezed: ^2.4.6
@@ -45,13 +46,14 @@ dependencies:
   http: ^1.2.0
   image_picker: ^1.0.7
   json_serializable: ^6.7.1
+  lottie: ^3.0.0
   markdown_toolbar: ^0.5.0
   pocketbase: ^0.18.0
   sfaclog_widgets:
     path: ../sfaclog_widgets
+  shared_preferences: ^2.2.2
   table_calendar: ^3.0.9
   url_launcher: ^6.2.4
-  flutter_rating_bar: ^4.0.1
   shimmer: ^3.0.0
 
 dev_dependencies:
@@ -77,6 +79,7 @@ flutter:
     - assets/icons/
     - assets/avatars/
     - assets/logo/
+    - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

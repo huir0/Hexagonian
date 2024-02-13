@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
+import 'package:sfaclog/view/pages/alarm_page/alarm_page.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/walkthrough_page/walkthrough_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_add_page.dart';
@@ -25,8 +27,19 @@ import 'package:sfaclog/view/pages/my_page/my_proposal_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_setting_page.dart';
 import 'package:sfaclog/view/pages/my_page/mye_terms_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_withdrawal_page.dart';
+import 'package:sfaclog/view/pages/onboarding_page/profile_edit_page.dart';
+import 'package:sfaclog/view/pages/splash_page/splash_page.dart';
 
-final router = GoRouter(initialLocation: '/home', routes: [
+// final router = GoRouter(initialLocation: '/home', routes: [
+final router = GoRouter(initialLocation: '/splash', routes: [
+  GoRoute(
+    path: '/splash',
+    builder: (context, state) => const SplashPage(),
+  ),
+  GoRoute(
+    path: '/walkthrough',
+    builder: (context, state) => const WalkthroughPage(),
+  ),
   GoRoute(
     path: '/home',
     builder: (context, state) => const AppWrapper(),
@@ -34,6 +47,10 @@ final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
     path: '/main',
     builder: (context, state) => const MainPage(),
+  ),
+  GoRoute(
+    path: '/alert',
+    builder: (context, state) => const AlarmPage(),
   ),
   GoRoute(path: '/log', builder: (context, state) => const LogPage(), routes: [
     GoRoute(
@@ -139,6 +156,10 @@ final router = GoRouter(initialLocation: '/home', routes: [
   GoRoute(
     path: '/signup',
     builder: (context, state) => const JoinPage(),
+  ),
+  GoRoute(
+    path: '/profile',
+    builder: (context, state) => const ProfileEditPage(),
   ),
   GoRoute(
     path: '/welcome',

@@ -84,6 +84,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
                       List<String> skillList = [
                         ...userInfo.skill!.map((skill) => skill.id)
                       ];
+
                       var res = await userInfoNotifier.createUserInfo(
                         nickname: userInfo.nickname!,
                         agreement: userInfo.agreementState!,
