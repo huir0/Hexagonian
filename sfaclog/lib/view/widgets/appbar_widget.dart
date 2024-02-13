@@ -39,6 +39,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             onPressed: () {
               print('Noti_Clicked');
+              context.push('/alert');
             },
             icon: SvgPicture.asset('assets/icons/bell.svg'),
           ),
