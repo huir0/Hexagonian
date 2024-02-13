@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
+import 'package:sfaclog/view/pages/alarm_page/alarm_page.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/walkthrough_page/walkthrough_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
@@ -34,12 +36,20 @@ final router = GoRouter(initialLocation: '/splash', routes: [
     builder: (context, state) => const SplashPage(),
   ),
   GoRoute(
+    path: '/walkthrough',
+    builder: (context, state) => const WalkthroughPage(),
+  ),
+  GoRoute(
     path: '/home',
     builder: (context, state) => const AppWrapper(),
   ),
   GoRoute(
     path: '/main',
     builder: (context, state) => const MainPage(),
+  ),
+  GoRoute(
+    path: '/alert',
+    builder: (context, state) => const AlarmPage(),
   ),
   GoRoute(path: '/log', builder: (context, state) => const LogPage(), routes: [
     GoRoute(
