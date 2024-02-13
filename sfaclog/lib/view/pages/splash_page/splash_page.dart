@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/login_page/login_page.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
@@ -15,7 +17,7 @@ class SplashPage extends ConsumerStatefulWidget {
 class _SplashPageState extends ConsumerState<SplashPage>
     with TickerProviderStateMixin {
   late final AnimationController controller;
-
+  List<SFACLogModel> popularLogList = [];
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,11 @@ class _SplashPageState extends ConsumerState<SplashPage>
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  Future<void> setInitData() async {
+    popularLogList = await ref.read(logProvider.notifier).getPopularLog();
+    ref.read(logProvider.notifier).setPopularLog(popularLogList);
   }
 
   void navigateToNextPage() {
@@ -52,8 +59,9 @@ class _SplashPageState extends ConsumerState<SplashPage>
             controller
               ..duration = composition.duration
               ..forward()
-              ..addStatusListener((status) {
+              ..addStatusListener((status) async {
                 if (status == AnimationStatus.completed) {
+                  await setInitData();
                   navigateToNextPage();
                 }
               });

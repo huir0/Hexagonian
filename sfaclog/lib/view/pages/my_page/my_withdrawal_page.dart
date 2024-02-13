@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
@@ -53,10 +52,10 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: 20,
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 23),
+                padding: const EdgeInsets.symmetric(horizontal: 23),
                 height: 27,
                 child: Text(
                   '⚠ ️주의해주세요!',
@@ -64,11 +63,11 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                       SLTextStyle.Text_XL_Bold?.copyWith(color: Colors.white),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
-                padding: EdgeInsets.only(left: 23, right: 25),
+                padding: const EdgeInsets.only(left: 23, right: 25),
                 child: Text(
                   '''탈퇴시 삭제된 정보는 복구가 불가능합니다.
           
@@ -79,11 +78,11 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               Container(
-                margin: EdgeInsets.only(left: 25),
+                margin: const EdgeInsets.only(left: 25),
                 alignment: Alignment.centerLeft,
                 height: 17,
                 child: Text(
@@ -91,10 +90,10 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                   style: SLTextStyle.Text_M_Bold?.copyWith(color: Colors.white),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Container(
+              SizedBox(
                 width: 312,
                 child: SFACSelectMenuButton(
                     itemWidth: 312,
@@ -105,21 +104,21 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                       print(index);
                     }),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Container(
+              const SizedBox(
                 width: 312,
                 height: 46,
                 child: SLInput(
                   hintText: '불편함 점을 직접 입력해주세요',
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 25),
+                margin: const EdgeInsets.symmetric(horizontal: 25),
                 alignment: Alignment.centerLeft,
                 height: 17,
                 child: Text(
@@ -129,10 +128,10 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
-              Container(
+              const SizedBox(
                 width: 312,
                 height: 46,
                 // TODO: 비밀번호 확인 로직 추가
@@ -140,9 +139,9 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                   hintText: '현재 비밀번호를 입력해주세요',
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Container(
-                margin: EdgeInsets.symmetric(
+                margin: const EdgeInsets.symmetric(
                   vertical: 28,
                 ),
                 alignment: Alignment.center,

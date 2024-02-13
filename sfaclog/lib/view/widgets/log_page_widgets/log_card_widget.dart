@@ -1,12 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class LogPageCardWidget extends StatefulWidget {
+class LogPageCardWidget extends ConsumerStatefulWidget {
   final SFACLogModel logData;
   const LogPageCardWidget({
     super.key,
@@ -14,13 +18,13 @@ class LogPageCardWidget extends StatefulWidget {
   });
 
   @override
-  State<LogPageCardWidget> createState() => _LogPageCardWidgetState();
+  ConsumerState<LogPageCardWidget> createState() => _LogPageCardWidgetState();
 }
 
-class _LogPageCardWidgetState extends State<LogPageCardWidget> {
+class _LogPageCardWidgetState extends ConsumerState<LogPageCardWidget> {
   String? imgUrl;
+  int replyCnt = 0;
   List<Widget> chipList = [];
-  final RemoteDataSource _remoteDataSource = RemoteDataSource();
 
   @override
   void initState() {
@@ -29,8 +33,10 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
   }
 
   Future<void> _loadData() async {
-    String imageUrl =
-        await _remoteDataSource.getThumbNailURL('log', widget.logData.id, 0);
+    imgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.logData.id);
+    replyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.logData.id);
     chipList = List.generate(
       widget.logData.tag.length,
       (index) {
@@ -45,9 +51,17 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
         );
       },
     );
-    setState(() {
-      imgUrl = imageUrl;
-    });
+    setState(() {});
+  }
+
+  String? getElipsisText(String bodyText) {
+    var data = jsonDecode(bodyText);
+    for (var item in data) {
+      if (item['insert'].runtimeType == String) {
+        return item['insert'];
+      }
+    }
+    return null;
   }
 
   @override
@@ -153,8 +167,7 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                       text: TextSpan(
                           style: SLTextStyle(style: SLStyle.Text_XS_Regular)
                               .textStyle,
-                          text:
-                              '개발이라는 분야가 생소하고 어렵게 느껴지지만 사실 어쩌구저쩌구 해서 개발은 누구나 도전할 수 있는 그런 분야'),
+                          text: getElipsisText(widget.logData.body)),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -173,7 +186,7 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                           width: 4,
                         ),
                         Text(
-                          '1',
+                          '$replyCnt',
                           style:
                               SLTextStyle(style: SLStyle.Text_S_Bold).textStyle,
                         ),
@@ -193,7 +206,7 @@ class _LogPageCardWidgetState extends State<LogPageCardWidget> {
                           width: 4,
                         ),
                         Text(
-                          '2',
+                          ' ${widget.logData.like}',
                           style:
                               SLTextStyle(style: SLStyle.Text_S_Bold).textStyle,
                         )

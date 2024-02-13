@@ -16,13 +16,14 @@ class SFACLogModel with _$SFACLogModel {
     required String category,
     required int favorite,
     required List<dynamic> images,
-    required int like,
     required String public,
     required List<dynamic> tag,
     required String thumbnail,
     required String title,
     required String user,
     required int view,
+    required int like,
+    int? replyCnt,
   }) = _SFACLogModel;
 
   factory SFACLogModel.fromJson(Map<String, dynamic> json) =>

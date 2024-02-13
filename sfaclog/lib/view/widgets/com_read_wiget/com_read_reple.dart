@@ -28,7 +28,7 @@ class ComReple extends StatelessWidget {
                           color: Colors.white,
                         ).textStyle,
                       ),
-                      TextSpan(
+                      const TextSpan(
                           text: '  1개',
                           style: TextStyle(
                             color: Color(0xFFB3B3B3),
@@ -44,7 +44,7 @@ class ComReple extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -52,7 +52,7 @@ class ComReple extends StatelessWidget {
                 Container(
                   width: 30,
                   height: 30,
-                  decoration: ShapeDecoration(
+                  decoration: const ShapeDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/basic_profile_sm.png'),
                       fit: BoxFit.cover,
@@ -64,7 +64,7 @@ class ComReple extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
@@ -76,7 +76,7 @@ class ComReple extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             RichText(
@@ -113,10 +113,10 @@ class ComReple extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InkWell(onTap: () {}, child: Text('답글')),
+                InkWell(onTap: () {}, child: const Text('답글')),
                 Row(
                   children: [
-                    Container(
+                    SizedBox(
                         width: 14,
                         height: 13,
                         child: Image.asset('assets/images/Vector (1).png')),
@@ -131,17 +131,17 @@ class ComReple extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
               children: [
-                Padding(padding: EdgeInsets.all(5)),
-                Container(
+                const Padding(padding: EdgeInsets.all(5)),
+                SizedBox(
                     width: 14,
                     height: 13,
                     child: Image.asset('assets/images/Vector 4850.png')),
-                ComReadCard(),
+                const ComReadCard(),
               ],
             ),
           ],

@@ -7,30 +7,30 @@ class ComSideReadBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(padding: EdgeInsets.all(8)),
-        Divider(
+        const Padding(padding: EdgeInsets.all(8)),
+        const Divider(
           thickness: 1,
           height: 1,
           color: Color(0xFF333333),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Container(
           width: 312,
           height: 144,
           decoration: ShapeDecoration(
-            color: Color(0xFF020202),
+            color: const Color(0xFF020202),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
           ),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Row(
+              const Row(
                 children: [
                   Padding(padding: EdgeInsets.only(left: 30)),
                   Text(
@@ -76,10 +76,10 @@ class ComSideReadBody extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Row(
+              const Row(
                 children: [
                   Padding(padding: EdgeInsets.only(left: 30)),
                   Text(
@@ -125,13 +125,13 @@ class ComSideReadBody extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 30)),
-                  Text(
+                  const Padding(padding: EdgeInsets.only(left: 30)),
+                  const Text(
                     '사용 언어',
                     style: TextStyle(
                       color: Colors.white,
@@ -139,26 +139,26 @@ class ComSideReadBody extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Container(
                     width: 20,
                     height: 20,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/images/image 1063.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Container(
                     width: 20,
                     height: 20,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(
                             'assets/images/Python-logo-notext 1.png'),
@@ -166,13 +166,13 @@ class ComSideReadBody extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 25,
                   ),
-                  Text(
+                  const Text(
                     '예상기간',
                     style: TextStyle(
                       color: Colors.white,
@@ -180,10 +180,10 @@ class ComSideReadBody extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
+                  const Text(
                     '3개월',
                     style: TextStyle(
                       color: Color(0xFFB3B3B3),

@@ -45,7 +45,7 @@ class ComTileWiget extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    Row(
+                    const Row(
                       children: [
                         Text('💬 3시간전 프레드윰 님의 새로운 답변',
                             style: TextStyle(
@@ -55,7 +55,7 @@ class ComTileWiget extends StatelessWidget {
                                 height: 0.17)),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -63,7 +63,7 @@ class ComTileWiget extends StatelessWidget {
                         Text('IPTIME 포트포워딩',
                             style: SLTextStyle(style: SLStyle.Text_M_Bold)
                                 .textStyle),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         Text(
@@ -80,7 +80,7 @@ class ComTileWiget extends StatelessWidget {
                       style:
                           SLTextStyle(style: SLStyle.Text_S_Medium).textStyle,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     SizedBox(
@@ -99,7 +99,7 @@ class ComTileWiget extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -111,7 +111,7 @@ class ComTileWiget extends StatelessWidget {
                                   color: SLColor.neutral.shade50)
                               .textStyle,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
@@ -121,11 +121,11 @@ class ComTileWiget extends StatelessWidget {
                                   color: SLColor.neutral.shade50)
                               .textStyle,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Image.asset('assets/images/Union (1).png'),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         Text(
@@ -135,7 +135,7 @@ class ComTileWiget extends StatelessWidget {
                                   color: SLColor.neutral.shade50)
                               .textStyle,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 130,
                         ),
                         Text(
@@ -147,10 +147,10 @@ class ComTileWiget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Divider(
+                    const Divider(
                       thickness: 1,
                       height: 1,
                       color: Color(0xFF333333),

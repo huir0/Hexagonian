@@ -15,7 +15,7 @@ class ComReadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: ComReadAppBarWidget(),
+        appBar: const ComReadAppBarWidget(),
         body: Column(
           children: [
             Expanded(
@@ -23,14 +23,14 @@ class ComReadPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  ComReadingHeader(),
-                  Divider(height: 1, color: Color(0xFF333333)),
-                  ComReple(),
-                  Divider(height: 1, color: Color(0xFF333333)),
-                  Padding(
+                  const ComReadingHeader(),
+                  const Divider(height: 1, color: Color(0xFF333333)),
+                  const ComReple(),
+                  const Divider(height: 1, color: Color(0xFF333333)),
+                  const Padding(
                     padding: EdgeInsets.all(20),
                     child: Text(
                       '다른 질문 둘러보기',
@@ -43,7 +43,7 @@ class ComReadPage extends StatelessWidget {
                   ),
                   Container(
                     // 수평적으로 대칭(symmetric)의 마진을 추가 -> 화면 위, 아래에 20픽세의 마진 삽입
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     // 컨테이너의 높이를 200으로 설정
                     height: 160.0,
                     // 리스트뷰 추가
@@ -51,7 +51,7 @@ class ComReadPage extends StatelessWidget {
                       // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
                       scrollDirection: Axis.horizontal,
                       // 컨테이너들을 ListView의 자식들로 추가
-                      children: [
+                      children: const [
                         ComReadCard2(),
                         SizedBox(
                           width: 10,
@@ -64,14 +64,14 @@ class ComReadPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 40,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       children: [
-                        EditButton(
+                        const EditButton(
                             text: '알림받기',
                             width: 125,
                             height: 39,
@@ -85,7 +85,7 @@ class ComReadPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ComReplayPage(),
+                                builder: (context) => const ComReplayPage(),
                               ),
                             );
                           },

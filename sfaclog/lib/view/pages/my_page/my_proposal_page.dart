@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
 import 'package:sfaclog/viewmodel/mypage_state_viewmodel/mypage_states.dart';
-import 'package:sfaclog_widgets/buttons/onboarding_button/no_button.dart';
 
 import '../../../common.dart';
 
@@ -34,16 +33,16 @@ class _MypageProposalState extends State<MypageProposal> {
       ),
       body: Container(
         width: 360,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
               width: 312,
               height: 36,
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: SLColor.neutral[80],
@@ -55,12 +54,12 @@ class _MypageProposalState extends State<MypageProposal> {
                     style: SLTextStyle.Text_M_Medium?.copyWith(
                         color: Colors.white),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   MypageToggle(toggleProvider: proposalStateProvider),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -69,7 +68,7 @@ class _MypageProposalState extends State<MypageProposal> {
             //   text: '채용 제안만 받을래요.',
 
             // ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             // NoButton(

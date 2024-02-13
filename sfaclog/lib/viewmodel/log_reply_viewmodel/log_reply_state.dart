@@ -5,27 +5,33 @@ import 'package:sfaclog/model/log_reply_model.dart';
 class LogReplyState extends Equatable {
   final List<LogReplyModel>? replyList;
   final List<LogReplyModel>? nestedReplyList;
-  final String parentReplyId; // 이 필드의 초기화가 생성자에서 올바르게 이루어져야 합니다.
+  final String parentReplyId;
+  final bool isLoading;
 
-  const LogReplyState({
-    this.replyList,
-    this.nestedReplyList,
-    this.parentReplyId = '', // 올바른 기본값 할당
-  });
+  const LogReplyState(
+      {this.replyList,
+      this.nestedReplyList,
+      this.parentReplyId = '',
+      this.isLoading = false});
 
   LogReplyState copyWith({
     List<LogReplyModel>? replyList,
     List<LogReplyModel>? nestedReplyList,
-    String? parentReplyId, // 올바른 파라미터 타입과 이름
+    String? parentReplyId,
+    bool? isLoading,
   }) {
     return LogReplyState(
-      replyList: replyList ?? this.replyList,
-      nestedReplyList: nestedReplyList ?? this.nestedReplyList,
-      parentReplyId: parentReplyId ?? this.parentReplyId, // 수정된 부분
-    );
+        replyList: replyList ?? this.replyList,
+        nestedReplyList: nestedReplyList ?? this.nestedReplyList,
+        parentReplyId: parentReplyId ?? this.parentReplyId,
+        isLoading: isLoading ?? this.isLoading);
   }
 
   @override
-  List<Object?> get props =>
-      [replyList, nestedReplyList, parentReplyId]; // Nullable 리스트를 올바르게 처리
+  List<Object?> get props => [
+        replyList,
+        nestedReplyList,
+        parentReplyId,
+        isLoading
+      ]; // Nullable 리스트를 올바르게 처리
 }

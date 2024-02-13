@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_picture_page.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
@@ -58,12 +57,12 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
       ),
       body: Container(
         width: 360,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 width: 108,
                 height: 108,
                 child: Stack(
@@ -71,7 +70,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                     // TODO: profile picture
                     Container(
                       clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.white),
                     ),
                     Positioned(
@@ -98,7 +97,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                           icon: Container(
                               width: 28,
                               height: 28,
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               child: SvgPicture.asset(
                                 'assets/icons/plus.svg',
                                 color: Colors.white,
@@ -109,10 +108,10 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -126,9 +125,9 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${nickname.text.length}/20',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -138,7 +137,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               SFACTextField(
@@ -146,10 +145,10 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 width: 312,
                 border: Border.all(color: SLColor.neutral[60]!),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -160,7 +159,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${nickname.text.length}/100',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -170,7 +169,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               SFACTextField(
@@ -180,10 +179,10 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 hintText: '나를 소개해주세요.',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 38,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -197,18 +196,18 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 36,
               ),
-              Wrap(
+              const Wrap(
                 children: [],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               SFACSearchBar(
@@ -227,7 +226,7 @@ onTap: () {
                                 );
 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               Text(
@@ -236,10 +235,10 @@ onTap: () {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Wrap(
+              const Wrap(
                 children: [
                   // TODO: skill 연동해서 보여주기
                 ],

@@ -30,13 +30,14 @@ mixin _$SFACLogModel {
   String get category => throw _privateConstructorUsedError;
   int get favorite => throw _privateConstructorUsedError;
   List<dynamic> get images => throw _privateConstructorUsedError;
-  int get like => throw _privateConstructorUsedError;
   String get public => throw _privateConstructorUsedError;
   List<dynamic> get tag => throw _privateConstructorUsedError;
   String get thumbnail => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get user => throw _privateConstructorUsedError;
   int get view => throw _privateConstructorUsedError;
+  int get like => throw _privateConstructorUsedError;
+  int? get replyCnt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -61,13 +62,14 @@ abstract class $SFACLogModelCopyWith<$Res> {
       String category,
       int favorite,
       List<dynamic> images,
-      int like,
       String public,
       List<dynamic> tag,
       String thumbnail,
       String title,
       String user,
-      int view});
+      int view,
+      int like,
+      int? replyCnt});
 }
 
 /// @nodoc
@@ -93,13 +95,14 @@ class _$SFACLogModelCopyWithImpl<$Res, $Val extends SFACLogModel>
     Object? category = null,
     Object? favorite = null,
     Object? images = null,
-    Object? like = null,
     Object? public = null,
     Object? tag = null,
     Object? thumbnail = null,
     Object? title = null,
     Object? user = null,
     Object? view = null,
+    Object? like = null,
+    Object? replyCnt = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -142,10 +145,6 @@ class _$SFACLogModelCopyWithImpl<$Res, $Val extends SFACLogModel>
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
-      like: null == like
-          ? _value.like
-          : like // ignore: cast_nullable_to_non_nullable
-              as int,
       public: null == public
           ? _value.public
           : public // ignore: cast_nullable_to_non_nullable
@@ -170,6 +169,14 @@ class _$SFACLogModelCopyWithImpl<$Res, $Val extends SFACLogModel>
           ? _value.view
           : view // ignore: cast_nullable_to_non_nullable
               as int,
+      like: null == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as int,
+      replyCnt: freezed == replyCnt
+          ? _value.replyCnt
+          : replyCnt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -193,13 +200,14 @@ abstract class _$$SFACLogModelImplCopyWith<$Res>
       String category,
       int favorite,
       List<dynamic> images,
-      int like,
       String public,
       List<dynamic> tag,
       String thumbnail,
       String title,
       String user,
-      int view});
+      int view,
+      int like,
+      int? replyCnt});
 }
 
 /// @nodoc
@@ -223,13 +231,14 @@ class __$$SFACLogModelImplCopyWithImpl<$Res>
     Object? category = null,
     Object? favorite = null,
     Object? images = null,
-    Object? like = null,
     Object? public = null,
     Object? tag = null,
     Object? thumbnail = null,
     Object? title = null,
     Object? user = null,
     Object? view = null,
+    Object? like = null,
+    Object? replyCnt = freezed,
   }) {
     return _then(_$SFACLogModelImpl(
       id: null == id
@@ -272,10 +281,6 @@ class __$$SFACLogModelImplCopyWithImpl<$Res>
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<dynamic>,
-      like: null == like
-          ? _value.like
-          : like // ignore: cast_nullable_to_non_nullable
-              as int,
       public: null == public
           ? _value.public
           : public // ignore: cast_nullable_to_non_nullable
@@ -300,6 +305,14 @@ class __$$SFACLogModelImplCopyWithImpl<$Res>
           ? _value.view
           : view // ignore: cast_nullable_to_non_nullable
               as int,
+      like: null == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as int,
+      replyCnt: freezed == replyCnt
+          ? _value.replyCnt
+          : replyCnt // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -318,13 +331,14 @@ class _$SFACLogModelImpl implements _SFACLogModel {
       required this.category,
       required this.favorite,
       required final List<dynamic> images,
-      required this.like,
       required this.public,
       required final List<dynamic> tag,
       required this.thumbnail,
       required this.title,
       required this.user,
-      required this.view})
+      required this.view,
+      required this.like,
+      this.replyCnt})
       : _images = images,
         _tag = tag;
 
@@ -358,8 +372,6 @@ class _$SFACLogModelImpl implements _SFACLogModel {
   }
 
   @override
-  final int like;
-  @override
   final String public;
   final List<dynamic> _tag;
   @override
@@ -377,10 +389,14 @@ class _$SFACLogModelImpl implements _SFACLogModel {
   final String user;
   @override
   final int view;
+  @override
+  final int like;
+  @override
+  final int? replyCnt;
 
   @override
   String toString() {
-    return 'SFACLogModel(id: $id, created: $created, updated: $updated, collectionId: $collectionId, collectionName: $collectionName, expand: $expand, body: $body, category: $category, favorite: $favorite, images: $images, like: $like, public: $public, tag: $tag, thumbnail: $thumbnail, title: $title, user: $user, view: $view)';
+    return 'SFACLogModel(id: $id, created: $created, updated: $updated, collectionId: $collectionId, collectionName: $collectionName, expand: $expand, body: $body, category: $category, favorite: $favorite, images: $images, public: $public, tag: $tag, thumbnail: $thumbnail, title: $title, user: $user, view: $view, like: $like, replyCnt: $replyCnt)';
   }
 
   @override
@@ -402,14 +418,16 @@ class _$SFACLogModelImpl implements _SFACLogModel {
             (identical(other.favorite, favorite) ||
                 other.favorite == favorite) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            (identical(other.like, like) || other.like == like) &&
             (identical(other.public, public) || other.public == public) &&
             const DeepCollectionEquality().equals(other._tag, _tag) &&
             (identical(other.thumbnail, thumbnail) ||
                 other.thumbnail == thumbnail) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.user, user) || other.user == user) &&
-            (identical(other.view, view) || other.view == view));
+            (identical(other.view, view) || other.view == view) &&
+            (identical(other.like, like) || other.like == like) &&
+            (identical(other.replyCnt, replyCnt) ||
+                other.replyCnt == replyCnt));
   }
 
   @JsonKey(ignore: true)
@@ -426,13 +444,14 @@ class _$SFACLogModelImpl implements _SFACLogModel {
       category,
       favorite,
       const DeepCollectionEquality().hash(_images),
-      like,
       public,
       const DeepCollectionEquality().hash(_tag),
       thumbnail,
       title,
       user,
-      view);
+      view,
+      like,
+      replyCnt);
 
   @JsonKey(ignore: true)
   @override
@@ -460,13 +479,14 @@ abstract class _SFACLogModel implements SFACLogModel {
       required final String category,
       required final int favorite,
       required final List<dynamic> images,
-      required final int like,
       required final String public,
       required final List<dynamic> tag,
       required final String thumbnail,
       required final String title,
       required final String user,
-      required final int view}) = _$SFACLogModelImpl;
+      required final int view,
+      required final int like,
+      final int? replyCnt}) = _$SFACLogModelImpl;
 
   factory _SFACLogModel.fromJson(Map<String, dynamic> json) =
       _$SFACLogModelImpl.fromJson;
@@ -492,8 +512,6 @@ abstract class _SFACLogModel implements SFACLogModel {
   @override
   List<dynamic> get images;
   @override
-  int get like;
-  @override
   String get public;
   @override
   List<dynamic> get tag;
@@ -505,6 +523,10 @@ abstract class _SFACLogModel implements SFACLogModel {
   String get user;
   @override
   int get view;
+  @override
+  int get like;
+  @override
+  int? get replyCnt;
   @override
   @JsonKey(ignore: true)
   _$$SFACLogModelImplCopyWith<_$SFACLogModelImpl> get copyWith =>

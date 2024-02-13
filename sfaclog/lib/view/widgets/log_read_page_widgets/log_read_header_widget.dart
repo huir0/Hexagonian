@@ -24,7 +24,7 @@ class LogReadHeaderWidget extends StatelessWidget {
       return '${difference.inHours}시간 전';
     } else {
       // 'yyyy-MM-dd HH:mm:ss' 포맷으로 날짜와 시간 표시
-      return '${givenTime.year}/${givenTime.month.toString().padLeft(2, '0')}/${givenTime.day.toString().padLeft(2, '0')} ${givenTime.hour.toString().padLeft(2, '0')}:${givenTime.minute.toString().padLeft(2, '0')}:${givenTime.second.toString().padLeft(2, '0')}';
+      return '${givenTime.year}/${givenTime.month.toString().padLeft(2, '0')}/${givenTime.day.toString().padLeft(2, '0')} ${givenTime.hour.toString().padLeft(2, '0')}:${givenTime.minute.toString().padLeft(2, '0')}';
     }
   }
 

@@ -60,10 +60,10 @@ class RemoteDataSource {
     }
   }
 
-  Future<RecordModel> getLogData(String tableName, String recordId) async {
+  Future<RecordModel> getDataOne(String tableName, String recordId) async {
     try {
       // 데이터를 가져옵니다.
-      var data = await pb.collection('log').getOne(
+      var data = await pb.collection(tableName).getOne(
             recordId,
             expand: 'relField1,relField2.subRelField',
           );
@@ -223,6 +223,7 @@ class RemoteDataSource {
           );
       return record.id;
     } catch (e) {
+      print(e);
       return '';
     }
   }

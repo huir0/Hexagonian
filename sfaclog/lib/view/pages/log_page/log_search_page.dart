@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/model/skill_model.dart';
 import 'package:sfaclog/viewmodel/log_search_viewmodel/log_search_notifier.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogSearchPage extends ConsumerStatefulWidget {
@@ -21,7 +23,6 @@ class _LogSearchPageState extends ConsumerState<LogSearchPage> {
   @override
   void initState() {
     super.initState();
-    // "ref"는 StatefulWidget의 모든 생명주기 상에서 사용할 수 있습니다.
     var viewModel = ref.read(logSearchProvider.notifier);
     viewModel.fetchData();
   }
@@ -56,7 +57,21 @@ class _LogSearchPageState extends ConsumerState<LogSearchPage> {
                     height: 37,
                     width: 285,
                     active: true,
-                    onSubmitted: (value) {
+                    onSubmitted: (value) async {
+                      List<SFACLogModel> sfaclogList;
+                      if (value != '') {
+                        sfaclogList = await ref
+                            .read(logProvider.notifier)
+                            .getLogDataFilter('tag ~ "#$value"');
+                      } else {
+                        sfaclogList = await ref
+                            .read(logProvider.notifier)
+                            .getLogDataOrderBy(ref.watch(logProvider).orderBy);
+                      }
+                      ref.read(logProvider.notifier).setLog(sfaclogList);
+                      if (context.mounted) {
+                        context.pop();
+                      }
                       setState(() {});
                     },
                   ),
@@ -123,8 +138,19 @@ class _LogSearchPageState extends ConsumerState<LogSearchPage> {
                                         style: SLStyle.Text_XS_Medium)
                                     .textStyle,
                               ),
+                              onPressed: () async {
+                                List<SFACLogModel> sfaclogList = await ref
+                                    .read(logProvider.notifier)
+                                    .getLogDataFilter(
+                                        'tag ~ "#${state.skillModel![index].name}"');
+                                ref
+                                    .read(logProvider.notifier)
+                                    .setLog(sfaclogList);
+                                if (context.mounted) {
+                                  context.pop();
+                                }
+                              },
                             );
-                            // SFACTag(text: state.skillModel![index].name);
                           } else {
                             return const SizedBox();
                           }

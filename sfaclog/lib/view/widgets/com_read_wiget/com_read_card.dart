@@ -12,13 +12,13 @@ class ComReadCard2 extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: ShapeDecoration(
           shape: RoundedRectangleBorder(
-        side: BorderSide(width: 1, color: Color(0xFF333333)),
+        side: const BorderSide(width: 1, color: Color(0xFF333333)),
         borderRadius: BorderRadius.circular(10),
       )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'IPTIME 포트포워딩 질문입니다.',
             style: TextStyle(
               fontSize: 14,
@@ -26,14 +26,14 @@ class ComReadCard2 extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          Text(
+          const Text(
             'NEW',
             style: TextStyle(
                 color: Color(0xFF196AFF),
                 fontSize: 12,
                 fontWeight: FontWeight.w700),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text('안녕하세요 저는 의사입니다. 비대면의료 플랫폼 닥터루시드를 출시합니다.본문에\n소개 부분을 보여줄...',
@@ -44,7 +44,7 @@ class ComReadCard2 extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(padding: EdgeInsets.only(top: 28)),
+              const Padding(padding: EdgeInsets.only(top: 28)),
               Text('답변7',
                   style: SLTextStyle(
                     style: SLStyle.Text_XS_Regular,

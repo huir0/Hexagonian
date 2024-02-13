@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
@@ -148,12 +147,12 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
                 padding:
-                    EdgeInsets.only(top: 12, bottom: 11, left: 25, right: 33),
+                    const EdgeInsets.only(top: 12, bottom: 11, left: 25, right: 33),
                 width: 360,
                 height: 42,
                 child: Row(
@@ -162,7 +161,7 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                   children: [
                     Container(
                       width: 67,
-                      padding: EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -171,11 +170,11 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                                   builder: (context) =>
                                       const MypageCategory()));
                         },
-                        child: SFACMenuButton(items: ['등록순','최신순'], onItemSelected: (index) {})
+                        child: SFACMenuButton(items: const ['등록순','최신순'], onItemSelected: (index) {})
                       ),
                     ),
-                    Spacer(),
-                    Container(
+                    const Spacer(),
+                    SizedBox(
                       width: 15,
                       child: GestureDetector(
                         onTap: () {
@@ -188,10 +187,10 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                             : 'assets/icons/menu_burger_on.svg'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
-                    Container(
+                    SizedBox(
                       width: 15,
                       child: GestureDetector(
                         onTap: () {
@@ -204,7 +203,7 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                             : 'assets/icons/menu_tile_off.svg'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                   ],
@@ -215,7 +214,7 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                 width: 360,
                 height: 480,
                 padding: tiled
-                    ? EdgeInsets.symmetric(horizontal: 24)
+                    ? const EdgeInsets.symmetric(horizontal: 24)
                     : EdgeInsets.zero,
                 child: tiled
                     ? SingleChildScrollView(
@@ -231,7 +230,7 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                     : ListView.separated(
                         itemCount: logs.length,
                         separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
+                          return const SizedBox(
                             height: 8,
                           );
                         },

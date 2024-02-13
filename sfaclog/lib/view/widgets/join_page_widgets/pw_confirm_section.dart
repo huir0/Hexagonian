@@ -186,7 +186,6 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
 
 class _buildExpansionChild extends StatefulWidget {
   const _buildExpansionChild({
-    super.key,
     required this.terms,
     required this.onChange,
     this.value = false,
