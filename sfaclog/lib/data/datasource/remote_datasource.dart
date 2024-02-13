@@ -11,14 +11,19 @@ class RemoteDataSource {
 
   final pb = PocketBase(pocketBaseURL);
   Future<List<dynamic>> getTableData(
-      {required String tableName, String? orderBy}) async {
+      {required String tableName, String? orderBy, String? filter = ''}) async {
     try {
-      // 데이터를 가져옵니다.
+      // 필터 문자열 구성
+      String finalFilter = 'created >= "2022-01-01 00:00:00"';
+      if (filter != '') {
+        finalFilter += "&&$filter";
+      }
+
       var data = await pb.collection(tableName).getList(
             page: 1,
             perPage: 50,
             sort: orderBy,
-            filter: 'created >= "2022-01-01 00:00:00"',
+            filter: finalFilter,
           );
 
       return data.items;
@@ -26,6 +31,32 @@ class RemoteDataSource {
       // 예외 발생 시 처리
       print("Error fetching data: $e");
       return [];
+    }
+  }
+
+  Future<String> createTableData(
+    String tableName,
+    Map<String, dynamic> creats,
+  ) async {
+    try {
+      var record = await pb.collection(tableName).create(body: creats);
+      return record.id;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  Future<String> updateTableData(
+    String tableName,
+    String tagId,
+    Map<String, dynamic> updates,
+  ) async {
+    try {
+      var record = await pb.collection(tableName).update(tagId, body: updates);
+      return record.id;
+    } catch (e) {
+      print(e);
+      return '';
     }
   }
 
@@ -148,14 +179,6 @@ class RemoteDataSource {
     } catch (e) {
       print(e);
     }
-  }
-
-  Future<void> updateLogData(
-    String tableName,
-    String tagId,
-    Map<String, dynamic> updates,
-  ) async {
-    await pb.collection(tableName).update(tagId, body: updates);
   }
 
   Future<String> getImgURL(

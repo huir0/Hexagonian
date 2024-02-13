@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
@@ -17,10 +18,10 @@ class LogReadAppBarWidget extends StatelessWidget
         onPressed: () {
           context.go('/home');
         },
-        icon: const Icon(Icons.arrow_back_ios_outlined),
+        icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
       ),
       actions: [
-        const Icon(Icons.share),
+        SvgPicture.asset('assets/icons/share.svg'),
         IconButton(
             onPressed: () {
               SLSheet.bottomSheet(
@@ -48,7 +49,7 @@ class LogReadAppBarWidget extends StatelessWidget
                   height: 180,
                   width: 360);
             },
-            icon: const Icon(Icons.more_vert_outlined))
+            icon: SvgPicture.asset('assets/icons/menu_dots.svg'))
       ],
     );
   }

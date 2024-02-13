@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class LogReplyAppBarWidget extends StatelessWidget
@@ -10,12 +11,13 @@ class LogReplyAppBarWidget extends StatelessWidget
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
       centerTitle: true,
       leading: IconButton(
         onPressed: () {
           context.pop();
         },
-        icon: const Icon(Icons.arrow_back_ios_outlined),
+        icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
       ),
       title: const Row(
         crossAxisAlignment: CrossAxisAlignment.center,

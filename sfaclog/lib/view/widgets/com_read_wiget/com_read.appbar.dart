@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
@@ -17,7 +18,7 @@ class ComReadAppBarWidget extends StatelessWidget
         onPressed: () {
           context.pop();
         },
-        icon: const Icon(Icons.arrow_back_ios_outlined),
+        icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
       ),
       actions: [
         const Icon(Icons.share),

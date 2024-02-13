@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/skill_model.dart';
@@ -47,10 +48,7 @@ class _LogSearchPageState extends ConsumerState<LogSearchPage> {
                     onPressed: () {
                       context.pop();
                     },
-                    icon: const Icon(
-                      Icons.arrow_back_ios_outlined,
-                      size: 20,
-                    )),
+                    icon: SvgPicture.asset('assets/icons/arrow_back.svg')),
                 Padding(
                   padding: const EdgeInsets.only(right: 24),
                   child: SFACSearchBar(
