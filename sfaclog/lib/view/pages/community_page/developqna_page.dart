@@ -46,9 +46,6 @@ class DevelopQnA extends StatelessWidget {
                   items: List.generate(
                     5, // Replace with the number of cards you want to display
                     (index) => InkWell(
-                        onTap: () {
-                          context.push('/readqa');
-                        },
                         child:
                             const comCard()), // Replace comCard() with your card widget
                   ),
@@ -84,7 +81,11 @@ class DevelopQnA extends StatelessWidget {
                     onTap: () {},
                   ),
                 ),
-                const ComTileWiget(),
+                ComTileWiget(
+                  onPressed: () {
+                    context.push('/readqa');
+                  },
+                ),
                 const ComTileWiget(),
                 const ComTileWiget(),
               ],
