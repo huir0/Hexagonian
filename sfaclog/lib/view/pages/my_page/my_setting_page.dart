@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sfaclog/view/pages/my_page/my_account_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_notification_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_privacy_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_proposal_page.dart';
-import 'package:sfaclog/view/pages/my_page/mye_terms_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_withdrawal_page.dart';
 
 import '../../../common.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
@@ -24,10 +18,7 @@ class MypageSetting extends ConsumerWidget {
           scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
-              // final currentTab = ref.read(myPageProvider).tab;
-              // ref.read(myPageProvider.notifier).tabChanged(currentTab);
-              router.go('/home');
-              // context.pop();
+              context.pop();
             },
             icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
           ),

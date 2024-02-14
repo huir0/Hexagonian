@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sfaclog/view/pages/join_page/join_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_picture_page.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
@@ -9,7 +9,11 @@ import '../../../common.dart';
 import 'my_profile_skill_page.dart';
 
 class MypageProfileSetting extends ConsumerStatefulWidget {
-  const MypageProfileSetting({super.key});
+  const MypageProfileSetting({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -27,10 +31,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           onPressed: () {
-            // final currentTab = ref.read(myPageProvider).tab;
-            // ref.read(myPageProvider.notifier).tabChanged(currentTab);
-            // router.go('/my');
-            Navigator.pop(context);
+            context.pop();
           },
           icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
         ),
@@ -87,13 +88,13 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                             Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const MypageProfilePicture(),
-                                  ),
-                                );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const MypageProfilePicture(),
+                              ),
+                            );
                           },
                           icon: Container(
                               width: 28,
@@ -217,15 +218,15 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 height: 38,
                 width: 312,
                 hintText: '#프론트엔드  #백엔드  #개발자일상',
-onTap: () {
-    Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const MypageProfileSkill(),
-                                  ),
-                                );
-},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const MypageProfileSkill(),
+                    ),
+                  );
+                },
               ),
               SizedBox(
                 height: 24,

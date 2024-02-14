@@ -3,135 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 
 import '../../widgets/mypage_log_widgets/mypage_log_card_widget.dart';
 
-List<Map<String, dynamic>> logs = [
-  {
-    'title': '제목',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': [
-      'tag1',
-      'tag2',
-      'tag3',
-      'tag4',
-      'tag5',
-      'tag6',
-      'tag7',
-      'tag8',
-      'tag9'
-    ],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-];
 
 class MyLogPage extends ConsumerStatefulWidget {
-  const MyLogPage({super.key});
-
+  const MyLogPage({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
   @override
   ConsumerState<MyLogPage> createState() => _MyLogPageState();
 }
@@ -139,9 +21,30 @@ class MyLogPage extends ConsumerStatefulWidget {
 class _MyLogPageState extends ConsumerState<MyLogPage> {
   late String category = '전체 로그';
   bool tiled = false;
+  List<dynamic> logList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      return _init();
+    });
+  }
+
+  Future<void> _init() async {
+    try {
+      logList = await ref
+          .read(myPageLogProvider.notifier)
+          .getUserLogs('7n5leq73rgpoutw');
+      ref.read(myPageLogProvider.notifier).setUserLogs(logList);
+    } catch (e) {
+      print("Error loading logs: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final logListState = ref.watch(myPageLogProvider).userLogs;
     return Material(
       child: Container(
         child: SingleChildScrollView(
@@ -243,13 +146,13 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                           spacing: 16,
                           runSpacing: 24,
                           children: [
-                            for (var i = 0; i < logs.length; i++)
-                              MypageLogSmallCard(log: logs[i])
+                            for (var i = 0; i < logListState.length; i++)
+                              MypageLogSmallCard(log: logListState[i])
                           ],
                         ),
                       )
                     : ListView.separated(
-                        itemCount: logs.length,
+                        itemCount: logListState.length,
                         separatorBuilder: (BuildContext context, int index) {
                           return SizedBox(
                             height: 8,
@@ -257,7 +160,7 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                         },
                         itemBuilder: (BuildContext context, int index) {
                           return MypageLogBigCard(
-                            log: logs[index],
+                            log: logListState[index],
                           );
                         },
                       ),

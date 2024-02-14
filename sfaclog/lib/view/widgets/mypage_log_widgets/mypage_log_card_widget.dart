@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_card_provider.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class MypageLogBigCard extends StatelessWidget {
+
+class MypageLogBigCard extends ConsumerWidget {
   const MypageLogBigCard({
     super.key,
     required this.log,
   });
-  final Map<String, dynamic> log;
+  final SFACLogModel log;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: EdgeInsets.only(bottom: 20, top: 12),
       padding: EdgeInsets.symmetric(horizontal: 23),
@@ -26,7 +31,7 @@ class MypageLogBigCard extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: AssetImage(
-                  log['image'],
+                  log.thumbnail,
                 ),
               ),
             ),
@@ -42,14 +47,14 @@ class MypageLogBigCard extends StatelessWidget {
                     ),
                     height: 18,
                     width: 18,
-                    child: Image.asset(log['profile_picture']),
+                    // child: Image.asset(log.user['picture']),
                   ),
                 ),
                 Positioned(
                   left: 34.82,
                   top: 10,
                   child: Text(
-                    log['author'],
+                    log.user,
                     style: SLTextStyle.Text_M_Medium?.copyWith(
                         color: Colors.white),
                   ),
@@ -69,7 +74,7 @@ class MypageLogBigCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: 14,
             child: Text(
-              log['category'],
+              log.category,
               style: SLTextStyle.Text_XS_Regular?.copyWith(
                   color: SLColor.neutral[50]),
             ),
@@ -81,7 +86,7 @@ class MypageLogBigCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: 19,
             child: Text(
-              log['title'],
+              log.title,
               style: SLTextStyle.Text_M_Bold?.copyWith(
                 color: Colors.white,
               ),
@@ -99,12 +104,16 @@ class MypageLogBigCard extends StatelessWidget {
                 SizedBox(
                   width: 4,
                 ),
-                Text(
-                  log['answer'].length.toString(),
-                  style: SLTextStyle.Text_S_Bold?.copyWith(
-                    color: SLColor.neutral[50],
-                  ),
-                ),
+                ref.watch(logRepliesProvider(log.id)).when(
+                      data: (replies) => Text(
+                        replies.toString(),
+                        style: SLTextStyle.Text_S_Bold?.copyWith(
+                          color: SLColor.neutral[50],
+                        ),
+                      ),
+                      loading: () => CircularProgressIndicator(),
+                      error: (error, _) => Text('Error: $error'),
+                    ),
                 SizedBox(
                   width: 10,
                 ),
@@ -122,7 +131,7 @@ class MypageLogBigCard extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  log['like'].length.toString(),
+                  log.like.toString(),
                   style: SLTextStyle.Text_S_Bold?.copyWith(
                     color: SLColor.neutral[50],
                   ),
@@ -138,14 +147,14 @@ class MypageLogBigCard extends StatelessWidget {
             width: 313,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: log['tags'].length,
+              itemCount: log.tag.length,
               separatorBuilder: (BuildContext context, int index) {
                 return SizedBox(width: 5);
               },
               itemBuilder: (BuildContext context, int index) {
                 return SFACTag(
                     text: Text(
-                  '# ${log['tags'][index]}',
+                  '# ${log.tag[index]}',
                   style: SLTextStyle.Text_XS_Regular?.copyWith(
                     color: SLColor.neutral[50],
                   ),
@@ -159,14 +168,18 @@ class MypageLogBigCard extends StatelessWidget {
   }
 }
 
-class MypageLogSmallCard extends StatelessWidget {
+class MypageLogSmallCard extends ConsumerWidget {
   const MypageLogSmallCard({
     super.key,
     required this.log,
   });
-  final Map<String, dynamic> log;
+  final SFACLogModel log;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final logReplies =
+        ref.read(myPageLogProvider.notifier).getLogReplies(log.id);
+
     return Container(
       margin: EdgeInsets.only(top: 12),
       padding: EdgeInsets.zero,
@@ -183,7 +196,7 @@ class MypageLogSmallCard extends StatelessWidget {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage(
-                    log['image'],
+                    log.thumbnail,
                   ),
                 ),
               ),
@@ -199,7 +212,7 @@ class MypageLogSmallCard extends StatelessWidget {
                       ),
                       height: 15,
                       width: 15,
-                      child: Image.asset(log['profile_picture']),
+                      // child: Image.asset(log['profile_picture']),
                     ),
                   ),
                   Positioned(
@@ -208,7 +221,7 @@ class MypageLogSmallCard extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        log['author'],
+                        log.user,
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white,
                           letterSpacing: -0.14,
@@ -238,7 +251,7 @@ class MypageLogSmallCard extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     height: 14,
                     child: Text(
-                      log['category'],
+                      log.category,
                       style: SLTextStyle.Text_XS_Regular?.copyWith(
                           color: SLColor.neutral[50]),
                     ),
@@ -248,7 +261,7 @@ class MypageLogSmallCard extends StatelessWidget {
                     height: 19,
                     padding: EdgeInsets.zero,
                     child: Text(
-                      log['title'],
+                      log.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       // FIXME: semibold
@@ -277,35 +290,39 @@ class MypageLogSmallCard extends StatelessWidget {
                         SizedBox(
                           width: 4,
                         ),
-                        Text(
-                          log['answer'].length.toString(),
-                          style: SLTextStyle.Text_S_Bold?.copyWith(
-                            color: SLColor.neutral[10],
-                          ),
-                        ),
+                        ref.watch(logRepliesProvider(log.id)).when(
+                              data: (replies) => Text(
+                                replies.toString(),
+                                style: SLTextStyle.Text_S_Bold?.copyWith(
+                                  color: SLColor.neutral[50],
+                                ),
+                              ),
+                              loading: () => CircularProgressIndicator(),
+                              error: (error, _) => Text('Error: $error'),
+                            ),
                         SizedBox(
                           width: 10,
                         ),
                         Text(
                           '|',
                           style: SLTextStyle.Text_S_Bold?.copyWith(
-                            color: SLColor.neutral[10],
+                            color: SLColor.neutral[50],
                           ),
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         SvgPicture.asset(
-                          'assets/icons/heart_white.svg',
+                          'assets/icons/heart.svg',
                           height: 14,
                         ),
                         SizedBox(
                           width: 4,
                         ),
                         Text(
-                          log['like'].length.toString(),
+                          log.like.toString(),
                           style: SLTextStyle.Text_S_Bold?.copyWith(
-                            color: SLColor.neutral[10],
+                            color: SLColor.neutral[50],
                           ),
                         ),
                       ],
@@ -319,14 +336,14 @@ class MypageLogSmallCard extends StatelessWidget {
               height: 22,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: log['tags'].length,
+                itemCount: log.tag.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(width: 5);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   final tag = SFACTag(
                     text: Text(
-                      '# ${log['tags'][index]}',
+                      '# ${log.tag[index]}',
                       style: SLTextStyle.Text_XS_Regular?.copyWith(
                         color: SLColor.neutral[50],
                       ),

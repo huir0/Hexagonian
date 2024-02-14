@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sfaclog/view/pages/my_page/my_education_add_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_experience_add_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_link_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_profile_setting_page.dart';
+import 'package:sfaclog/model/profile_model.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/dash_divider.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/experience_card.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/link_card.dart';
+import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
+import 'package:sfaclog/viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
+import 'package:sfaclog/viewmodel/my_qna_viewmodel/my_qna_notifier.dart';
 import 'package:sfaclog/viewmodel/mypage_state_viewmodel/mypage_states.dart';
 import 'package:sfaclog_widgets/chips/sl_chip.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
@@ -19,42 +20,6 @@ import 'package:sfaclog_widgets/util/common.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
 import '../../router.dart';
 import '../../widgets/mypage_widgets/resume_widgets/education_card.dart';
-
-const List<Map<String, String>> qna = [
-  {
-    'collection': 'Q',
-    'first_title': '스프링 데이터 몽고디비를 사용할 때 템플릿과 리포지토리 방법의 장단점에 대해서 알려주세요',
-    'second_title': '강의나 블로그에 있는 예제를 보면 예제를 보면 리포지토리를 사용...',
-    'content': '''안녕하세요 !
-
-질문주신 내용이 Spring Data Mongodb 에서 제공해주는 Repository Interface 와 Mongo Templete 사용에 대한 질문으로 이해하였습니다.@RestController 어노테이션은 @Controller 어노테이션에 @ResponseBody 가 추가된 것으로 객체 데이터를 반환하여 전달하는것을 목적으로 합니다.
-주로 RESTful API(혹은 일반적인 HTTP API) 를 구현할 때 많이 쓰입니다. 즉 @RestController 를 안쓰고 @Controller 를 통해 API 를 구현하고 싶으시다면, @Controller 를 정의하신 뒤에 @ResponseBody 어노테이션을 쓰시고, ResponseEntity 를 전달하는 형태로 구현하시면 @RestController 를 쓰는것과 동일하게 구현하실 수 있고 이때 말씀하신 html 작성은 필요하지 않습니다.
-
-초기에는 @Controller 로 모든 상황을 구현하다가 이후 편의성과 가독성을 위해
-@RestController 가 추가로 나오게 되었다고 이해해주시면 되겠습니다.
-
-구글링 해보시면 @Controller 와 @RestController 차이가 잘 정리된 많은 글들을 접하실 수 있는데요,
-그중에 잘 정리된 블로그를 추가로 첨부드립니다.
-
-https://mangkyu.tistory.com/49
-
-저의 짧은 지식이 조금이나마 도움이 되시길 바랍니다.'''
-  },
-  {
-    'collection': 'Q',
-    'first_title': '하나의 리액트 컴포넌트에 import 문 많은 경우 어떻게 처리해야하나요?',
-    'second_title': '코드 가독성 측면에서 모듈 최상단에 import 문이 너무 많은 경...',
-    'content':
-        '''import 같은 경우 IDE의 도움을 받아서 코드 가독성보다는 의존성이 높아지고 응집성이 낮아지는 결합도 문제를 겪는 경우가 많습니다!... import 같은 경우는 IDE의 도움을 받아서
-코드 가독성보다는 의존성이 많아져서
-응집성이 낮아지고 결합도가 높아지는 문제를 겪는 경우가 많습니다!
-
-그럴 때는 기능 또는 역할 또는 책임을 기준으로 그룹을 만들어보시고
-컴포넌트 파일로 분리하면 해결될 것으로 보여요.
-
-리팩터링/클린 코드/클린 아키텍처와 같은 도서를 참고하시면 좋을 것 같아요 :)'''
-  },
-];
 
 const List<Map<String, dynamic>> reviews = [
   {
@@ -87,39 +52,12 @@ const List<Map<String, dynamic>> reviews = [
   },
 ];
 
-List<Map<String, dynamic>> resumes = [
-  {
-    'company': 'sniperfactory',
-    'title': 'mobile developer',
-    'period_start': DateTime.now(),
-    'period_end': DateTime.now(),
-    'content': '스나이퍼 앱 개발(Flutter)',
-    'institute': 'university',
-    'major': 'architecture',
-  },
-  {
-    'company': '스나이퍼 팩토리',
-    'title': 'mobile developer2',
-    'period_start': DateTime.now(),
-    'period_end': null,
-    'content': '스나이퍼 앱 개발(Flutter)',
-    'institute': '대학교',
-    'major': '건축',
-  },
-];
-List<Map<String, dynamic>> links = [
-  {
-    'url': 'https://github.com/huir0',
-    'title': '깃허브',
-  },
-  {
-    'url': 'https://github.com/huir0/Hexagonian',
-    'title': '육각형인재 프로젝트',
-  },
-];
-
 class MyProfilePage extends ConsumerStatefulWidget {
-  const MyProfilePage({super.key});
+  const MyProfilePage({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyProfilePageState();
@@ -127,9 +65,63 @@ class MyProfilePage extends ConsumerStatefulWidget {
 
 class _MyProfilePageState extends ConsumerState<MyProfilePage> {
   List<String> skills = ['javascript', 'css', 'html'];
-  List<String> experiences = [];
+  late List<dynamic> experiences = [];
+  late List<dynamic> educations = [];
+  late List<dynamic> links = [];
+  late List<dynamic> likedPosts = [];
+  late List<dynamic> qnaAnswers = [];
   bool resumePublic = false;
-  double progressValue = 1 / 3;
+  double progressValue = 0;
+  String userId = '7n5leq73rgpoutw';
+  ProfileInfo userInfo = ProfileInfo(
+      recentSearch: '',
+      nickname: '',
+      agreement: [],
+      profile: '',
+      proposeState: '',
+      collectionId: '',
+      collectionName: '',
+      updated: '',
+      created: '',
+      skill: []);
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    try {
+      experiences =
+          await ref.read(MyPageProfileProvider.notifier).getExperiences(userId);
+      educations =
+          await ref.read(MyPageProfileProvider.notifier).getEducations(userId);
+      links = await ref.read(MyPageProfileProvider.notifier).getLinks(userId);
+      userInfo =
+          await ref.read(MyPageProfileProvider.notifier).getUserInfo(userId);
+      likedPosts =
+          await ref.read(myPageLogProvider.notifier).getLikedPosts(userId);
+      qnaAnswers =
+          await ref.read(myPageQnaProvider.notifier).getUserQnaAnswers(userId);
+      setState(() {
+        progressValue = ((experiences.isNotEmpty ? 1 : 0) +
+                (educations.isNotEmpty ? 1 : 0) +
+                (links.isNotEmpty ? 1 : 0)) /
+            3;
+      });
+    } catch (e) {
+      print("Error loading profile data: $e");
+    }
+  }
+
+  String formatDateDifference(Duration difference) {
+    if (difference.inDays < 30) {
+      return "${difference.inDays}일 전";
+    } else {
+      var months = difference.inDays ~/ 30;
+      return "${months}달 전";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +163,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             // nickname
                             Container(
                               height: 21,
-                              child: Text('김개발'),
+                              child: Text(userInfo.nickname ?? '로딩중'),
                             ),
                             SizedBox(
                               height: 12,
@@ -180,7 +172,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                               children: [
                                 GestureDetector(
                                     onTap: () {
-                                      router.go('/my/follow');
+                                      context.push('/my/follow/$userId');
                                       ref
                                           .read(myFollowPageProvider.notifier)
                                           .tabChanged(0);
@@ -199,7 +191,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    router.go('/my/follow');
+                                    context.push('/my/follow/$userId');
                                     ref
                                         .read(myFollowPageProvider.notifier)
                                         .tabChanged(1);
@@ -225,7 +217,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     Container(
                       height: 50,
-                      child: Text('스나이퍼팩토리 x 웅진씽크빅 교육 수료완료'),
+                      child: Text(userInfo.introduction ?? '로딩중'),
                     ),
                     SizedBox(
                       height: 4,
@@ -239,12 +231,12 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         separatorBuilder: (context, index) =>
                             SizedBox(width: 8),
                         itemBuilder: (context, index) {
-                          final skill = skills[index];
+                          final skill = userInfo.skill?[index];
                           return SFACSkillChip(
                             height: 32,
                             padding: EdgeInsets.symmetric(horizontal: 6),
                             text: Text(
-                              skill,
+                              skill ?? '로딩중',
                               style: SLTextStyle.Text_S_Bold?.copyWith(
                                   fontFamily: 'Pretendard'),
                             ),
@@ -271,13 +263,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   backgroundColor: SLColor.neutral[90],
                                   padding: EdgeInsets.all(0)),
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const MypageProfileSetting(),
-                                  ),
-                                );
+                                context.push('/my/profile/setting/$userId');
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -397,25 +383,27 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                       width: 9,
                     ),
                     // TODO: 레코드 중에 가장 최신인 걸로 뽑아서 now에서 시간 빼기
-                    Container(
-                      alignment: Alignment.center,
-                      width: 64,
-                      height: 17,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Color(0xffd6d6d6),
-                        ),
-                      ),
-                      child: Text(
-                        '업데이트 5달전',
-                        style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xffd6d6d6),
-                            letterSpacing: -0.08),
-                      ),
-                    ),
+                    experiences.isNotEmpty
+                        ? Container(
+                            alignment: Alignment.center,
+                            width: 64,
+                            height: 17,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: Color(0xffd6d6d6),
+                              ),
+                            ),
+                            child: Text(
+                              '업데이트 ${formatDateDifference(DateTime.now().toUtc().difference(DateTime.parse(experiences[0].updated)))}',
+                              style: TextStyle(
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xffd6d6d6),
+                                  letterSpacing: -0.08),
+                            ),
+                          )
+                        : Container(),
                     Spacer(),
                     Text(
                       '${(progressValue * 100).roundToDouble().toStringAsFixed(0)}%',
@@ -448,13 +436,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                   children: [
                     SFACResumeButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const MypageAddExperience(),
-                          ),
-                        );
+                        context.push('/my/profile/experience_add/$userId');
                       },
                       title: '경력',
                       // FIXME: 경력 계산해서 집어넣기
@@ -462,13 +444,16 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     // 경력 데이터
                     // FIXME: experience나 resume에서 데이터 뽑아오기
-                    resumes.length > 0
+                    experiences.length > 0
                         ? Container(
                             child: Column(
                               children: [
-                                for (var i = 0; i < resumes.length; i++) ...[
-                                  ResumeExperienceCard(resume: resumes[i]),
-                                  if (i < resumes.length - 1)
+                                for (var i = 0;
+                                    i < experiences.length;
+                                    i++) ...[
+                                  ResumeExperienceCard(
+                                      experience: experiences[i]),
+                                  if (i < experiences.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
                                       size: Size(280, 1),
@@ -493,24 +478,18 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     SFACResumeButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const MypageAddEducation(),
-                            ),
-                          );
+                          context.push('/my/profile/education_add/$userId');
                         },
                         title: '학력/교육'),
                     // 교육 데이터
                     // FIXME: resumes => education이나 resume에서 데이터 뽑아오기
-                    resumes.length > 0
+                    educations.length > 0
                         ? Container(
                             child: Column(
                               children: [
-                                for (var i = 0; i < resumes.length; i++) ...[
-                                  ResumeEducationCard(resume: resumes[i]),
-                                  if (i < resumes.length - 1)
+                                for (var i = 0; i < educations.length; i++) ...[
+                                  ResumeEducationCard(education: educations[i]),
+                                  if (i < educations.length - 1)
                                     CustomPaint(
                                       painter: DashedLinePainter(),
                                       size: Size(280, 1),
@@ -536,13 +515,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     SFACResumeButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const MypageAddLink(),
-                            ),
-                          );
+                          context.push('/my/profile/link_add/$userId');
                         },
                         title: '링크'),
                     links.length > 0
@@ -590,16 +563,16 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               ),
               SFACExpandableButton(
                 text: 'QnA 답변',
-                count: qna.length.toString(),
-                posts: PostCard(posts: qna),
+                count: qnaAnswers.length.toString(),
+                posts: PostCard(posts: qnaAnswers),
               ),
               SizedBox(
                 height: 16,
               ),
               SFACExpandableButton(
                 text: '좋아요',
-                count: qna.length.toString(),
-                posts: PostCard(posts: qna),
+                count: likedPosts.length.toString(),
+                posts: PostCard(posts: likedPosts),
               ),
               SizedBox(
                 height: 16,

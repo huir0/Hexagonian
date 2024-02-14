@@ -5,6 +5,7 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
+import '../../../viewmodel/my_log_viewmodel/my_log_notifier.dart';
 import '../../widgets/mypage_log_widgets/mypage_log_card_widget.dart';
 
 List<Map<String, dynamic>> logs = [
@@ -131,8 +132,10 @@ List<Map<String, dynamic>> logs = [
 ];
 
 class MyBookmarkPage extends ConsumerStatefulWidget {
-  const MyBookmarkPage({super.key});
-
+  const MyBookmarkPage({
+    required this.userId,
+  });
+final String userId;
   @override
   ConsumerState<MyBookmarkPage> createState() => _MyBookmarkPageState();
 }
@@ -140,6 +143,27 @@ class MyBookmarkPage extends ConsumerStatefulWidget {
 class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
   late String category = '전체 로그';
   bool tiled = false;
+
+   List<dynamic> logList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      return _init();
+    });
+  }
+
+  Future<void> _init() async {
+    try {
+      logList =
+          await ref.read(myPageLogProvider.notifier).getUserLogs(widget.userId);
+          ref.read(myPageLogProvider.notifier).setBookmarkedLogs(logList);
+    } catch (e) {
+      print("Error loading popular logs: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +248,7 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                           runSpacing: 24,
                           children: [
                             for (var i = 0; i < logs.length; i++)
-                              MypageLogSmallCard(log: logs[i])
+                              MypageLogSmallCard(log: logList[i])
                           ],
                         ),
                       )
@@ -237,7 +261,7 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                         },
                         itemBuilder: (BuildContext context, int index) {
                           return MypageLogBigCard(
-                            log: logs[index],
+                            log: logList[index],
                           );
                         },
                       ),

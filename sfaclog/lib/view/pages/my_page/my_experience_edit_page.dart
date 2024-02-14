@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import '../../../common.dart';
 
 class MypageEditExperience extends ConsumerStatefulWidget {
-  const MypageEditExperience({super.key});
+  const MypageEditExperience({super.key, required experienceId});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -23,6 +23,25 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
   final bool working = false;
   DateTime? startDate;
   DateTime? endDate;
+  @override
+  void initState() {
+    super.initState();
+    title.addListener(updateTextLength);
+    content.addListener(updateTextLength);
+  }
+
+  @override
+  void dispose() {
+    title.removeListener(updateTextLength);
+    title.dispose();
+    content.removeListener(updateTextLength);
+    content.dispose();
+    super.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -419,6 +438,9 @@ ex) 쇼핑라이브 프론트 지면 개발''',
                   ),
                   child: Text('경력 삭제'),
                 ),
+              ),
+              SizedBox(
+                height: 63,
               ),
             ],
           ),

@@ -65,7 +65,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 ),
           onPressed: () {
             if (pageLabel == '마이페이지') {
-              router.go('/my/setting');
+              context.push('/my/setting');
             } else {
               print('Noti_Clicked');
             }

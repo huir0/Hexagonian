@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/pages/my_page/my_email_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_mobile_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_password_page.dart';
 
 import '../../../common.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
-import '../../router.dart';
 
 class MypageAccount extends ConsumerWidget {
   const MypageAccount({super.key});
@@ -18,13 +17,12 @@ class MypageAccount extends ConsumerWidget {
     return Material(
       child: Scaffold(
         appBar: AppBar(
-        scrolledUnderElevation: 0,
+          scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
               final currentTab = ref.read(myPageProvider).tab;
               ref.read(myPageProvider.notifier).tabChanged(currentTab);
-              // router.go('/my');
-              Navigator.pop(context);
+              context.pop();
             },
             icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
           ),
@@ -82,13 +80,7 @@ class MypageAccount extends ConsumerWidget {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        const MypageChangeEmail(),
-                  ),
-                );
+                context.push('/my/setting/account/email/');
               },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -123,13 +115,7 @@ class MypageAccount extends ConsumerWidget {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        const MypageChangeMobile(),
-                  ),
-                );
+                context.push('/my/setting/account/mobile/');
               },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -161,13 +147,7 @@ class MypageAccount extends ConsumerWidget {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        const MypageChangePassword(),
-                  ),
-                );
+                context.push('/my/setting/account/password/');
               },
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),

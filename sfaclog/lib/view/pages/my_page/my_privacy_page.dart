@@ -20,9 +20,6 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           onPressed: () {
-            // final currentTab = ref.read(myPageProvider).tab;
-            // ref.read(myPageProvider.notifier).tabChanged(currentTab);
-            // router.go('/my');
             context.pop();
           },
           icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
@@ -61,11 +58,8 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
               width: 305,
               height: 462,
               child: Stack(
-                // alignment: Alignment.center,
                 children: [
                   Container(
-                    // width: 305,
-                    // height: 462,
                     child: SingleChildScrollView(
                         child: Text(
                       '''[스팩로그 개인정보처리방침]

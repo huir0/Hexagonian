@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:sfaclog/model/resume_education_model.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_appbar_widget.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
-import 'package:intl/intl.dart';
+import 'package:sfaclog/data/datasource/remote_datasource.dart';
 
 import '../../../common.dart';
 
 class MypageEditEducation extends ConsumerStatefulWidget {
-  const MypageEditEducation({super.key});
+  const MypageEditEducation({
+    super.key,
+    required this.educationId,
+  });
+  final String educationId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -16,13 +23,57 @@ class MypageEditEducation extends ConsumerStatefulWidget {
 }
 
 class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
-  final company = TextEditingController();
-  final title = TextEditingController();
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  final institute = TextEditingController();
+  final major = TextEditingController();
   final content = TextEditingController();
   final link = TextEditingController();
-  final bool working = false;
+  bool studying = false;
   DateTime? startDate;
   DateTime? endDate;
+  late EducationModel education;
+
+  @override
+  void initState() {
+    super.initState();
+    major.addListener(updateTextLength);
+    content.addListener(updateTextLength);
+    _init();
+  }
+
+  @override
+  void dispose() {
+    major.removeListener(updateTextLength);
+    major.dispose();
+    content.removeListener(updateTextLength);
+    content.dispose();
+    super.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
+
+  Future<void> _init() async {
+    try {
+      education = await _remoteDataSource
+          .getOneRecord('education', widget.educationId)
+          .then((value) {
+        education = EducationModel.fromJson(value.toJson());
+        institute.text = education.institute;
+        major.text = education.major;
+        content.text = education.content;
+        startDate = DateTime.parse(education.startDate);
+        endDate = DateTime.parse(education.endDate);
+        studying = education.studying;
+        return education;
+      });
+      print(startDate);
+      print(endDate);
+    } catch (e) {
+      print("Error loading education data: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +85,19 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: () {
-                // TODO: 저장
-                Navigator.pop(context);
+              onTap: () async {
+                final body = <String, dynamic>{
+                  "institute": institute.text,
+                  "major": major.text,
+                  "startDate": startDate!.toIso8601String(),
+                  "endDate": endDate!.toIso8601String(),
+                  "studying": studying,
+                  "user": education.user,
+                  "content": content.text
+                };
+                await _remoteDataSource.updateTableData(
+                    'education', education.id, body);
+                context.push('/home/');
               },
               child: Text(
                 '확인',
@@ -78,6 +139,7 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
                 height: 16,
               ),
               SFACTextField(
+                controller: institute,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -105,7 +167,7 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
                     ),
                     Spacer(),
                     Text(
-                      '${title.text.length}/50',
+                      '${major.text.length}/50',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
                         color: SLColor.neutral[50],
                       ),
@@ -117,6 +179,7 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
                 height: 16,
               ),
               SFACTextField(
+                controller: major,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -212,7 +275,7 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () async {
-                        if (!working) {
+                        if (!studying) {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDatePickerMode: DatePickerMode.day,
@@ -277,6 +340,7 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
                 height: 16,
               ),
               SFACTextField(
+                controller: content,
                 height: 104,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -330,8 +394,31 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
                 ),
               ),
               SizedBox(
-                height: 104,
+                height: 36,
               ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  _remoteDataSource.deleteRecord(
+                      'education', widget.educationId);
+                  context.push('/home');
+                },
+                child: Container(
+                  width: 63,
+                  height: 34,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: SLColor.neutral[30]!,
+                      ),
+                    ),
+                  ),
+                  child: Text('교육 삭제'),
+                ),
+              ),
+              SizedBox(height: 63),
             ],
           ),
         ),

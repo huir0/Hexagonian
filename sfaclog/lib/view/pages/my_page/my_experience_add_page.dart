@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sfaclog/view/widgets/mypage_widgets/my_appbar_widget.dart';
-import 'package:sfaclog_widgets/sfaclog_widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:sfaclog/model/resume_experience_model.dart';
+import 'package:sfaclog/view/widgets/mypage_widgets/my_appbar_widget.dart';
+import 'package:sfaclog/viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
+import '../../../data/datasource/remote_datasource.dart';
 
 class MypageAddExperience extends ConsumerStatefulWidget {
-  const MypageAddExperience({super.key});
+  const MypageAddExperience({
+    required this.userId,
+  });
+  final String userId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -16,13 +23,33 @@ class MypageAddExperience extends ConsumerStatefulWidget {
 }
 
 class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
   final company = TextEditingController();
   final title = TextEditingController();
   final content = TextEditingController();
   final link = TextEditingController();
-  final bool working = false;
+  bool working = false;
   DateTime? startDate;
   DateTime? endDate;
+  @override
+  void initState() {
+    super.initState();
+    title.addListener(updateTextLength);
+    content.addListener(updateTextLength);
+  }
+
+  @override
+  void dispose() {
+    title.removeListener(updateTextLength);
+    title.dispose();
+    content.removeListener(updateTextLength);
+    content.dispose();
+    super.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +61,18 @@ class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: () {
-                // TODO: 저장
-                Navigator.pop(context);
+              onTap: () async {
+                final body = <String, dynamic>{
+                  "company": company.text,
+                  "title": title.text,
+                  "user": widget.userId,
+                  "working": working,
+                  "startDate": startDate!.toIso8601String(),
+                  "endDate": endDate != null ? endDate!.toIso8601String() : null,
+                  "content": content.text,
+                };
+                await _remoteDataSource.createTableData('experience', body);
+                context.push('/home');
               },
               child: Text(
                 '확인',
@@ -78,6 +114,7 @@ class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
                 height: 16,
               ),
               SFACTextField(
+                controller: company,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -117,6 +154,7 @@ class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
                 height: 16,
               ),
               SFACTextField(
+                controller: title,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -254,7 +292,11 @@ class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
               ),
               Row(
                 children: [
-                  SLCheckbox(onChange: (e) {}, value: working),
+                  SLCheckbox(
+                      onChange: (e) {
+                        working = !working;
+                      },
+                      value: working),
                   SizedBox(
                     width: 6,
                   ),
@@ -344,6 +386,8 @@ class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
                 height: 16,
               ),
               SFACTextField(
+                // maxLength: 100,
+                controller: content,
                 height: 104,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),

@@ -5,7 +5,11 @@ import '../../../common.dart';
 import '../../widgets/mypage_widgets/my_appbar_widget.dart';
 
 class MypageAddLink extends StatelessWidget {
-  const MypageAddLink({super.key});
+  const MypageAddLink({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +119,11 @@ class MypageAddLink extends StatelessWidget {
 }
 
 class MypageEditLink extends StatelessWidget {
-  const MypageEditLink({super.key});
-
+  const MypageEditLink({
+    super.key,
+    required this.linkId,
+  });
+  final String linkId;
   @override
   Widget build(BuildContext context) {
     final title = TextEditingController();

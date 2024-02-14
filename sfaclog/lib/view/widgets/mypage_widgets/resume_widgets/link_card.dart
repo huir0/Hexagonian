@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/link_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ResumeLinkCard extends StatelessWidget {
@@ -8,11 +10,11 @@ class ResumeLinkCard extends StatelessWidget {
     super.key,
     required this.link,
   });
-  final Map<String, dynamic> link;
+  final LinkModel link;
 
   @override
   Widget build(BuildContext context) {
-    final Uri _url = Uri.parse(link['url']);
+    final Uri _url = Uri.parse(link.link);
     
     Future<void> _launchUrl() async {
       if (!await launchUrl(_url)) {
@@ -39,15 +41,14 @@ class ResumeLinkCard extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  link['url'],
+                  link.link,
                   style:
                       SLTextStyle.Text_XS_Medium?.copyWith(color: Colors.white),
                 ),
                 const Spacer(),
                 GestureDetector(
                     onTap: () {
-                      // TODO: 편집 페이지로 연결
-                      print('pencil');
+                      context.push('/my/profile/link_edit/${link.user}');
                     },
                     child: SvgPicture.asset('assets/icons/pencil_grey.svg')),
               ],
@@ -59,7 +60,7 @@ class ResumeLinkCard extends StatelessWidget {
               children: [
                 SizedBox(width: 25,),
                 Text(
-                  link['title'],
+                  link.name,
                   style: SLTextStyle.Text_XS_Medium?.copyWith(
                       color: SLColor.neutral[60], letterSpacing: -0.1),
                 ),

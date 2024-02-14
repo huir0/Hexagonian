@@ -98,9 +98,9 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
                       height: 54,
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(shape: BoxShape.circle),
-                      child: i < 10 ? SvgPicture.asset('assets/avatars/avatar_0${i}.svg') :
-                      SvgPicture.asset('assets/avatars/avatar_${i}.svg'),
-                      // child: SvgPicture.asset('assets/icons/profile_picture$i'),
+                      // child: i < 10 ? SvgPicture.asset('assets/avatars/avatar_0${i}.svg') :
+                      // SvgPicture.asset('assets/avatars/avatar_${i}.svg'),
+                      child: SvgPicture.asset('assets/icons/profile_picture$i.svg'),
                     ),
                   ),
                   for (var i = 17; i <= 19; i++)
