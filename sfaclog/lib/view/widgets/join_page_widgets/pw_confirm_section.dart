@@ -62,81 +62,83 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
             curIdx: onboardingState.currentPage + 1,
             total: onboardingState.totalPage),
         const SizedBox(height: 40),
-        Form(
-          key: formKey,
-          onChanged: () {
-            if (formKey.currentState!.validate()) {
-              onboardingNotifier.setButtonEnabled(true);
-            } else {
-              onboardingNotifier.setButtonEnabled(false);
-            }
-          },
-          child: Column(
-            children: [
-              ValidateInput(
-                controller: ref.watch(PwConfirmSection.passwordController),
-                type: ValidateInputType.password,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return '숫자 v 특수문자 v 6-18자 이내 v';
-                  }
-                  if (!RegExp(
-                          r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
-                      .hasMatch(value)) {
-                    return '숫자 v 특수문자 v 6-18자 이내 v';
-                  }
-                  return null;
-                },
-                onSaved: (newValue) {
-                  password = newValue ?? '';
-                },
-              ),
-              const SizedBox(height: 20),
-              ValidateInput(
-                type: ValidateInputType.passwordConfirm,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (ref.watch(PwConfirmSection.passwordController).text !=
-                      value) {
-                    return '불일치';
-                  }
-                  return null;
-                },
-                onSaved: (newValue) {
-                  passwordConfirm = newValue ?? '';
-                },
-              ),
-              const SizedBox(height: 20),
-              SLExpansionTile(
-                title: terms[0],
-                color: SLColor.neutral,
-                onChange: (newValue) {
-                  if (newValue) {
-                    agreementState = ['all'];
-                    setState(() {});
-                  } else {
-                    agreementState = [];
-                    setState(() {});
-                  }
-                },
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                    child: _buildExpansionChild(
-                        terms: terms,
-                        onChange: (newValue) {
-                          // 부모 value가 true면 다 true가 되어야함.
-                        },
-                        value:
-                            onboardingState.agreementState?.contains('all') ??
-                                false //agreementState.contains('all'),
-                        ),
-                  ),
-                ],
-              ),
-            ],
+        Expanded(
+          child: Form(
+            key: formKey,
+            onChanged: () {
+              if (formKey.currentState!.validate()) {
+                onboardingNotifier.setButtonEnabled(true);
+              } else {
+                onboardingNotifier.setButtonEnabled(false);
+              }
+            },
+            child: Column(
+              children: [
+                ValidateInput(
+                  controller: ref.watch(PwConfirmSection.passwordController),
+                  type: ValidateInputType.password,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return '숫자 v 특수문자 v 6-18자 이내 v';
+                    }
+                    if (!RegExp(
+                            r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
+                        .hasMatch(value)) {
+                      return '숫자 v 특수문자 v 6-18자 이내 v';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    password = newValue ?? '';
+                  },
+                ),
+                const SizedBox(height: 20),
+                ValidateInput(
+                  type: ValidateInputType.passwordConfirm,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (ref.watch(PwConfirmSection.passwordController).text !=
+                        value) {
+                      return '불일치';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    passwordConfirm = newValue ?? '';
+                  },
+                ),
+                const SizedBox(height: 20),
+                SLExpansionTile(
+                  title: terms[0],
+                  color: SLColor.neutral,
+                  onChange: (newValue) {
+                    if (newValue) {
+                      agreementState = ['all'];
+                      setState(() {});
+                    } else {
+                      agreementState = [];
+                      setState(() {});
+                    }
+                  },
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 2),
+                      child: _buildExpansionChild(
+                          terms: terms,
+                          onChange: (newValue) {
+                            // 부모 value가 true면 다 true가 되어야함.
+                          },
+                          value:
+                              onboardingState.agreementState?.contains('all') ??
+                                  false //agreementState.contains('all'),
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
         SLButton(
