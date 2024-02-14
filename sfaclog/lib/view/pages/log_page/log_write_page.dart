@@ -12,6 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:parchment_delta/parchment_delta.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
 import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -73,6 +75,7 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
 
   @override
   Widget build(BuildContext context) {
+    var state = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -133,7 +136,8 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
                   title: _headerController.value.text,
                   body: contents,
                   images: imageList,
-                  tag: tagList);
+                  tag: tagList,
+                  user: state.userInfo['id']);
               ref.read(logwriteProvider.notifier).setLog(newValue);
               context.push('/log/write/setting');
             },

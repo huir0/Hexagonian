@@ -126,6 +126,11 @@ class PocketbaseAuth {
     return authData;
   }
 
+  Future<dynamic> findUser(String tagId) async {
+    var data = await pb.collection('user').getList(filter: 'profile="$tagId"');
+    return data;
+  }
+
   void requestVerification({
     required String email,
   }) async {

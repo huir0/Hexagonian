@@ -172,6 +172,10 @@ class RemoteDataSource {
             logModel.public,
           ),
           http.MultipartFile.fromString(
+            'user',
+            logModel.user,
+          ),
+          http.MultipartFile.fromString(
             'tag',
             tagsJson,
           ),
