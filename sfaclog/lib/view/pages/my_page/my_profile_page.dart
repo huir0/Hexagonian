@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/dash_divider.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/experience_card.dart';
@@ -137,12 +136,12 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    var experiences = ref.watch(MyPageProfileProvider).experiences!;
-    var educations = ref.watch(MyPageProfileProvider).educations!;
+    var experiences = ref.watch(MyPageProfileProvider).experiences;
+    var educations = ref.watch(MyPageProfileProvider).educations;
     var links = ref.watch(MyPageProfileProvider).links!;
     var idUserInfo = ref.watch(MyPageProfileProvider).userInfo;
-    double progressValue = ((experiences.isNotEmpty ? 1 : 0) +
-            (educations.isNotEmpty ? 1 : 0) +
+    double progressValue = ((experiences!.isNotEmpty ? 1 : 0) +
+            (educations!.isNotEmpty ? 1 : 0) +
             (links.isNotEmpty ? 1 : 0)) /
         3;
     // 이력서 업데이트 날짜

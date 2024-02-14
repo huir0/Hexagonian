@@ -107,7 +107,7 @@ class _MypageAccountState extends ConsumerState<MypageAccount> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                context.push('/my/setting/account/email/');
+                context.push('/my/setting/account/${widget.userId}/email/');
               },
               child: Container(
                   padding:

@@ -5,8 +5,10 @@ import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_education_add_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_education_edit_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_email_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_experience_edit_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_link_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_mobile_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_setting_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_password_page.dart';
@@ -124,12 +126,25 @@ final router = GoRouter(initialLocation: '/splash', routes: [
       builder: (context, state) => const MypageSetting(),
       routes: [
         GoRoute(
-          path: 'account/:userId',
-          builder: (context, state) {
-            final userId = state.pathParameters['userId'];
-            return MypageAccount(userId: userId!);
-          },
-        ),
+            path: 'account/:userId',
+            builder: (context, state) {
+              final userId = state.pathParameters['userId'];
+              return MypageAccount(userId: userId!);
+            },
+            routes: [
+              GoRoute(
+                path: 'email',
+                builder: (context, state) => MypageChangeEmail(),
+              ),
+              GoRoute(
+                path: 'mobile',
+                builder: (context, state) => MypageChangeMobile(),
+              ),
+              GoRoute(
+                path: 'password',
+                builder: (context, state) => MypageChangePassword(),
+              ),
+            ]),
         GoRoute(
           path: 'proposestate/:userId',
           builder: (context, state) {
