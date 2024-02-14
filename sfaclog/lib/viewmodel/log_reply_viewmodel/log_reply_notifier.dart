@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/log_reply_model.dart';
 import 'package:sfaclog/viewmodel/log_reply_viewmodel/log_reply_state.dart';
@@ -41,6 +44,19 @@ class LogReplyNotifier extends StateNotifier<LogReplyState> {
       replyList.add(temp);
     }
     state = state.copyWith(replyList: replyList);
+  }
+
+  Future<String> getAvatarUrl(String tagId) async {
+    String imageUrl =
+        await _remoteDataSource.getAvatarURL('user', tagId, 'picture');
+    return imageUrl;
+  }
+
+  Future<dynamic> getUserInfo(String tagId) async {
+    RecordModel data =
+        await _remoteDataSource.getDataOne('log_reply', tagId, 'user');
+    var userData = jsonDecode(jsonEncode(data.expand["user"]));
+    return userData[0];
   }
 
   // 댓글 목록을 초기화하는 메서드

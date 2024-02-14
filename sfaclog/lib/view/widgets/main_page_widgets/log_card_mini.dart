@@ -1,39 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class LogCardMini extends StatelessWidget {
+class LogCardMini extends ConsumerStatefulWidget {
   const LogCardMini({
     super.key,
-    this.image,
-    this.title,
-    this.tags,
-    this.profileImage,
-    this.isBooked = false,
+    // this.image,
+    // this.title,
+    // this.tags,
+    // this.profileImage,
+    // this.isBooked = false,
+    required this.logData,
   });
-  final String? image;
-  final String? profileImage;
-  final String? title;
-  final List<String?>? tags;
-  final bool isBooked;
+  // final String? image;
+  // final String? profileImage;
+  // final String? title;
+  // final List<String?>? tags;
+  // final bool isBooked;
+  final SFACLogModel logData;
+
+  @override
+  ConsumerState<LogCardMini> createState() => _LogCardMiniState();
+}
+
+class _LogCardMiniState extends ConsumerState<LogCardMini> {
+  String? imgUrl;
+  int replyCnt = 0;
+  List<Widget> chipList = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  @override
+  void didUpdateWidget(LogCardMini oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.logData != widget.logData) {
+      _loadData();
+    }
+  }
+
+  Future<void> _loadData() async {
+    imgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.logData.id);
+    replyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.logData.id);
+
+    if (!mounted) return;
+    setState(() {});
+    if (!mounted) return;
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<String> tags = [
-      '#프론트엔드',
-      '#일상',
-      '#백앤드',
-      '#개발자',
-    ];
     const String category = '개발자일상';
     const String title = '개발자가 되고 싶은 이유';
-    const String comment = '1';
-    const String book = '2';
 
     return Column(
       children: [
         _ImageSection(
-            image: image, profileImage: profileImage, isBooked: isBooked),
+          image: imgUrl,
+          isBooked: false,
+        ),
         const SizedBox(height: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +93,7 @@ class LogCardMini extends StatelessWidget {
                 Icon(Icons.message, size: 12, color: SLColor.neutral.shade50),
                 const SizedBox(width: 4),
                 Text(
-                  comment,
+                  '$replyCnt',
                   style: SLTextStyle(
                           style: SLStyle.Text_S_Bold,
                           color: SLColor.neutral.shade50)
@@ -81,7 +113,7 @@ class LogCardMini extends StatelessWidget {
                     size: 12, color: SLColor.neutral.shade50),
                 const SizedBox(width: 4),
                 Text(
-                  book,
+                  widget.logData.favorite.toString(),
                   style: SLTextStyle(
                           style: SLStyle.Text_S_Bold,
                           color: SLColor.neutral.shade50)
@@ -91,7 +123,8 @@ class LogCardMini extends StatelessWidget {
             ),
             // @todo: 횡스크롤 ListView
             Wrap(
-              children: buildTags(tags, maxLen: 1),
+              // children: [...chipList],
+              children: buildTags(widget.logData.tag, maxLen: 1),
             ),
           ],
         )
@@ -103,7 +136,7 @@ class LogCardMini extends StatelessWidget {
 class _ImageSection extends StatelessWidget {
   const _ImageSection({
     required this.image,
-    required this.profileImage,
+    this.profileImage,
     required this.isBooked,
   });
 
@@ -194,9 +227,10 @@ class _ImageSection extends StatelessWidget {
   }
 }
 
-List<Widget> buildTags(List<String> tags, {int maxLen = 2}) {
+List<Widget> buildTags(List<dynamic> tags, {int maxLen = 3}) {
   int tagLength = tags.length;
   List<Widget> result = [];
+  if (tags.isEmpty) return [];
   for (int i = 0; i < maxLen; i++) {
     result.add(_TagWidget(label: tags[i]));
     tagLength--;

@@ -79,18 +79,21 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
           TextButton(
               onPressed: () async {
                 List<String> imgUrlList = [];
+                // 썸네일을 미리 저장하여 Tag ID를 생성
                 var tagId = await remoteDataSource.uploadThumbNail(
                   'log',
                   imgPath,
                   state.logModel!.title,
                 );
                 if (state.logModel!.images.isNotEmpty) {
+                  //이미지를 Upload한 후 이를 RestAPI로 호출 할 수 있도록 URL 리스트 생성
                   imgUrlList = await remoteDataSource.uploadFile(
                       'log', state.logModel!, tagId);
                   // logModel의 body를 파싱하여 List<dynamic>으로 변환합니다.
                   List<dynamic> body = jsonDecode(state.logModel!.body);
                   int imgUrlIndex = 0;
                   for (var item in body) {
+                    // 기존 localPath로 되어있던 것들을 URL로 변경
                     if (item['insert'] is Map<String, dynamic> &&
                         item['insert']['_type'] == 'image') {
                       // _type이 image인 항목의 source를 새로운 값으로 업데이트합니다.
@@ -103,12 +106,13 @@ class _LogSettingPageState extends ConsumerState<LogSettingPage> {
                   var newLogData =
                       state.logModel!.copyWith(body: convertedBody);
                   ref.read(logwriteProvider.notifier).setLog(newLogData);
-
+                  // 생성된 Tag ID에 변경된 Body Update
                   await remoteDataSource
                       .uploadLog('log', newLogData, tagId)
                       .then((value) {
                     context.push('/log/write/upload/$tagId');
                   });
+                  // 이미지가 없다면
                 } else {
                   await remoteDataSource
                       .uploadLog('log', state.logModel!, tagId)

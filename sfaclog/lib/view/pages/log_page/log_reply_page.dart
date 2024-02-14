@@ -5,6 +5,7 @@ import 'package:sfaclog/model/log_reply_model.dart';
 import 'package:sfaclog/view/widgets/log_reply_widgets/log_nested_reply_listtile_widget.dart';
 import 'package:sfaclog/view/widgets/log_reply_widgets/log_reply_header_widget.dart';
 import 'package:sfaclog/view/widgets/log_reply_widgets/log_reply_listtile_widget.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/log_read_viewmodel/log_read_notifier.dart';
 import 'package:sfaclog/viewmodel/log_reply_viewmodel/log_reply_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
@@ -44,6 +45,7 @@ class _LogReplyPageState extends ConsumerState<LogReplyPage> {
   @override
   Widget build(BuildContext context) {
     var state = ref.watch(logReplyProvider);
+    var authState = ref.watch(authProvider);
     int totalReplyCnt =
         ref.read(logReplyProvider.notifier).getTotalReplyCnt(state.replyList!);
 
@@ -121,10 +123,14 @@ class _LogReplyPageState extends ConsumerState<LogReplyPage> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 14),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         state.parentReplyId != ""
-                            ? const Text('@대댓글 작성')
+                            ? const Text('@ 대댓글 작성')
                             : const SizedBox(),
+                        const SizedBox(
+                          height: 4,
+                        ),
                         InputWithTextButton(
                           onPressed: () async {
                             LogReplyModel logReplyModel = LogReplyModel(
@@ -134,7 +140,7 @@ class _LogReplyPageState extends ConsumerState<LogReplyPage> {
                                     ? state.parentReplyId
                                     : "",
                                 like: 0,
-                                user: '');
+                                user: authState.userInfo['id']);
                             try {
                               replyTagId =
                                   await _remoteDataSource.createTableData(

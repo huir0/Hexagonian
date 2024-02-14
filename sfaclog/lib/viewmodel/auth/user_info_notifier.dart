@@ -24,7 +24,7 @@ class UserInfoNotifier extends StateNotifier<UserState> {
 
       state = state.copyWith(
         userInfo: state.userInfo!.copyWith(
-          user: user,
+          profile: user,
         ), // userInfo의 user만 세팅,
         userStatus: UserStatus.success,
       );
@@ -98,7 +98,7 @@ class UserInfoNotifier extends StateNotifier<UserState> {
         ...userInfo.data,
         'id': userInfo.id,
         'skill': skills.map((skill) => skill.toJson()).toList(),
-        'user': user.toJson(),
+        'profile': user.toJson(),
       });
 
       state = state.copyWith(

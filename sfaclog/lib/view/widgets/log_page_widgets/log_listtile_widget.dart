@@ -10,6 +10,7 @@ import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LogListTileWidget extends ConsumerStatefulWidget {
   final SFACLogModel logData;
@@ -97,10 +98,16 @@ class _LogListTileWidgetState extends ConsumerState<LogListTileWidget> {
                             imgUrl!,
                             fit: BoxFit.fill,
                           )
-                        : Container(
-                            color: Colors.grey, // 대체 이미지 또는 색상으로 로딩 상태 표시
-                            child: const Center(
-                              child: CircularProgressIndicator(), // 로딩 인디케이터
+                        : Shimmer.fromColors(
+                            baseColor: Colors.grey[300]!,
+                            highlightColor: Colors.grey[100]!,
+                            child: Container(
+                              width: listTileW,
+                              height: listTileH,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             ),
                           ),
                   ),

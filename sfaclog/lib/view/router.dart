@@ -255,6 +255,10 @@ final router = GoRouter(initialLocation: '/splash', routes: [
     path: '/welcome',
     builder: (context, state) => const JoinCompletePage(),
   ),
+  GoRoute(
+    path: '/passwordReset',
+    builder: (context, state) => const MypageChangePassword(),
+  ),
 
   GoRoute(
     path: '/readqa',

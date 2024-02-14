@@ -63,7 +63,7 @@ class OnboardingState extends Equatable {
       currentPage: 0,
       totalPage: onboardingSections.length + joinSections.length,
       userInfo: const UserInfo(
-        user: UserModel(
+        profile: UserModel(
           name: '',
           email: '',
         ),
