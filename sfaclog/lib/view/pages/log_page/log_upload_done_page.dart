@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/labels/log_label.dart';
 
-class LogUploadDonePage extends StatelessWidget {
+class LogUploadDonePage extends ConsumerStatefulWidget {
   final String tagId;
   const LogUploadDonePage({super.key, required this.tagId});
 
   @override
+  ConsumerState<LogUploadDonePage> createState() => _LogUploadDonePageState();
+}
+
+class _LogUploadDonePageState extends ConsumerState<LogUploadDonePage> {
+  @override
   Widget build(BuildContext context) {
+    var state = ref.watch(logProvider);
     return Scaffold(
       body: Center(
         child: Column(
@@ -38,9 +47,15 @@ class LogUploadDonePage extends StatelessWidget {
           width: 312,
           height: 52,
           text: '확인',
-          onPressed: () {
-            context.go('/log/read/$tagId');
-            // Navigator.push 로직
+          onPressed: () async {
+            await ref
+                .read(logProvider.notifier)
+                .getLogDataOrderBy(state.orderBy)
+                .then((value) => ref.read(logProvider.notifier).setLog(value));
+
+            if (context.mounted) {
+              context.push('/log/read/${widget.tagId}');
+            }
           },
         ),
       ),

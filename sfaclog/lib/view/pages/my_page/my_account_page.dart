@@ -34,8 +34,8 @@ class MypageAccount extends ConsumerWidget {
         ),
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-            margin: EdgeInsets.only(top: 20),
-            padding: EdgeInsets.only(
+            margin: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(
               left: 25,
             ),
             height: 22,
@@ -55,13 +55,13 @@ class MypageAccount extends ConsumerWidget {
               behavior: HitTestBehavior.opaque,
               onTap: () {},
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                  child: Row(
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  child: const Row(
                     children: [
                       // FIXME: 유저정보 불러와서 집어넣기
                       Text('계정정보'),
                       Spacer(),
-                      Container(
+                      SizedBox(
                         width: 55,
                         height: 22,
                         child: Text('신규가입'),
@@ -83,12 +83,12 @@ class MypageAccount extends ConsumerWidget {
                 context.push('/my/setting/account/email/');
               },
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
                     children: [
-                      Text('이메일 변경'),
-                      Spacer(),
-                      Container(
+                      const Text('이메일 변경'),
+                      const Spacer(),
+                      const SizedBox(
                         width: 134,
                         height: 22,
                         // FIXME: 데이터 불러오기
@@ -97,7 +97,7 @@ class MypageAccount extends ConsumerWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 9,
                       ),
                       SvgPicture.asset('assets/icons/arrow_right.svg'),
@@ -118,18 +118,18 @@ class MypageAccount extends ConsumerWidget {
                 context.push('/my/setting/account/mobile/');
               },
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
                     children: [
-                      Text('휴대폰 번호 변경'),
-                      Spacer(),
-                      Container(
+                      const Text('휴대폰 번호 변경'),
+                      const Spacer(),
+                      const SizedBox(
                         width: 134,
                         height: 22,
                         // FIXME: 데이터 불러오기
                         child: Text('전화번호'),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 9,
                       ),
                       SvgPicture.asset('assets/icons/arrow_right.svg'),
@@ -150,11 +150,11 @@ class MypageAccount extends ConsumerWidget {
                 context.push('/my/setting/account/password/');
               },
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
                     children: [
-                      Text('비밀번호 변경'),
-                      Spacer(),
+                      const Text('비밀번호 변경'),
+                      const Spacer(),
                       SvgPicture.asset('assets/icons/arrow_right.svg'),
                     ],
                   )),

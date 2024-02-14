@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +19,8 @@ class ResumeLinkCard extends StatelessWidget {
     final Uri _url = Uri.parse(link.link);
     
     Future<void> _launchUrl() async {
-      if (!await launchUrl(_url)) {
-        throw Exception('Could not launch $_url');
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
       }
     }
 
@@ -37,7 +39,7 @@ class ResumeLinkCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SvgPicture.asset('assets/icons/link.svg'),
-                SizedBox(
+                const SizedBox(
                   width: 8,
                 ),
                 Text(
@@ -58,7 +60,9 @@ class ResumeLinkCard extends StatelessWidget {
             ),
             Row(
               children: [
-                SizedBox(width: 25,),
+                const SizedBox(
+                  width: 25,
+                ),
                 Text(
                   link.name,
                   style: SLTextStyle.Text_XS_Medium?.copyWith(

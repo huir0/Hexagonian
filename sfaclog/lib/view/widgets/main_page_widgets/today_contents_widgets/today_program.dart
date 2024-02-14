@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_program_model.dart';
+import 'package:sfaclog/view/widgets/main_page_widgets/dot_indicator.dart';
 import 'package:sfaclog/viewmodel/programs_viewmodel/programs_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,25 +17,57 @@ class TodayProgram extends ConsumerStatefulWidget {
 }
 
 class TodayProgramState extends ConsumerState<TodayProgram> {
+  int curIdx = 0;
+  late CarouselController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CarouselController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller = CarouselController();
+  }
+
   @override
   Widget build(BuildContext context) {
     var programState = ref.watch(programsProvider).programs;
 
-    if (programState == []) {
+    if (programState.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return CarouselSlider(
-      options: CarouselOptions(
-        height: 200,
-        viewportFraction: 0.85,
-        enlargeCenterPage: true,
-      ),
-      items: List.generate(programState.length ?? 0, (index) {
-        return ProgramCard(
-          data: programState[index],
-        );
-      }).toList(),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CarouselSlider(
+          carouselController: controller,
+          options: CarouselOptions(
+            height: 200,
+            viewportFraction: 0.85,
+            enlargeCenterPage: true,
+            onPageChanged: (val, _) {
+              curIdx = val;
+              controller.jumpToPage(val);
+              setState(() {});
+            },
+          ),
+          items: List.generate(programState.length ?? 0, (index) {
+            return ProgramCard(
+              data: programState[index],
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 12),
+        DotIndicator(
+          curIdx: curIdx,
+          controller: controller,
+          length: programState.length ?? 0,
+        ),
+      ],
     );
   }
 }

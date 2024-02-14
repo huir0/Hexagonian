@@ -43,10 +43,10 @@ class SpecupReviewSection extends ConsumerWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  context.push('/log/read/${logModelListState?[index].id}');
+                  context.push('/log/read/${logModelListState[index].id}');
                 },
                 child: LogListTileWidget(
-                  logData: logModelListState?[index],
+                  logData: logModelListState![index],
                 ),
               );
             },

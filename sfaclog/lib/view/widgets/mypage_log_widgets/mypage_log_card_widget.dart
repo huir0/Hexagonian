@@ -17,8 +17,8 @@ class MypageLogBigCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: EdgeInsets.only(bottom: 20, top: 12),
-      padding: EdgeInsets.symmetric(horizontal: 23),
+      margin: const EdgeInsets.only(bottom: 20, top: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 23),
       width: 360,
       height: 259,
       child: Column(
@@ -41,7 +41,7 @@ class MypageLogBigCard extends ConsumerWidget {
                   top: 10,
                   left: 12,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
@@ -67,7 +67,7 @@ class MypageLogBigCard extends ConsumerWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 7,
           ),
           Container(
@@ -79,7 +79,7 @@ class MypageLogBigCard extends ConsumerWidget {
                   color: SLColor.neutral[50]),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 7,
           ),
           Container(
@@ -92,16 +92,16 @@ class MypageLogBigCard extends ConsumerWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 7,
           ),
-          Container(
+          SizedBox(
             height: 16,
             width: 313,
             child: Row(
               children: [
                 SvgPicture.asset('assets/icons/chat_grey.svg'),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 ref.watch(logRepliesProvider(log.id)).when(
@@ -123,11 +123,11 @@ class MypageLogBigCard extends ConsumerWidget {
                     color: SLColor.neutral[50],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 SvgPicture.asset('assets/icons/heart.svg'),
-                SizedBox(
+                const SizedBox(
                   width: 4,
                 ),
                 Text(
@@ -139,17 +139,17 @@ class MypageLogBigCard extends ConsumerWidget {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Container(
+          SizedBox(
             height: 22,
             width: 313,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: log.tag.length,
               separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(width: 5);
+                return const SizedBox(width: 5);
               },
               itemBuilder: (BuildContext context, int index) {
                 return SFACTag(
@@ -181,7 +181,7 @@ class MypageLogSmallCard extends ConsumerWidget {
         ref.read(myPageLogProvider.notifier).getLogReplies(log.id);
 
     return Container(
-      margin: EdgeInsets.only(top: 12),
+      margin: const EdgeInsets.only(top: 12),
       padding: EdgeInsets.zero,
       width: 148,
       height: 182,
@@ -206,7 +206,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                     top: 6,
                     left: 8,
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                       ),
@@ -238,7 +238,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             SizedBox(
@@ -270,7 +270,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
                   Container(
@@ -287,7 +287,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                               'assets/icons/chat_white.svg',
                               height: 14,
                             )),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
                         ref.watch(logRepliesProvider(log.id)).when(
@@ -309,14 +309,14 @@ class MypageLogSmallCard extends ConsumerWidget {
                             color: SLColor.neutral[50],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         SvgPicture.asset(
                           'assets/icons/heart.svg',
                           height: 14,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 4,
                         ),
                         Text(
@@ -331,14 +331,14 @@ class MypageLogSmallCard extends ConsumerWidget {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: 141,
               height: 22,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: log.tag.length,
                 separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(width: 5);
+                  return const SizedBox(width: 5);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   final tag = SFACTag(

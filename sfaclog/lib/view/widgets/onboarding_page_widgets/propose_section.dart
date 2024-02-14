@@ -72,6 +72,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
         const SizedBox(height: 40),
         ...renderProposeButtons(),
         const SizedBox(height: 40),
+        const Spacer(),
         SLButton(
           text: '스팩로그 시작하기',
           isActive: proposeState != null,
@@ -84,6 +85,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
                       List<String> skillList = [
                         ...userInfo.skill!.map((skill) => skill.id)
                       ];
+
                       var res = await userInfoNotifier.createUserInfo(
                         nickname: userInfo.nickname!,
                         agreement: userInfo.agreementState!,

@@ -37,13 +37,13 @@ class MypageAddLink extends StatelessWidget {
       ),
       body: Container(
         width: 360,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
-            Container(
+            SizedBox(
               width: 308,
               height: 19,
               child: Row(
@@ -57,12 +57,12 @@ class MypageAddLink extends StatelessWidget {
                   Text(
                     '*',
                     style: SLTextStyle.Text_M_Bold?.copyWith(
-                        color: Color(0xffD3265C)),
+                        color: const Color(0xffD3265C)),
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SFACTextField(
@@ -72,10 +72,10 @@ class MypageAddLink extends StatelessWidget {
               hintText: 'https://',
               hintTextColor: SLColor.neutral[60]!,
             ),
-            SizedBox(
+            const SizedBox(
               height: 28,
             ),
-            Container(
+            SizedBox(
               width: 308,
               height: 19,
               child: Row(
@@ -89,9 +89,9 @@ class MypageAddLink extends StatelessWidget {
                   Text(
                     '*',
                     style: SLTextStyle.Text_M_Bold?.copyWith(
-                        color: Color(0xffD3265C)),
+                        color: const Color(0xffD3265C)),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     '${title.text.length}/50',
                     style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -101,7 +101,7 @@ class MypageAddLink extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SFACTextField(
@@ -150,13 +150,13 @@ class MypageEditLink extends StatelessWidget {
       ),
       body: Container(
         width: 360,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
-            Container(
+            SizedBox(
               width: 308,
               height: 19,
               child: Row(
@@ -170,12 +170,12 @@ class MypageEditLink extends StatelessWidget {
                   Text(
                     '*',
                     style: SLTextStyle.Text_M_Bold?.copyWith(
-                        color: Color(0xffD3265C)),
+                        color: const Color(0xffD3265C)),
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SFACTextField(
@@ -185,10 +185,10 @@ class MypageEditLink extends StatelessWidget {
               hintText: 'https://',
               hintTextColor: SLColor.neutral[60]!,
             ),
-            SizedBox(
+            const SizedBox(
               height: 28,
             ),
-            Container(
+            SizedBox(
               width: 308,
               height: 19,
               child: Row(
@@ -202,9 +202,9 @@ class MypageEditLink extends StatelessWidget {
                   Text(
                     '*',
                     style: SLTextStyle.Text_M_Bold?.copyWith(
-                        color: Color(0xffD3265C)),
+                        color: const Color(0xffD3265C)),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Text(
                     '${title.text.length}/50',
                     style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -214,7 +214,7 @@ class MypageEditLink extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             SFACTextField(
@@ -224,7 +224,7 @@ class MypageEditLink extends StatelessWidget {
               hintText: 'ex) 김개발의 포트폴리오',
               hintTextColor: SLColor.neutral[60]!,
             ),
-            Spacer(),
+            const Spacer(),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
@@ -242,10 +242,10 @@ class MypageEditLink extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: Text('링크 삭제'),
+                child: const Text('링크 삭제'),
               ),
             ),
-            SizedBox(height: 63),
+            const SizedBox(height: 63),
           ],
         ),
       ),

@@ -51,21 +51,21 @@ class _MypageAddSkillState extends ConsumerState<MypageAddSkill> {
           ],
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 34,
               ),
               Text(
                 '스킬을 선택해주세요',
                 style: SLTextStyle.Text_M_Bold?.copyWith(color: Colors.white),
               ),
-              Wrap(
+              const Wrap(
                 children: [],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               SFACSearchBar(
@@ -83,7 +83,7 @@ class _MypageAddSkillState extends ConsumerState<MypageAddSkill> {
                   );
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               Text(
@@ -92,10 +92,10 @@ class _MypageAddSkillState extends ConsumerState<MypageAddSkill> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Wrap(
+              const Wrap(
                 children: [
                   // TODO: skill 연동해서 보여주기
                 ],

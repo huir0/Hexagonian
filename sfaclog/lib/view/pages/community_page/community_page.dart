@@ -16,12 +16,12 @@ class CommunityPage extends ConsumerWidget {
     return Container(
       child: Column(children: [
         Container(
-          padding: EdgeInsets.only(top: 7),
+          padding: const EdgeInsets.only(top: 7),
           child: SLTab(
             currentIndex: ref.watch(myPageProvider).tab,
             horizontalMargin: 9,
             height: 43,
-            menu: [
+            menu: const [
               Text('개발자 Q&A'),
               Text('사이드 프로젝트'),
             ],
@@ -31,7 +31,7 @@ class CommunityPage extends ConsumerWidget {
             },
           ),
         ),
-        Expanded(
+        const Expanded(
           child: CommunityPageBody(),
         ),
       ]),
@@ -40,6 +40,8 @@ class CommunityPage extends ConsumerWidget {
 }
 
 class CommunityPageBody extends ConsumerWidget {
+  const CommunityPageBody({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final selectedTab = ref.watch(selectedTabProvider);
@@ -47,9 +49,9 @@ class CommunityPageBody extends ConsumerWidget {
 
     switch (selectedTab) {
       case 0:
-        return DevelopQnA();
+        return const DevelopQnA();
       case 1:
-        return ComSidePage();
+        return const ComSidePage();
 
       default:
         return Container();

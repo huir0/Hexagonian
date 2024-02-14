@@ -25,13 +25,13 @@ class ResumeEducationCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SvgPicture.asset('assets/icons/mortar_board.svg'),
-              SizedBox(width: 8,),
+              const SizedBox(width: 8,),
               Text(
                 education.institute,
                 style: SLTextStyle.Text_XS_Medium?.copyWith(
                     color: Colors.white),
               ),
-              Text(' - '),
+              const Text(' - '),
               Text(
                 education.major,
                 style: SLTextStyle.Text_XS_Medium?.copyWith(
@@ -50,7 +50,7 @@ class ResumeEducationCard extends StatelessWidget {
           ),
           Row(
             children: [
-              SizedBox(width: 25,),
+              const SizedBox(width: 25,),
               Text.rich(
                 TextSpan(
                     style: SLTextStyle.Text_XS_Medium?.copyWith(color: SLColor.neutral[60], letterSpacing: -0.1),

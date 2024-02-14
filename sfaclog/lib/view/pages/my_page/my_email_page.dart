@@ -40,8 +40,8 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 20),
-              padding: EdgeInsets.only(
+              margin: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(
                 left: 23,
               ),
               height: 16,
@@ -50,32 +50,32 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
                 style: SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: SLInput(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: const SLInput(
                 // FIXME: 계정 연동해서 이메일 주소 보여주기
                 hintText: 'test@test.com',
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 32,
             ),
             Container(
-              padding: EdgeInsets.only(left: 23),
+              padding: const EdgeInsets.only(left: 23),
               height: 16,
               child: Text(
                 '새로운 이메일 주소',
                 style: SLTextStyle.Text_S_Bold?.copyWith(color: Colors.white),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 14,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SLInput(
                 controller: newEmail,
                 // FIXME: 계정 연동해서 이메일 주소 받기
@@ -90,9 +90,9 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Container(
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                 vertical: 28,
               ),
               alignment: Alignment.center,

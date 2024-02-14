@@ -4,11 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/model/user_model.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
-import 'package:sfaclog_widgets/titles/title_with_count.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
-import 'package:sfaclog_widgets/buttons/sl_button.dart';
-import 'package:sfaclog_widgets/textfields/validate_input.dart';
-import 'package:sfaclog_widgets/menus/sl_expansion_tile.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
 class PwConfirmSection extends ConsumerStatefulWidget {
@@ -65,119 +62,133 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
             curIdx: onboardingState.currentPage + 1,
             total: onboardingState.totalPage),
         const SizedBox(height: 40),
-        Form(
-          key: formKey,
-          onChanged: () {
-            if (formKey.currentState!.validate()) {
-              onboardingNotifier.setButtonEnabled(true);
-            } else {
-              onboardingNotifier.setButtonEnabled(false);
-            }
-          },
-          child: Column(
-            children: [
-              ValidateInput(
-                controller: ref.watch(PwConfirmSection.passwordController),
-                type: ValidateInputType.password,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return '숫자 v 특수문자 v 6-18자 이내 v';
-                  }
-                  if (!RegExp(
-                          r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
-                      .hasMatch(value)) {
-                    return '숫자 v 특수문자 v 6-18자 이내 v';
-                  }
-                  return null;
-                },
-                onSaved: (newValue) {
-                  password = newValue ?? '';
-                },
-              ),
-              const SizedBox(height: 20),
-              ValidateInput(
-                type: ValidateInputType.passwordConfirm,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (ref.watch(PwConfirmSection.passwordController).text !=
-                      value) {
-                    return '불일치';
-                  }
-                  return null;
-                },
-                onSaved: (newValue) {
-                  passwordConfirm = newValue ?? '';
-                },
-              ),
-              const SizedBox(height: 20),
-              SLExpansionTile(
-                title: terms[0],
-                color: SLColor.neutral,
-                onChange: (newValue) {
-                  if (newValue) {
-                    agreementState = ['all'];
-                    setState(() {});
-                  } else {
-                    agreementState = [];
-                    setState(() {});
-                  }
-                },
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                    child: _buildExpansionChild(
-                        terms: terms,
-                        onChange: (newValue) {
-                          // 부모 value가 true면 다 true가 되어야함.
-                        },
-                        value:
-                            onboardingState.agreementState?.contains('all') ??
-                                false //agreementState.contains('all'),
-                        ),
-                  ),
-                ],
-              ),
-            ],
+        Expanded(
+          child: Form(
+            key: formKey,
+            onChanged: () {
+              if (formKey.currentState!.validate()) {
+                onboardingNotifier.setButtonEnabled(true);
+              } else {
+                onboardingNotifier.setButtonEnabled(false);
+              }
+            },
+            child: Column(
+              children: [
+                ValidateInput(
+                  controller: ref.watch(PwConfirmSection.passwordController),
+                  type: ValidateInputType.password,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return '숫자 v 특수문자 v 6-18자 이내 v';
+                    }
+                    if (!RegExp(
+                            r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
+                        .hasMatch(value)) {
+                      return '숫자 v 특수문자 v 6-18자 이내 v';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    password = newValue ?? '';
+                  },
+                ),
+                const SizedBox(height: 20),
+                ValidateInput(
+                  type: ValidateInputType.passwordConfirm,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (ref.watch(PwConfirmSection.passwordController).text !=
+                        value) {
+                      return '불일치';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    passwordConfirm = newValue ?? '';
+                  },
+                ),
+                const SizedBox(height: 20),
+                SLExpansionTile(
+                  title: terms[0],
+                  color: SLColor.neutral,
+                  onChange: (newValue) {
+                    if (newValue) {
+                      agreementState = ['all'];
+                      setState(() {});
+                    } else {
+                      agreementState = [];
+                      setState(() {});
+                    }
+                  },
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 2),
+                      child: _buildExpansionChild(
+                          terms: terms,
+                          onChange: (newValue) {
+                            // 부모 value가 true면 다 true가 되어야함.
+                          },
+                          value:
+                              onboardingState.agreementState?.contains('all') ??
+                                  false //agreementState.contains('all'),
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-        SLButton(
-          text: '다음',
-          isActive:
-              onboardingState.isButtonEnabled && agreementState.contains('all'),
-          onTap: onboardingState.isButtonEnabled &&
-                  agreementState.contains('all')
-              ? () async {
-                  try {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                      onboardingNotifier.uploadTerms(
-                        terms: agreementState,
-                      );
+        Padding(
+          padding: const EdgeInsets.only(bottom: 27),
+          child: SLButton(
+            text: '다음',
+            isActive: onboardingState.isButtonEnabled &&
+                agreementState.contains('all'),
+            onTap: onboardingState.isButtonEnabled &&
+                    agreementState.contains('all')
+                ? () async {
+                    try {
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        onboardingNotifier.uploadTerms(
+                          terms: agreementState,
+                        );
 
-                      UserModel basicUserInfo = onboardingState.userInfo!.user!;
+                        UserModel basicUserInfo =
+                            onboardingState.userInfo!.user!;
 
-                      var res = await authNotifier.signup(
-                        name: basicUserInfo.name!,
-                        email: basicUserInfo.email!,
-                        password: password,
-                        passwordConfirm: passwordConfirm,
-                        nickname: basicUserInfo.name!,
-                      );
+                        // var res = await authNotifier.signup(
+                        // name: basicUserInfo.name!,
+                        // email: basicUserInfo.email!,
+                        // password: password,
+                        // passwordConfirm: passwordConfirm,
+                        // nickname: basicUserInfo.name!,
+                        // );
 
-                      await userInfoNotifier.setBasicUserInfo(res);
-                      onboardingNotifier.setNewUser(res);
+                        var res = await authNotifier.updateUser(
+                          userId: basicUserInfo.id!,
+                          name: basicUserInfo.name!,
+                          password: password,
+                          passwordConfirm: passwordConfirm,
+                          nickname: basicUserInfo.name!,
+                        );
+
+                        await userInfoNotifier.setBasicUserInfo(res);
+                        onboardingNotifier.setNewUser(res);
+                      }
+
+                      Future.delayed(Duration.zero, () {
+                        context.push('/welcome');
+                      });
+                    } catch (e) {
+                      print('pw_confirm_section error: $e');
                     }
-
-                    Future.delayed(Duration.zero, () {
-                      context.push('/welcome');
-                    });
-                  } catch (e) {
-                    print('pw_confirm_section error: $e');
                   }
-                }
-              : null,
+                : null,
+          ),
         ),
       ],
     );
@@ -186,7 +197,6 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
 
 class _buildExpansionChild extends StatefulWidget {
   const _buildExpansionChild({
-    super.key,
     required this.terms,
     required this.onChange,
     this.value = false,

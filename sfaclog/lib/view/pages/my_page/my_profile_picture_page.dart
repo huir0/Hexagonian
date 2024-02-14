@@ -50,7 +50,7 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 56,
             ),
             Padding(
@@ -62,20 +62,20 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
                     color: Colors.white, letterSpacing: -0.20),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 28,
             ),
             Container(
               width: 92,
               height: 92,
               clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 // FIXME: 이미지 추가
                 // image:
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 62,
             ),
             Wrap(
@@ -91,7 +91,7 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
                 for (var i = 1; i <= 19; i++)
                   GestureDetector(
                     onTap: () {
-                      print('${i}');
+                      print('$i');
                     },
                     child: Container(
                       width: 54,
@@ -106,14 +106,14 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
                   for (var i = 17; i <= 19; i++)
                   GestureDetector(
                     onTap: () {
-                      print('${i}');
+                      print('$i');
                     },
                     child: Container(
                       width: 54,
                       height: 54,
                       clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(shape: BoxShape.circle),
-                      child: Image.asset('assets/icons/profile_picture${i}.png'),
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: Image.asset('assets/icons/profile_picture$i.png'),
                     ),
                   ),
 

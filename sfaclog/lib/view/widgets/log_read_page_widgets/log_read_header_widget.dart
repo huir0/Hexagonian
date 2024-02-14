@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogReadHeaderWidget extends StatelessWidget {
   final SFACLogModel sfacLogModel;
+  final dynamic userInfo;
+  final String avatarUrl;
   const LogReadHeaderWidget({
     super.key,
     required this.sfacLogModel,
+    required this.userInfo,
+    required this.avatarUrl,
   });
 
   String _handleCreatedTime(String createdTime) {
@@ -24,12 +30,14 @@ class LogReadHeaderWidget extends StatelessWidget {
       return '${difference.inHours}시간 전';
     } else {
       // 'yyyy-MM-dd HH:mm:ss' 포맷으로 날짜와 시간 표시
-      return '${givenTime.year}/${givenTime.month.toString().padLeft(2, '0')}/${givenTime.day.toString().padLeft(2, '0')} ${givenTime.hour.toString().padLeft(2, '0')}:${givenTime.minute.toString().padLeft(2, '0')}:${givenTime.second.toString().padLeft(2, '0')}';
+      return '${givenTime.year}/${givenTime.month.toString().padLeft(2, '0')}/${givenTime.day.toString().padLeft(2, '0')} ${givenTime.hour.toString().padLeft(2, '0')}:${givenTime.minute.toString().padLeft(2, '0')}';
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SizedBox(
@@ -64,15 +72,15 @@ class LogReadHeaderWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/avatars/avatar_17.svg',
+                    SvgPicture.network(
+                      avatarUrl,
                       height: 30,
                     ),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      'Name',
+                      userInfo?['nickname'] ?? '',
                       style: SLTextStyle(style: SLStyle.Text_S_Bold).textStyle,
                     ),
                     const SizedBox(

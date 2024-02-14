@@ -36,10 +36,10 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(
+              margin: const EdgeInsets.only(
                 top: 20,
               ),
-              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 14),
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 14),
               height: 52,
               width: 312,
               decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
                 style: SLTextStyle.Text_L_Bold?.copyWith(color: Colors.white),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             SizedBox(
@@ -108,7 +108,7 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
                     child: Container(
                       width: 359,
                       height: 140,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment(0.04, 1.00),
                           end: Alignment(-0.04, -1),
@@ -133,14 +133,14 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
                             ),
                             child: SvgPicture.asset(
                               'assets/icons/check.svg',
-                              colorFilter: ColorFilter.mode(
+                              colorFilter: const ColorFilter.mode(
                                 Colors.white,
                                 BlendMode.srcIn,
                               ),
                               fit: BoxFit.scaleDown,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
@@ -149,7 +149,7 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 17,
                           ),
                           Container(
@@ -159,7 +159,7 @@ class _MypagePrivacyState extends ConsumerState<MypagePrivacy> {
                                 color: SLColor.neutral[70],
                                 borderRadius: BorderRadius.circular(4)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(

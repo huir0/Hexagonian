@@ -18,13 +18,14 @@ _$SFACLogModelImpl _$$SFACLogModelImplFromJson(Map<String, dynamic> json) =>
       category: json['category'] as String,
       favorite: json['favorite'] as int,
       images: json['images'] as List<dynamic>,
-      like: json['like'] as int,
       public: json['public'] as String,
       tag: json['tag'] as List<dynamic>,
       thumbnail: json['thumbnail'] as String,
       title: json['title'] as String,
       user: json['user'] as String,
       view: json['view'] as int,
+      like: json['like'] as int,
+      replyCnt: json['replyCnt'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$SFACLogModelImplToJson(_$SFACLogModelImpl instance) =>
@@ -39,11 +40,12 @@ Map<String, dynamic> _$$SFACLogModelImplToJson(_$SFACLogModelImpl instance) =>
       'category': instance.category,
       'favorite': instance.favorite,
       'images': instance.images,
-      'like': instance.like,
       'public': instance.public,
       'tag': instance.tag,
       'thumbnail': instance.thumbnail,
       'title': instance.title,
       'user': instance.user,
       'view': instance.view,
+      'like': instance.like,
+      'replyCnt': instance.replyCnt,
     };

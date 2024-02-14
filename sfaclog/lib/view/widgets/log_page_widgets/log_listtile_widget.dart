@@ -2,29 +2,32 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class LogListTileWidget extends StatefulWidget {
-  final dynamic logData;
+class LogListTileWidget extends ConsumerStatefulWidget {
+  final SFACLogModel logData;
   const LogListTileWidget({
     super.key,
     required this.logData,
   });
 
   @override
-  State<LogListTileWidget> createState() => _LogListTileWidgetState();
+  ConsumerState<LogListTileWidget> createState() => _LogListTileWidgetState();
 }
 
-class _LogListTileWidgetState extends State<LogListTileWidget> {
+class _LogListTileWidgetState extends ConsumerState<LogListTileWidget> {
   String? imgUrl;
+  int replyCnt = 0;
   List<Widget> chipList = [];
-  final RemoteDataSource _remoteDataSource = RemoteDataSource();
-  SFACLogModel? logModel;
+  String avatarUrl = '';
+  var userInfo;
   @override
   void initState() {
     super.initState();
@@ -40,17 +43,20 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
   }
 
   Future<void> _loadData() async {
-    logModel = SFACLogModel.fromJson(jsonDecode(widget.logData.toString()));
-
-    String imageUrl =
-        await _remoteDataSource.getThumbNailURL('log', logModel!.id, 0);
-
+    userInfo =
+        await ref.read(logProvider.notifier).getUserInfo(widget.logData.id);
+    avatarUrl =
+        await ref.read(logProvider.notifier).getAvatarUrl(userInfo['id']);
+    imgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.logData.id);
+    replyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.logData.id);
     chipList = List.generate(
-      logModel!.tag.length,
+      widget.logData.tag.length,
       (index) {
         return SFACTag(
           text: Text(
-            logModel!.tag[index],
+            widget.logData.tag[index],
             style:
                 SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
                     .textStyle,
@@ -59,9 +65,7 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
       },
     );
     if (!mounted) return;
-    setState(() {
-      imgUrl = imageUrl;
-    });
+    setState(() {});
     if (!mounted) return;
   }
 
@@ -106,16 +110,17 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                   top: 12,
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.facebook,
-                        color: Colors.white,
-                        size: 14,
-                      ),
+                      avatarUrl == ''
+                          ? const SizedBox()
+                          : SvgPicture.network(
+                              avatarUrl,
+                              height: 20,
+                            ),
                       const SizedBox(
                         width: 4,
                       ),
                       Text(
-                        '토스페이먼츠',
+                        userInfo?['nickname'] ?? '',
                         style:
                             SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
                       )
@@ -144,7 +149,7 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                logModel!.category,
+                widget.logData.category,
                 style: SLTextStyle(
                         style: SLStyle.Text_XS_Regular,
                         color: SLColor.neutral.shade50)
@@ -153,7 +158,7 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                 child: Text(
-                  logModel!.title,
+                  widget.logData.title,
                   style: SLTextStyle(
                     style: SLStyle.Text_M_Bold,
                   ).textStyle,
@@ -171,7 +176,7 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                     width: 4,
                   ),
                   Text(
-                    '1',
+                    '$replyCnt',
                     style: SLTextStyle(
                             style: SLStyle.Text_S_Bold,
                             color: SLColor.neutral.shade50)
@@ -195,7 +200,7 @@ class _LogListTileWidgetState extends State<LogListTileWidget> {
                     width: 4,
                   ),
                   Text(
-                    '2',
+                    '${widget.logData.like}',
                     style: SLTextStyle(
                             style: SLStyle.Text_S_Bold,
                             color: SLColor.neutral.shade50)

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:parchment_delta/parchment_delta.dart';
 import 'package:fleather/fleather.dart';
 import 'package:flutter/material.dart';
@@ -11,21 +12,25 @@ import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_appbar_widget.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_footer_widget.dart';
 import 'package:sfaclog/view/widgets/log_read_page_widgets/log_read_header_widget.dart';
+import 'package:sfaclog/viewmodel/log_read_viewmodel/log_read_notifier.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LogReadPage extends StatefulWidget {
+class LogReadPage extends ConsumerStatefulWidget {
   final String tagId;
+
   const LogReadPage({super.key, required this.tagId});
 
   @override
-  State<LogReadPage> createState() => _LogReadPageState();
+  ConsumerState<LogReadPage> createState() => _LogReadPageState();
 }
 
-class _LogReadPageState extends State<LogReadPage> {
+class _LogReadPageState extends ConsumerState<LogReadPage> {
   FleatherController? _controller;
-  final RemoteDataSource _remoteDataSource = RemoteDataSource();
-  RecordModel? logData;
+  dynamic userInfo;
+  String avatarUrl = '';
+
   SFACLogModel? sfacLogModel;
   @override
   void initState() {
@@ -42,44 +47,40 @@ class _LogReadPageState extends State<LogReadPage> {
 
   Future<void> _initController() async {
     try {
-      logData =
-          await _remoteDataSource.getLogData('log', widget.tagId).then((value) {
-        sfacLogModel = SFACLogModel.fromJson(value.toJson());
-        return null;
-      });
+      //find Clicked Log
+      sfacLogModel = ref.read(logReadProvider.notifier).findLog(widget.tagId);
+      //update View Count
+      if (sfacLogModel != null) {
+        // 조회수 업데이트
+        await ref
+            .read(logReadProvider.notifier)
+            .updateViewCount(sfacLogModel!.view, widget.tagId);
+        userInfo =
+            await ref.read(logProvider.notifier).getUserInfo(widget.tagId);
+        avatarUrl =
+            await ref.read(logProvider.notifier).getAvatarUrl(userInfo['id']);
+      }
 
-      await _updateViewCount(widget.tagId);
-      final logBody = sfacLogModel!.body;
+      // 로그 본문 처리
+      final logBody = sfacLogModel?.body ?? '{}';
       final heuristics = ParchmentHeuristics(
         formatRules: [],
-        insertRules: [
-          ForceNewlineForInsertsAroundInlineImageRule(),
-        ],
+        insertRules: [ForceNewlineForInsertsAroundInlineImageRule()],
         deleteRules: [],
       ).merge(ParchmentHeuristics.fallback);
-      final doc = ParchmentDocument.fromJson(
-        jsonDecode(logBody),
-        heuristics: heuristics,
-      );
+      final doc = ParchmentDocument.fromJson(jsonDecode(logBody),
+          heuristics: heuristics);
       _controller = FleatherController(document: doc);
+
+      // UI 업데이트
+      if (mounted) {
+        setState(() {
+          // 이 부분에서 UI에 반영될 상태 변경을 처리합니다.
+        });
+      }
     } catch (err, st) {
       print('Cannot read welcome.json: $err\n$st');
       _controller = FleatherController();
-    }
-    setState(() {});
-  }
-
-  Future<void> _updateViewCount(String tagId) async {
-    try {
-      int currentViewCount = sfacLogModel!.view;
-
-      await _remoteDataSource.updateTableData(
-        'log',
-        tagId,
-        {'view': currentViewCount + 1},
-      );
-    } catch (e) {
-      print("Failed to update view count: $e");
     }
   }
 
@@ -92,55 +93,43 @@ class _LogReadPageState extends State<LogReadPage> {
         children: [
           _controller == null
               ? const SizedBox()
-              : sfacLogModel == null
-                  ? Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(
-                        height: 200,
-                        margin: const EdgeInsets.symmetric(horizontal: 24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+              : Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LogReadHeaderWidget(
+                          sfacLogModel: sfacLogModel!,
+                          avatarUrl: avatarUrl,
+                          userInfo: userInfo,
                         ),
-                      ),
-                    )
-                  : Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            LogReadHeaderWidget(
-                              sfacLogModel: sfacLogModel!,
-                            ),
-                            Divider(
-                              height: 1,
-                              color: SLColor.neutral.shade80,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24),
-                              child: FleatherField(
-                                readOnly: true,
-                                controller: _controller!,
-                                onLaunchUrl: _launchUrl,
-                                embedBuilder: _embedBuilder,
-                                // spellCheckConfiguration:
-                                //     SpellCheckConfiguration(
-                                //         spellCheckService:
-                                //             DefaultSpellCheckService(),
-                                //         misspelledSelectionColor: Colors.red,
-                                //         misspelledTextStyle:
-                                //             DefaultTextStyle.of(context).style),
-                              ),
-                            ),
-                          ],
+                        Divider(
+                          height: 1,
+                          color: SLColor.neutral.shade80,
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: FleatherField(
+                            readOnly: true,
+                            controller: _controller!,
+                            onLaunchUrl: _launchUrl,
+                            embedBuilder: _embedBuilder,
+                            // spellCheckConfiguration:
+                            //     SpellCheckConfiguration(
+                            //         spellCheckService:
+                            //             DefaultSpellCheckService(),
+                            //         misspelledSelectionColor: Colors.red,
+                            //         misspelledTextStyle:
+                            //             DefaultTextStyle.of(context).style),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                ),
           sfacLogModel == null
-              ? const CircularProgressIndicator()
-              : LogReadFooterWidget(tagId: sfacLogModel!.id),
+              ? const SizedBox()
+              : LogReadFooterWidget(sfacLogModel: sfacLogModel!),
         ],
       ),
     ));

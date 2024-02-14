@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
-
+import 'package:go_router/go_router.dart';
 import '../router.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -40,6 +39,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             onPressed: () {
               print('Noti_Clicked');
+              context.push('/alert');
             },
             icon: SvgPicture.asset('assets/icons/bell.svg'),
           ),

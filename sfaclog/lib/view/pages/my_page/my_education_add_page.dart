@@ -82,14 +82,14 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 34,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -103,12 +103,12 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACTextField(
@@ -119,10 +119,10 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                 hintText: '교육기관을 입력해주세요.',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -136,9 +136,9 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${major.text.length}/50',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -148,7 +148,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACTextField(
@@ -159,10 +159,10 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                 hintText: '전공/과정을 입력해주세요 ex)앱 개발 과정 수료',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -176,12 +176,12 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
@@ -203,10 +203,11 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2030),
                         );
-                        if (pickedDate != null)
+                        if (pickedDate != null) {
                           setState(() {
                             startDate = pickedDate;
                           });
+                        }
                       },
                       child: Row(
                         children: [
@@ -220,9 +221,9 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                                   color: SLColor.neutral[60]),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           SvgPicture.asset('assets/icons/calendar.svg'),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
                         ],
@@ -256,10 +257,11 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2030),
                           );
-                          if (pickedDate != null)
+                          if (pickedDate != null) {
                             setState(() {
                               endDate = pickedDate;
                             });
+                          }
                         }
                       },
                       child: Row(
@@ -274,9 +276,9 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                                   color: SLColor.neutral[60]),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           SvgPicture.asset('assets/icons/calendar.svg'),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
                         ],
@@ -285,10 +287,10 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -299,7 +301,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${content.text.length}/100',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -309,7 +311,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACTextField(
@@ -320,10 +322,10 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                 hintText: '''직무와 관련된 교육 내용 및 활동을 입력해주세요.''',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -337,7 +339,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
@@ -361,12 +363,12 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                               color: SLColor.neutral[60]),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 104,
               ),
             ],

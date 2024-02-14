@@ -24,13 +24,13 @@ class _MypageCategoryState extends State<MypageCategory> {
         title: '나의 카테고리',
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
                 height: 51,
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Row(
                   children: [
                     Text(
@@ -38,11 +38,11 @@ class _MypageCategoryState extends State<MypageCategory> {
                       style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
-                    Text('number'),
-                    Spacer(),
+                    const Text('number'),
+                    const Spacer(),
                     SvgPicture.asset(
                       'assets/icons/check_blue.svg',
                     ),
@@ -61,7 +61,7 @@ class _MypageCategoryState extends State<MypageCategory> {
                   child: Container(
                     width: 312,
                     height: 51,
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
                       children: [
                         Text(
@@ -69,12 +69,12 @@ class _MypageCategoryState extends State<MypageCategory> {
                           style: SLTextStyle.Text_M_Medium?.copyWith(
                               color: SLColor.neutral[50]),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         // TODO: 글 개수 연결
-                        Text('number'),
-                        SizedBox(
+                        const Text('number'),
+                        const SizedBox(
                           width: 12,
                         ),
                         SvgPicture.asset('assets/icons/padlock.svg'),
@@ -97,7 +97,7 @@ class _MypageCategoryState extends State<MypageCategory> {
                 },
                 child: Container(
                   height: 51,
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Row(
                     children: [
                       Text(
@@ -105,7 +105,7 @@ class _MypageCategoryState extends State<MypageCategory> {
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                             color: Colors.white),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SvgPicture.asset(
                         'assets/icons/check_blue.svg',
                       ),
@@ -127,7 +127,7 @@ class _MypageCategoryState extends State<MypageCategory> {
                 behavior: HitTestBehavior.opaque,
                 child: Container(
                   height: 51,
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Row(
                     children: [
                       Text(
@@ -135,7 +135,7 @@ class _MypageCategoryState extends State<MypageCategory> {
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                             color: Colors.white),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SvgPicture.asset(
                         'assets/icons/check_blue.svg',
                       ),

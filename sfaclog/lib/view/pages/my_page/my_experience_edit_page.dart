@@ -67,14 +67,14 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 34,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -88,12 +88,12 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACTextField(
@@ -103,10 +103,10 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                 hintText: '회사명을 입력해주세요.',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -120,9 +120,9 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${title.text.length}/50',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -132,7 +132,7 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACTextField(
@@ -142,10 +142,10 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                 hintText: '직함을 입력해주세요 ex)  백앤드 개발자 )',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -159,12 +159,12 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                     Text(
                       '*',
                       style: SLTextStyle.Text_M_Bold?.copyWith(
-                          color: Color(0xffD3265C)),
+                          color: const Color(0xffD3265C)),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
@@ -186,10 +186,11 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                           firstDate: DateTime(2000),
                           lastDate: DateTime(2101),
                         );
-                        if (pickedDate != null)
+                        if (pickedDate != null) {
                           setState(() {
                             startDate = pickedDate;
                           });
+                        }
                       },
                       child: Row(
                         children: [
@@ -203,9 +204,9 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                                   color: SLColor.neutral[60]),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           SvgPicture.asset('assets/icons/calendar.svg'),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
                         ],
@@ -239,10 +240,11 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2101),
                           );
-                          if (pickedDate != null)
+                          if (pickedDate != null) {
                             setState(() {
                               endDate = pickedDate;
                             });
+                          }
                         }
                       },
                       child: Row(
@@ -257,9 +259,9 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                                   color: SLColor.neutral[60]),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           SvgPicture.asset('assets/icons/calendar.svg'),
-                          SizedBox(
+                          const SizedBox(
                             width: 15,
                           ),
                         ],
@@ -268,13 +270,13 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Row(
                 children: [
                   SLCheckbox(onChange: (e) {}, value: working),
-                  SizedBox(
+                  const SizedBox(
                     width: 6,
                   ),
                   Text(
@@ -285,10 +287,10 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -302,7 +304,7 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
@@ -326,19 +328,19 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                               color: SLColor.neutral[60]),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       SvgPicture.asset('assets/icons/arrow_right.svg'),
-                      SizedBox(
+                      const SizedBox(
                         width: 16,
                       )
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -349,7 +351,7 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                         color: Colors.white,
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${content.text.length}/100',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
@@ -359,7 +361,7 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               SFACTextField(
@@ -370,10 +372,10 @@ class _MypageEditExperienceState extends ConsumerState<MypageEditExperience> {
 ex) 쇼핑라이브 프론트 지면 개발''',
                 hintTextColor: SLColor.neutral[60]!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 28,
               ),
-              Container(
+              SizedBox(
                 width: 308,
                 height: 19,
                 child: Row(
@@ -387,7 +389,7 @@ ex) 쇼핑라이브 프론트 지면 개발''',
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
@@ -411,12 +413,12 @@ ex) 쇼핑라이브 프론트 지면 개발''',
                               color: SLColor.neutral[60]),
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 36,
               ),
               GestureDetector(
@@ -436,7 +438,7 @@ ex) 쇼핑라이브 프론트 지면 개발''',
                       ),
                     ),
                   ),
-                  child: Text('경력 삭제'),
+                  child: const Text('경력 삭제'),
                 ),
               ),
               SizedBox(

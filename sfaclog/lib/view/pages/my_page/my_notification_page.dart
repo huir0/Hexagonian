@@ -52,17 +52,17 @@ class _MypageNotificationState extends State<MypageNotification> {
       ),
       body: Container(
         width: 360,
-        padding: EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           children: [
             for (var i = 0; i < list.length; i++) ...[
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
                 width: 312,
                 height: 36,
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: SLColor.neutral[80],
@@ -74,7 +74,7 @@ class _MypageNotificationState extends State<MypageNotification> {
                       style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     Text(
@@ -82,7 +82,7 @@ class _MypageNotificationState extends State<MypageNotification> {
                       style: SLTextStyle.Text_S_Medium?.copyWith(
                           color: SLColor.neutral[60]),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     MypageToggle(toggleProvider: list[i]['provider']),
                   ],
                 ),

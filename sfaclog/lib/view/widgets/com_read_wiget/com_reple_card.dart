@@ -6,7 +6,7 @@ class ComReadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 286,
       height: 125,
       child: Stack(
@@ -18,7 +18,7 @@ class ComReadCard extends StatelessWidget {
               width: 286,
               height: 126,
               decoration: ShapeDecoration(
-                color: Color(0xFF020202),
+                color: const Color(0xFF020202),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -47,7 +47,7 @@ class ComReadCard extends StatelessWidget {
                     Container(
                       width: 30,
                       height: 30,
-                      decoration: ShapeDecoration(
+                      decoration: const ShapeDecoration(
                         image: DecorationImage(
                           image:
                               AssetImage('assets/images/basic_profile_sm.png'),
@@ -60,7 +60,7 @@ class ComReadCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(
@@ -79,7 +79,7 @@ class ComReadCard extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 110,
                 ),
                 Row(

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/kakao_login_button.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:sfaclog_widgets/buttons/sl_button.dart';
 import 'package:sfaclog_widgets/textfields/sl_input.dart';
 
@@ -34,105 +35,119 @@ class LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authNotifier = ref.watch(authProvider.notifier);
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Column(
-              children: [
-                SvgPicture.asset(
-                  'assets/logo/sfaclog_logo.svg',
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  description,
-                  style: SLTextStyle.Text_L_Regular,
-                ),
-              ],
-            ),
-            const SizedBox(height: 84),
-            Form(
-              key: formKey,
-              onChanged: () {
-                if (formKey.currentState!.validate()) {
-                  _isActive = true;
-                  setState(() {});
-                } else {
-                  _isActive = false;
-                  setState(() {});
-                }
-              },
-              child: Column(
+    final authNotifier = ref.read(authProvider.notifier);
+    final authStatus = ref.watch(authProvider).authStatus;
+
+    return PopScope(
+      onPopInvoked: (didPop) async => false,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Center(
+              child: ListView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  SLInput(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    hintText: '이메일',
-                    controller: emailController,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return '이메일을 입력해주세요.';
-                      }
-                      if (!RegExp(
-                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                          .hasMatch(value)) {
-                        return '잘못된 이메일 형식입니다.';
-                      }
-                      return null;
-                    },
+                  Column(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/logo/sfaclog_logo.svg',
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        description,
+                        style: SLTextStyle.Text_L_Regular,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  SLInput(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    hintText: '비밀번호',
-                    controller: passwordController,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return '숫자 v 특수문자 v 6-18자 이내 v';
+                  const SizedBox(height: 84),
+                  Form(
+                    key: formKey,
+                    onChanged: () {
+                      if (formKey.currentState!.validate()) {
+                        _isActive = true;
+                        setState(() {});
+                      } else {
+                        _isActive = false;
+                        setState(() {});
                       }
-                      if (!RegExp(
-                              r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
-                          .hasMatch(value)) {
-                        return '숫자 v 특수문자 v 6-18자 이내 v';
-                      }
-                      return null;
                     },
-                    obscureText: true,
+                    child: Column(
+                      children: [
+                        SLInput(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          hintText: '이메일',
+                          controller: emailController,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return '이메일을 입력해주세요.';
+                            }
+                            if (!RegExp(
+                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                .hasMatch(value)) {
+                              return '잘못된 이메일 형식입니다.';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        SLInput(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          hintText: '비밀번호',
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return '숫자 v 특수문자 v 6-18자 이내 v';
+                            }
+                            if (!RegExp(
+                                    r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
+                                .hasMatch(value)) {
+                              return '숫자 v 특수문자 v 6-18자 이내 v';
+                            }
+                            return null;
+                          },
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 36),
+                  SLButton(
+                    text: buttonText,
+                    isActive: _isActive,
+                    onTap: _isActive
+                        ? () async {
+                            var id = await authNotifier.login(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                            if (authStatus == AuthStatus.authenticated) {
+                              await authNotifier.setUserInfoById(id);
+                              context.push('/home');
+                            }
+                          }
+                        : null,
+                  ),
+                  const SizedBox(height: 10),
+                  const NavigateToJoinPageButton(),
+                  const SizedBox(height: 64),
+                  const DividerWithText(text: 'SNS로 1초만에 로그인'),
+                  const SizedBox(height: 20),
+                  const Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 18,
+                    children: [
+                      KakaoLoginButton(),
+                      KakaoLoginButton(),
+                      KakaoLoginButton(),
+                    ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 36),
-            SLButton(
-              text: buttonText,
-              isActive: _isActive,
-              onTap: _isActive
-                  ? () {
-                      authNotifier.login(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      );
-                    }
-                  : null,
-            ),
-            const SizedBox(height: 10),
-            const NavigateToJoinPageButton(),
-            const SizedBox(height: 64),
-            const DividerWithText(text: 'SNS로 1초만에 로그인'),
-            const SizedBox(height: 20),
-            const Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 18,
-              children: [
-                KakaoLoginButton(),
-                KakaoLoginButton(),
-                KakaoLoginButton(),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );

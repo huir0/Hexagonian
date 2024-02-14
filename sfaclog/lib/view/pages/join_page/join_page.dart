@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/util/join_sections.dart';
 import 'package:sfaclog/util/onboarding_sections.dart';
@@ -14,31 +16,43 @@ class JoinPage extends ConsumerWidget {
 
     int curIndex = onboardingState.currentPage;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-        ),
-        child: ListView(
-          children: [
-            const SizedBox(height: 52),
-            LinearProgressIndicator(
-              minHeight: 2,
-              value: (curIndex + 1) / onboardingState.totalPage,
-              color: SLColor.primary,
-              backgroundColor: SLColor.neutral.shade80,
+    return PopScope(
+      onPopInvoked: (didPop) async => false,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
+              ),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 52),
+                  LinearProgressIndicator(
+                    minHeight: 2,
+                    value: (curIndex + 1) / onboardingState.totalPage,
+                    color: SLColor.primary,
+                    backgroundColor: SLColor.neutral.shade80,
+                  ),
+                  const SizedBox(height: 34),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height - 130,
+                    child: IndexedStack(
+                      key: ValueKey<int>(onboardingState.currentPage),
+                      index: onboardingState.currentPage,
+                      children: [
+                        ...joinSections,
+                        ...onboardingSections,
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 34),
-            IndexedStack(
-              key: ValueKey<int>(onboardingState.currentPage),
-              index: onboardingState.currentPage,
-              children: [
-                ...joinSections,
-                ...onboardingSections,
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
