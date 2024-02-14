@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_appbar_widget.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
-import 'package:intl/intl.dart';
 
 import '../../../common.dart';
+import '../../../data/datasource/remote_datasource.dart';
 
 class MypageAddEducation extends ConsumerStatefulWidget {
-  const MypageAddEducation({super.key});
+  const MypageAddEducation({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -16,13 +22,33 @@ class MypageAddEducation extends ConsumerStatefulWidget {
 }
 
 class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
-  final company = TextEditingController();
-  final title = TextEditingController();
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  final institute = TextEditingController();
+  final major = TextEditingController();
   final content = TextEditingController();
   final link = TextEditingController();
-  final bool working = false;
+  bool studying = false;
   DateTime? startDate;
   DateTime? endDate;
+  @override
+  void initState() {
+    super.initState();
+    major.addListener(updateTextLength);
+    content.addListener(updateTextLength);
+  }
+
+  @override
+  void dispose() {
+    major.removeListener(updateTextLength);
+    major.dispose();
+    content.removeListener(updateTextLength);
+    content.dispose();
+    super.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +60,20 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: () {
-                // TODO: 저장
-                Navigator.pop(context);
+              onTap: () async {
+                if (institute.text.isNotEmpty && major.text.isNotEmpty) {
+                  final body = <String, dynamic>{
+                    "institute": institute.text,
+                    "major": major.text,
+                    "startDate": startDate!.toIso8601String(),
+                    "endDate": endDate!.toIso8601String(),
+                    "studying": endDate == null ? true : studying,
+                    "user": widget.userId,
+                    "content": content.text
+                  };
+                  await _remoteDataSource.createTableData('education', body);
+                }
+                context.push('/home/');
               },
               child: Text(
                 '확인',
@@ -78,6 +115,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                 height: 16,
               ),
               SFACTextField(
+                controller: institute,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -105,7 +143,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                     ),
                     const Spacer(),
                     Text(
-                      '${title.text.length}/50',
+                      '${major.text.length}/50',
                       style: SLTextStyle.Text_S_Medium?.copyWith(
                         color: SLColor.neutral[50],
                       ),
@@ -117,6 +155,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                 height: 16,
               ),
               SFACTextField(
+                controller: major,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),
@@ -213,7 +252,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () async {
-                        if (!working) {
+                        if (!studying) {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDatePickerMode: DatePickerMode.day,
@@ -279,6 +318,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
                 height: 16,
               ),
               SFACTextField(
+                controller: content,
                 height: 104,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[70]!),

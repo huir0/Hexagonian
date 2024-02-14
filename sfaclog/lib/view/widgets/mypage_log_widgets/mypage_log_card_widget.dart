@@ -1,14 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_card_provider.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class MypageLogBigCard extends StatelessWidget {
+import '../../../viewmodel/log_viewmodel/log_notifier.dart';
+
+class MypageLogBigCard extends ConsumerStatefulWidget {
   const MypageLogBigCard({
     super.key,
     required this.log,
+    this.bookmarked = false,
   });
-  final Map<String, dynamic> log;
+  final SFACLogModel log;
+  final bool bookmarked;
+
+  @override
+  ConsumerState<MypageLogBigCard> createState() => _MypageLogBigCardState();
+}
+
+class _MypageLogBigCardState extends ConsumerState<MypageLogBigCard> {
+  String avatarUrl = '';
+  String imgUrl = '';
+  int replyCnt = 0;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _init());
+  }
+
+  Future<void> _init() async {
+    var newAvatarUrl = await ref
+        .read(logProvider.notifier)
+        .getAvatarUrl(widget.log.expand['user']['id']);
+    var newImgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.log.id);
+    var newReplyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.log.id);
+    setState(() {
+      avatarUrl = newAvatarUrl;
+      imgUrl = newImgUrl;
+      replyCnt = newReplyCnt;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,19 +58,20 @@ class MypageLogBigCard extends StatelessWidget {
       child: Column(
         children: [
           Container(
+            clipBehavior: Clip.hardEdge,
             width: 313,
             height: 157,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                  log['image'],
-                ),
-              ),
             ),
             child: Stack(
               children: [
+                Container(
+                  child: Image.network(
+                    imgUrl,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
                 Positioned(
                   top: 10,
                   left: 12,
@@ -42,14 +82,17 @@ class MypageLogBigCard extends StatelessWidget {
                     ),
                     height: 18,
                     width: 18,
-                    child: Image.asset(log['profile_picture']),
+                    child: SvgPicture.network(
+                      avatarUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(
                   left: 34.82,
                   top: 10,
                   child: Text(
-                    log['author'],
+                    widget.log.expand['user']['nickname'],
                     style: SLTextStyle.Text_M_Medium?.copyWith(
                         color: Colors.white),
                   ),
@@ -57,7 +100,11 @@ class MypageLogBigCard extends StatelessWidget {
                 Positioned(
                   right: 15,
                   top: 11,
-                  child: SvgPicture.asset('assets/icons/bookmark_outline.svg'),
+                  child: GestureDetector(
+                      onTap: () {},
+                      child: widget.bookmarked
+                          ? SvgPicture.asset('assets/icons/bookmark_filled.svg')
+                          : SvgPicture.asset('assets/icons/bookmark.svg')),
                 ),
               ],
             ),
@@ -69,7 +116,7 @@ class MypageLogBigCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: 14,
             child: Text(
-              log['category'],
+              widget.log.category,
               style: SLTextStyle.Text_XS_Regular?.copyWith(
                   color: SLColor.neutral[50]),
             ),
@@ -81,7 +128,7 @@ class MypageLogBigCard extends StatelessWidget {
             alignment: Alignment.centerLeft,
             height: 19,
             child: Text(
-              log['title'],
+              widget.log.title,
               style: SLTextStyle.Text_M_Bold?.copyWith(
                 color: Colors.white,
               ),
@@ -100,12 +147,12 @@ class MypageLogBigCard extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  log['answer'].length.toString(),
+                  replyCnt.toString(),
                   style: SLTextStyle.Text_S_Bold?.copyWith(
                     color: SLColor.neutral[50],
                   ),
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 10,
                 ),
                 Text(
@@ -122,7 +169,7 @@ class MypageLogBigCard extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  log['like'].length.toString(),
+                  widget.log.like.toString(),
                   style: SLTextStyle.Text_S_Bold?.copyWith(
                     color: SLColor.neutral[50],
                   ),
@@ -138,14 +185,14 @@ class MypageLogBigCard extends StatelessWidget {
             width: 313,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: log['tags'].length,
+              itemCount: widget.log.tag.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const SizedBox(width: 5);
               },
               itemBuilder: (BuildContext context, int index) {
                 return SFACTag(
                     text: Text(
-                  '# ${log['tags'][index]}',
+                  '${widget.log.tag[index]}',
                   style: SLTextStyle.Text_XS_Regular?.copyWith(
                     color: SLColor.neutral[50],
                   ),
@@ -159,12 +206,44 @@ class MypageLogBigCard extends StatelessWidget {
   }
 }
 
-class MypageLogSmallCard extends StatelessWidget {
+class MypageLogSmallCard extends ConsumerStatefulWidget {
   const MypageLogSmallCard({
     super.key,
     required this.log,
+    this.bookmarked = false,
   });
-  final Map<String, dynamic> log;
+  final SFACLogModel log;
+  final bool bookmarked;
+
+  @override
+  ConsumerState<MypageLogSmallCard> createState() => _MypageLogSmallCardState();
+}
+
+class _MypageLogSmallCardState extends ConsumerState<MypageLogSmallCard> {
+  String avatarUrl = '';
+  String imgUrl = '';
+  int replyCnt = 0;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _init());
+  }
+
+  Future<void> _init() async {
+    var newAvatarUrl = await ref
+        .read(logProvider.notifier)
+        .getAvatarUrl(widget.log.expand['user']['id']);
+    var newImgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.log.id);
+    var newReplyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.log.id);
+    setState(() {
+      avatarUrl = newAvatarUrl;
+      imgUrl = newImgUrl;
+      replyCnt = newReplyCnt;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -183,12 +262,15 @@ class MypageLogSmallCard extends StatelessWidget {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage(
-                    log['image'],
+                    widget.log.thumbnail,
                   ),
                 ),
               ),
               child: Stack(
                 children: [
+                  Container(
+                    child: Image.network(imgUrl),
+                  ),
                   Positioned(
                     top: 6,
                     left: 8,
@@ -199,7 +281,7 @@ class MypageLogSmallCard extends StatelessWidget {
                       ),
                       height: 15,
                       width: 15,
-                      child: Image.asset(log['profile_picture']),
+                      child: SvgPicture.network(avatarUrl),
                     ),
                   ),
                   Positioned(
@@ -208,7 +290,7 @@ class MypageLogSmallCard extends StatelessWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        log['author'],
+                        widget.log.expand['user']['nickname'],
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white,
                           letterSpacing: -0.14,
@@ -219,8 +301,9 @@ class MypageLogSmallCard extends StatelessWidget {
                   Positioned(
                     right: 10,
                     top: 7,
-                    child:
-                        SvgPicture.asset('assets/icons/bookmark_outline.svg'),
+                    child: widget.bookmarked
+                        ? SvgPicture.asset('assets/icons/bookmark_filled.svg')
+                        : SvgPicture.asset('assets/icons/bookmark.svg'),
                   ),
                 ],
               ),
@@ -238,7 +321,7 @@ class MypageLogSmallCard extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     height: 14,
                     child: Text(
-                      log['category'],
+                      widget.log.category,
                       style: SLTextStyle.Text_XS_Regular?.copyWith(
                           color: SLColor.neutral[50]),
                     ),
@@ -248,7 +331,7 @@ class MypageLogSmallCard extends StatelessWidget {
                     height: 19,
                     padding: EdgeInsets.zero,
                     child: Text(
-                      log['title'],
+                      widget.log.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       // FIXME: semibold
@@ -278,34 +361,34 @@ class MypageLogSmallCard extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          log['answer'].length.toString(),
+                          replyCnt.toString(),
                           style: SLTextStyle.Text_S_Bold?.copyWith(
-                            color: SLColor.neutral[10],
+                            color: SLColor.neutral[50],
                           ),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 10,
                         ),
                         Text(
                           '|',
                           style: SLTextStyle.Text_S_Bold?.copyWith(
-                            color: SLColor.neutral[10],
+                            color: SLColor.neutral[50],
                           ),
                         ),
                         const SizedBox(
                           width: 10,
                         ),
                         SvgPicture.asset(
-                          'assets/icons/heart_white.svg',
+                          'assets/icons/heart.svg',
                           height: 14,
                         ),
                         const SizedBox(
                           width: 4,
                         ),
                         Text(
-                          log['like'].length.toString(),
+                          widget.log.like.toString(),
                           style: SLTextStyle.Text_S_Bold?.copyWith(
-                            color: SLColor.neutral[10],
+                            color: SLColor.neutral[50],
                           ),
                         ),
                       ],
@@ -319,14 +402,14 @@ class MypageLogSmallCard extends StatelessWidget {
               height: 22,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: log['tags'].length,
+                itemCount: widget.log.tag.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(width: 5);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   final tag = SFACTag(
                     text: Text(
-                      '# ${log['tags'][index]}',
+                      '${widget.log.tag[index]}',
                       style: SLTextStyle.Text_XS_Regular?.copyWith(
                         color: SLColor.neutral[50],
                       ),

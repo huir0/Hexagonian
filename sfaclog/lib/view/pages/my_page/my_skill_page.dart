@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
@@ -22,7 +23,7 @@ class _MypageAddSkillState extends ConsumerState<MypageAddSkill> {
           scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+             context.pop();
             },
             icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
           ),
@@ -37,6 +38,7 @@ class _MypageAddSkillState extends ConsumerState<MypageAddSkill> {
               child: GestureDetector(
                 onTap: () {
                   // TODO: 저장
+                  
                   Navigator.pop(context);
                 },
                 child: Text(

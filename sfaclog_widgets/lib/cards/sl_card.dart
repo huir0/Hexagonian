@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -10,7 +12,7 @@ class PostCard extends StatefulWidget {
     super.key,
     required this.posts,
   });
-  final List<Map<String, String>> posts;
+  final List<dynamic> posts;
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -18,6 +20,17 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   late List<bool> isExpandedList;
+
+  String extractTextFromPostBody(String bodyText) {
+    var data = jsonDecode(bodyText);
+    StringBuffer sb = StringBuffer();
+    for (var item in data) {
+      if (item['insert'].runtimeType == String) {
+        sb.write(item['insert']);
+      }
+    }
+    return sb.toString();
+  }
 
   @override
   void initState() {
@@ -29,11 +42,22 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     return Container(
       width: 312,
-      height: 300,
+      height: widget.posts.length > 1 ? 300 : 200,
       child: ListView.builder(
         itemCount: widget.posts.length,
         itemBuilder: (context, index) {
           final post = widget.posts[index];
+          String text;
+          bool isShortText;
+          if (post.collectionName == 'log') {
+            String extractedText = extractTextFromPostBody(post.body);
+            isShortText = extractedText.length <= 100;
+            text =
+                isShortText ? extractedText : extractedText.substring(0, 100);
+          } else {
+            isShortText = post.content.length <= 100;
+            text = isShortText ? post.content : post.content.substring(0, 100);
+          }
           return Container(
             child: Column(
               children: [
@@ -52,7 +76,7 @@ class _PostCardState extends State<PostCard> {
                         width: 25,
                         height: 24,
                         child: Text(
-                          post['collection']!,
+                          post.collectionName == 'log' ? 'L' : 'Q',
                           style: SLTextStyle.Text_S_Medium?.copyWith(
                             color: Colors.white,
                           ),
@@ -64,7 +88,7 @@ class _PostCardState extends State<PostCard> {
                       Container(
                         width: 232,
                         child: Text(
-                          post['first_title']!,
+                          post.title,
                           maxLines: 2,
                           style: SLTextStyle.Text_S_Bold?.copyWith(
                             color: Colors.white,
@@ -75,21 +99,25 @@ class _PostCardState extends State<PostCard> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 23, right: 24),
-                  width: 265,
-                  height: 14,
-                  child: Text(
-                    post['second_title']!,
-                    style: SLTextStyle.Text_XS_Medium?.copyWith(
-                      color: Colors.white,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
+                post.collectionName == 'qna_answer'
+                    ? SizedBox(
+                        height: 12,
+                      )
+                    : SizedBox(),
+                post.collectionName == 'qna_answer'
+                    ? Container(
+                        margin: EdgeInsets.only(left: 23, right: 24),
+                        width: 265,
+                        height: 14,
+                        child: Text(
+                          post.qnaTitle,
+                          style: SLTextStyle.Text_XS_Medium?.copyWith(
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
                 SizedBox(
                   height: 16,
                 ),
@@ -105,7 +133,9 @@ class _PostCardState extends State<PostCard> {
                   width: 265,
                   child: isExpandedList[index]
                       ? Text(
-                          post['content']!,
+                          post.collectionName == 'log'
+                              ? extractTextFromPostBody(post.body)
+                              : post.content,
                           style: SLTextStyle.Text_XS_Medium?.copyWith(
                               color: Colors.white, fontFamily: 'Pretendard'),
                         )
@@ -115,22 +145,21 @@ class _PostCardState extends State<PostCard> {
                                 color: Colors.white, fontFamily: 'Pretendard'),
                             children: [
                               TextSpan(
-                                text: post['content']!.length > 100
-                                    ? post['content']!.substring(0, 100)
-                                    : post['content']!,
+                                text: text,
                               ),
-                              TextSpan(
-                                text: '...더보기',
-                                style: SLTextStyle.Text_XS_Medium?.copyWith(
-                                    color: SLColor.neutral[40],
-                                    fontFamily: 'Pretendard'),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    setState(() {
-                                      isExpandedList[index] = true;
-                                    });
-                                  },
-                              ),
+                              if (!isShortText)
+                                TextSpan(
+                                  text: '...더보기',
+                                  style: SLTextStyle.Text_XS_Medium?.copyWith(
+                                      color: SLColor.neutral[40],
+                                      fontFamily: 'Pretendard'),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      setState(() {
+                                        isExpandedList[index] = true;
+                                      });
+                                    },
+                                ),
                             ],
                           ),
                         ),
@@ -189,7 +218,7 @@ class _ReviewCardState extends State<ReviewCard> {
                     rating: averageRating,
                     itemCount: 5,
                     itemPadding: EdgeInsets.only(right: 9),
-                    itemBuilder: (context,_) => SvgPicture.asset(
+                    itemBuilder: (context, _) => SvgPicture.asset(
                       'assets/icons/star.svg',
                       color: SLColor.primary[100],
                     ),
@@ -272,7 +301,7 @@ class _ReviewCardState extends State<ReviewCard> {
                                 Container(
                                   height: 19,
                                   child: Text(
-                                    review['content']!,
+                                    review['content'],
                                     // FIXME: 폰트 세미볼드로 바꿔야함
                                     style: SLTextStyle.Text_M_Medium?.copyWith(
                                         color: Colors.white),

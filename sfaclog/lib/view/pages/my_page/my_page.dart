@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_page.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../viewmodel/auth/auth_state.dart';
+import '../../../viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
+import '../../router.dart';
 import 'my_bookmark_page.dart';
 import 'my_log_page.dart';
-
-// final selectedTabProvider = StateProvider<int>((ref) => 0);
 
 class MyPage extends ConsumerWidget {
   const MyPage({super.key});
@@ -28,7 +32,6 @@ class MyPage extends ConsumerWidget {
               Text('북마크'),
             ],
             onTap: (index) {
-              // ref.read(selectedTabProvider.notifier).state = index;
               ref.read(myPageProvider.notifier).tabChanged(index);
             },
           ),
@@ -41,21 +44,23 @@ class MyPage extends ConsumerWidget {
   }
 }
 
-class MyPageBody extends ConsumerWidget {
+class MyPageBody extends ConsumerStatefulWidget {
   const MyPageBody({super.key});
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyPageBodyState();
+}
 
+class _MyPageBodyState extends ConsumerState<MyPageBody> {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final selectedTab = ref.watch(selectedTabProvider);
+  Widget build(BuildContext context) {
     final selectedTab = ref.watch(myPageProvider).tab;
-
+    final userInfo = ref.watch(authProvider).userInfo;
     switch (selectedTab) {
       case 0:
-        return const MyProfilePage();
+        return MyProfilePage(userInfo: userInfo, userId: userInfo['id']);
       case 1:
-        return const MyLogPage();
+        return MyLogPage(userId: userInfo['id']);
       case 2:
-        return const MyBookmarkPage();
+        return MyBookmarkPage(userInfo: userInfo);
       default:
         return Container();
     }

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../common.dart';
+import '../../../../model/resume_education_model.dart';
 
 class ResumeEducationCard extends StatelessWidget {
   const ResumeEducationCard({
     super.key,
-    required this.resume,
+    required this.education,
   });
-  final Map<String, dynamic> resume;
+  final EducationModel education;
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +27,20 @@ class ResumeEducationCard extends StatelessWidget {
               SvgPicture.asset('assets/icons/mortar_board.svg'),
               const SizedBox(width: 8,),
               Text(
-                resume['institute'],
+                education.institute,
                 style: SLTextStyle.Text_XS_Medium?.copyWith(
                     color: Colors.white),
               ),
               const Text(' - '),
               Text(
-                resume['major'],
+                education.major,
                 style: SLTextStyle.Text_XS_Medium?.copyWith(
                     color: Colors.white),
               ),
               const Spacer(),
               GestureDetector(
                   onTap: () {
-                    // TODO: 편집 페이지로 연결
+                    context.push('/my/profile/education_edit/${education.id}');
                   },
                   child: SvgPicture.asset('assets/icons/pencil_grey.svg')),
             ],
@@ -55,12 +57,12 @@ class ResumeEducationCard extends StatelessWidget {
                     children: [
                       TextSpan(
                           text:
-                              DateFormat('yyyy.MM').format(resume['period_start'])),
+                              DateFormat('yyyy.MM').format(DateTime.parse(education.startDate))),
                       const TextSpan(text: ' ~ '),
                       TextSpan(
-                          text: resume['period_end'] == null
+                          text: education.endDate == null
                               ? '현재'
-                              : DateFormat('yyyy.MM').format(resume['period_end'])),
+                              : DateFormat('yyyy.MM').format(DateTime.parse(education.endDate))),
                     ]),
                 textAlign: TextAlign.start,
               ),

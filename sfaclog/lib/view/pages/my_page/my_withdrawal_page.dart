@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
+import '../../../data/datasource/pocketbase_auth.dart';
+import '../../../data/datasource/remote_datasource.dart';
+import '../../../model/users_model.dart';
+import '../../../viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 import '../../router.dart';
 
 const List<String> complaints = [
@@ -14,15 +21,52 @@ const List<String> complaints = [
   '기타 (직접 입력할래요)',
 ];
 
-class MypageWithdrawal extends StatefulWidget {
-  const MypageWithdrawal({super.key});
+class MypageWithdrawal extends ConsumerStatefulWidget {
+  const MypageWithdrawal({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
 
   @override
-  State<MypageWithdrawal> createState() => _MypageWithdrawalState();
+  ConsumerState<MypageWithdrawal> createState() => _MypageWithdrawalState();
 }
 
-class _MypageWithdrawalState extends State<MypageWithdrawal> {
+class _MypageWithdrawalState extends ConsumerState<MypageWithdrawal> {
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
   bool btnEnabled = false;
+  final password = TextEditingController();
+  UsersModel userInfo = UsersModel(id: '', email: '', name: '');
+
+  Future<void> _init() async {
+    var newUsersInfo = await ref
+        .read(MyPageProfileProvider.notifier)
+        .getUsersInfo(widget.userId);
+
+    setState(() {
+      userInfo = newUsersInfo;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+    password.addListener(updateButtonState);
+  }
+
+  @override
+  void dispose() {
+    password.removeListener(updateButtonState);
+    super.dispose();
+  }
+
+  void updateButtonState() {
+    setState(() {
+      btnEnabled = password.text.isNotEmpty;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +74,6 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
         scrolledUnderElevation: 0,
         leading: IconButton(
           onPressed: () {
-            // final currentTab = ref.read(myPageProvider).tab;
-            // ref.read(myPageProvider.notifier).tabChanged(currentTab);
-            // router.go('/my');
             Navigator.pop(context);
           },
           icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
@@ -131,13 +172,15 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
               const SizedBox(
                 height: 16,
               ),
-              const SizedBox(
-                width: 312,
+              SFACTextField(
+                border: Border.all(color: SLColor.neutral[70]!),
                 height: 46,
-                // TODO: 비밀번호 확인 로직 추가
-                child: SLInput(
-                  hintText: '현재 비밀번호를 입력해주세요',
-                ),
+                width: 312,
+                controller: password,
+                onChanged: (p0) {
+                  updateButtonState();
+                },
+                hintText: '현재 비밀번호를 입력해주세요',
               ),
               const Spacer(),
               Container(
@@ -174,11 +217,9 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                                   ),
                                 ),
                                 onCanceled: () {
-                                  Navigator.pop(context);
+                                  context.pop();
                                 },
                                 onConfirmed: () {
-                                  Navigator.pop(context);
-
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -209,8 +250,12 @@ class _MypageWithdrawalState extends State<MypageWithdrawal> {
                                                 ],
                                               ),
                                             ),
-                                            onConfirmed: () {
-                                              router.go('/home');
+                                            onConfirmed: () async {
+                                              PocketbaseAuth().logout();
+                                              await _remoteDataSource
+                                                  .deleteRecord(
+                                                      'users', userInfo.id);
+                                              router.go('/login');
                                             });
                                       });
                                 });

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:http/http.dart' as http;
@@ -251,6 +252,59 @@ class RemoteDataSource {
     } catch (e) {
       print(e);
       return '';
+    }
+  }
+
+  Future<RecordModel> getOneRecord(String tableName, String id) async {
+    try {
+      final record = await pb.collection(tableName).getOne(
+            id,
+          );
+      return record;
+    } catch (e) {
+      print(e);
+      return RecordModel();
+    }
+  }
+
+  Future<RecordModel> getFilteredRecord(
+      String tableName, String filter, String? expand) async {
+    try {
+      final record = await pb.collection(tableName).getFirstListItem(
+            filter,
+            expand: expand ?? '',
+          );
+      return record;
+    } catch (e) {
+      print(e);
+      return RecordModel();
+    }
+  }
+
+  Future<void> deleteRecord(String tableName, String id) async {
+    try {
+      await pb.collection(tableName).delete(id);
+    } catch (e) {
+      print('deleteRecord failed $e');
+    }
+  }
+
+  Future<List<dynamic>> getExpandedTableData(
+      {required String tableName, String? expand, String? filter = ''}) async {
+    try {
+      var data = await pb.collection(tableName).getList(
+            page: 1,
+            perPage: 50,
+            expand: expand,
+            filter: filter,
+            sort: '-created',
+          );
+
+      return data.items;
+    } catch (e) {
+      // 예외 발생 시 처리
+      print("Error fetching data: $e");
+      return [];
     }
   }
 }

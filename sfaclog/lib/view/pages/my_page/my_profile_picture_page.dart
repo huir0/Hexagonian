@@ -88,7 +88,7 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
                   },
                   child: SvgPicture.asset('assets/icons/add_picture.svg'),
                 ),
-                for (var i = 1; i <= 16; i++)
+                for (var i = 1; i <= 19; i++)
                   GestureDetector(
                     onTap: () {
                       print('$i');
@@ -97,7 +97,9 @@ class _MypageProfilePictureState extends ConsumerState<MypageProfilePicture> {
                       width: 54,
                       height: 54,
                       clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      decoration: BoxDecoration(shape: BoxShape.circle),
+                      // child: i < 10 ? SvgPicture.asset('assets/avatars/avatar_0${i}.svg') :
+                      // SvgPicture.asset('assets/avatars/avatar_${i}.svg'),
                       child: SvgPicture.asset('assets/icons/profile_picture$i.svg'),
                     ),
                   ),

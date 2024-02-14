@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_appbar_widget.dart';
+import 'package:sfaclog/viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
+import '../../../viewmodel/auth/auth_notifier.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
 import 'my_follower_page.dart';
 import 'my_following_page.dart';
@@ -10,19 +12,37 @@ import 'my_following_page.dart';
 class MyFollowPage extends ConsumerStatefulWidget {
   const MyFollowPage({
     super.key,
-    required this.userName,
+    required this.userId,
   });
-  final String userName;
+  final String userId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyFollowPageState();
 }
 
 class _MyFollowPageState extends ConsumerState<MyFollowPage> {
+  
+  String nickname = '';
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _init());
+  }
+
+  Future<void> _init() async {
+  var userInfo = await ref
+      .read(MyPageProfileProvider.notifier)
+      .getUserInfo(widget.userId);
+  var newNickname = userInfo.nickname;
+  setState(() {
+    nickname = newNickname;
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppbar(onPressed: (e) {}, title: widget.userName),
+      appBar: MyAppbar(onPressed: (e) {}, title: nickname),
       body: Column(
         children: [
           Container(
@@ -40,8 +60,8 @@ class _MyFollowPageState extends ConsumerState<MyFollowPage> {
               },
             ),
           ),
-          const Expanded(
-            child: MyFollowPageBody(),
+          Expanded(
+            child: MyFollowPageBody(userId: widget.userId),
           ),
         ],
       ),
@@ -50,17 +70,20 @@ class _MyFollowPageState extends ConsumerState<MyFollowPage> {
 }
 
 class MyFollowPageBody extends ConsumerWidget {
-  const MyFollowPageBody({super.key});
-
+  const MyFollowPageBody({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTab = ref.watch(myFollowPageProvider).tab;
 
     switch (selectedTab) {
       case 0:
-        return const MyFollowingPage();
+        return MyFollowingPage(userId: userId);
       case 1:
-        return const MyFollowerPage();
+        return MyFollowerPage(userId: userId);
       default:
         return Container();
     }

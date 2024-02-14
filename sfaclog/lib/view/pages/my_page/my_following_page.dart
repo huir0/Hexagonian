@@ -4,14 +4,37 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sfaclog/view/widgets/my_follow_widget/my_follow_card_widget.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class MyFollowingPage extends ConsumerStatefulWidget {
-  const MyFollowingPage({super.key});
+import '../../../viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 
+class MyFollowingPage extends ConsumerStatefulWidget {
+  const MyFollowingPage({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MyFollowingPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _MyFollowingPageState();
 }
 
 class _MyFollowingPageState extends ConsumerState<MyFollowingPage> {
+  List<dynamic> followings = [];
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _init());
+  }
+
+  Future<void> _init() async {
+    var newfollowings = await ref
+        .read(MyPageProfileProvider.notifier)
+        .getFollowings(widget.userId);
+
+    setState(() {
+      followings = newfollowings;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,12 +53,10 @@ class _MyFollowingPageState extends ConsumerState<MyFollowingPage> {
           ),
           SingleChildScrollView(
             child: Column(children: [
-              MyFollowCard(
-                following: true,
-                username: '황금수정',
-                profilePicture:
-                    SvgPicture.asset('assets/icons/profile_picture3.svg'),
-              ),
+              for (var i = 0; i < followings.length; i++)
+                MyFollowCard(
+                  user: followings[i],
+                ),
             ]),
           ),
         ],

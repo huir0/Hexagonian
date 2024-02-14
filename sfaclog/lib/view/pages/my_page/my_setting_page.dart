@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 
 import '../../../common.dart';
 import '../../router.dart';
@@ -10,16 +13,14 @@ class MypageSetting extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    var userInfo = ref.watch(authProvider).userInfo;
     return Material(
       child: Scaffold(
         appBar: AppBar(
           scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
-              // final currentTab = ref.read(myPageProvider).tab;
-              // ref.read(myPageProvider.notifier).tabChanged(currentTab);
               router.go('/home');
-              // context.pop();
             },
             icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
           ),
@@ -40,7 +41,7 @@ class MypageSetting extends ConsumerWidget {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                router.go('/my/setting/account');
+                router.go('/my/setting/account/${userInfo['id']}');
               },
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -67,7 +68,7 @@ class MypageSetting extends ConsumerWidget {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                router.go('/my/setting/proposestate');
+                router.go('/my/setting/proposestate/${userInfo['id']}');
               },
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -123,7 +124,10 @@ class MypageSetting extends ConsumerWidget {
             ),
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {},
+              onTap: () {
+                PocketbaseAuth().logout();
+                router.go('/login');
+              },
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
@@ -154,7 +158,7 @@ class MypageSetting extends ConsumerWidget {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                router.go('/my/setting/withdrawal');
+                router.go('/my/setting/withdrawal/${userInfo['id']}');
               },
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
