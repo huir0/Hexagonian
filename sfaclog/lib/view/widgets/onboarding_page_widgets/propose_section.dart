@@ -72,6 +72,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
         const SizedBox(height: 40),
         ...renderProposeButtons(),
         const SizedBox(height: 40),
+        const Spacer(),
         SLButton(
           text: '스팩로그 시작하기',
           isActive: proposeState != null,

@@ -16,36 +16,42 @@ class JoinPage extends ConsumerWidget {
 
     int curIndex = onboardingState.currentPage;
 
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 52),
-              LinearProgressIndicator(
-                minHeight: 2,
-                value: (curIndex + 1) / onboardingState.totalPage,
-                color: SLColor.primary,
-                backgroundColor: SLColor.neutral.shade80,
+    return PopScope(
+      onPopInvoked: (didPop) async => false,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24,
               ),
-              const SizedBox(height: 34),
-              SizedBox(
-                height: 604,
-                child: IndexedStack(
-                  key: ValueKey<int>(onboardingState.currentPage),
-                  index: onboardingState.currentPage,
-                  children: [
-                    ...joinSections,
-                    ...onboardingSections,
-                  ],
-                ),
+              child: ListView(
+                children: [
+                  const SizedBox(height: 52),
+                  LinearProgressIndicator(
+                    minHeight: 2,
+                    value: (curIndex + 1) / onboardingState.totalPage,
+                    color: SLColor.primary,
+                    backgroundColor: SLColor.neutral.shade80,
+                  ),
+                  const SizedBox(height: 34),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height - 130,
+                    child: IndexedStack(
+                      key: ValueKey<int>(onboardingState.currentPage),
+                      index: onboardingState.currentPage,
+                      children: [
+                        ...joinSections,
+                        ...onboardingSections,
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

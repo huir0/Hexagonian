@@ -77,6 +77,7 @@ class SkillSectionState extends ConsumerState<SkillSection> {
         ),
         const SizedBox(height: 12),
         const AllSkills(),
+        const Spacer(),
         SLButton(
           text: '다음',
           isActive: onboardingState.isButtonEnabled,
