@@ -13,6 +13,7 @@ class LogWriteNotifier extends StateNotifier<LogWriteState> {
   void addCategory(LogCategoryModel value) {
     final newList = List<LogCategoryModel>.from(state.categoryList)..add(value);
     state = state.copyWith(categoryList: newList);
+    setCategory(state.categoryList);
   }
 
   void setCategory(List<LogCategoryModel> categoryList) {

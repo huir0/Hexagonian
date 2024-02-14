@@ -61,7 +61,7 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
           TextButton(
               onPressed: () {
                 var newLogModel = state.logModel!
-                    .copyWith(category: categoryList[selectedIndex].name);
+                    .copyWith(category: state.categoryList[selectedIndex].name);
                 ref.read(logwriteProvider.notifier).setLog(newLogModel);
                 context.pop();
               },
@@ -70,7 +70,7 @@ class _LogCategoryPageState extends ConsumerState<LogCategoryPage> {
                 style: SLTextStyle(
                         style: SLStyle.Text_L_Regular, color: Colors.white)
                     .textStyle,
-              ))
+              )),
         ],
       ),
       body: Padding(
