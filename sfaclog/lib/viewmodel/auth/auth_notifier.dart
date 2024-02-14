@@ -58,8 +58,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         verified: tempRecord.record!.data['verified'],
       );
 
-      print(state);
-
       return result;
     } catch (e) {
       print('verified error: $e');

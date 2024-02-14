@@ -41,7 +41,7 @@ class PocketbaseAuth {
     required String propose_state,
   }) async {
     RecordModel result = await pb.collection('user').create(body: {
-      'user': user,
+      'profile': user,
       'agreement': agreement,
       'nickname': nickname,
       'picture': picture ?? '',

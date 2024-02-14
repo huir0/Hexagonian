@@ -25,7 +25,7 @@ _$SFACLogModelImpl _$$SFACLogModelImplFromJson(Map<String, dynamic> json) =>
       user: json['user'] as String,
       view: json['view'] as int,
       like: json['like'] as int,
-      replyCnt: json['replyCnt'] as int? ?? 0,
+      replyCnt: json['replyCnt'] as int?,
     );
 
 Map<String, dynamic> _$$SFACLogModelImplToJson(_$SFACLogModelImpl instance) =>
