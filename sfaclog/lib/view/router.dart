@@ -9,6 +9,7 @@ import 'package:sfaclog/view/pages/my_page/my_experience_edit_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_link_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_setting_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_password_page.dart';
 import 'package:sfaclog/view/pages/walkthrough_page/walkthrough_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
