@@ -104,7 +104,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                               return '숫자 v 특수문자 v 6-18자 이내 v';
                             }
                             if (!RegExp(
-                                    r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
+                                    r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+\S]{6,18}$')
                                 .hasMatch(value)) {
                               return '숫자 v 특수문자 v 6-18자 이내 v';
                             }
@@ -133,7 +133,24 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         : null,
                   ),
                   const SizedBox(height: 10),
-                  const NavigateToJoinPageButton(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const NavigateToJoinPageButton(),
+                      GestureDetector(
+                        onTap: () {
+                          context.push('/passwordReset');
+                        },
+                        child: Text(
+                          '비밀번호 찾기',
+                          style: SLTextStyle(
+                            style: SLStyle.Text_XS_Regular,
+                            color: SLColor.neutral.shade30,
+                          ).textStyle,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 64),
                   const DividerWithText(text: 'SNS로 1초만에 로그인'),
                   const SizedBox(height: 20),

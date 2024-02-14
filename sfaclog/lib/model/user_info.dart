@@ -16,7 +16,7 @@ class UserInfo with _$UserInfo {
     List<String>? agreementState,
     String? picture,
     List<SkillModel>? skill,
-    UserModel? user,
+    UserModel? profile,
     String? introduction,
   }) = _UserInfo;
 

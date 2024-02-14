@@ -46,7 +46,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
     required String email,
   }) {
     try {
-      UserModel newUserData = state.userInfo!.user!.copyWith(
+      UserModel newUserData = state.userInfo!.profile!.copyWith(
         name: name,
         username: name,
         email: email,
@@ -54,7 +54,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
       state = state.copyWith(
         onboardingStatus: OnboardingStatus.section1,
         userInfo: state.userInfo!.copyWith(
-          user: newUserData,
+          profile: newUserData,
         ),
       );
       print(state.userInfo);
@@ -143,7 +143,7 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
 
     state = state.copyWith(
       userInfo: state.userInfo!.copyWith(
-        user: user,
+        profile: user,
       ),
       onboardingStatus: OnboardingStatus.success,
     );
