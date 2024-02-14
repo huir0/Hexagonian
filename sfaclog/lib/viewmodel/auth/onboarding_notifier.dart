@@ -8,6 +8,10 @@ import 'package:sfaclog/viewmodel/auth/onboarding_state.dart';
 class OnboardingNotifier extends StateNotifier<OnboardingState> {
   OnboardingNotifier() : super(OnboardingState.init());
 
+  void setAgreementState(List<String> agreementState) {
+    state = state.copyWith(agreementState: agreementState);
+  }
+
   void setButtonEnabled(bool isEnabled) {
     state = state.copyWith(
       isButtonEnabled: isEnabled,

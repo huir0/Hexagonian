@@ -141,50 +141,54 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
             ),
           ),
         ),
-        SLButton(
-          text: '다음',
-          isActive:
-              onboardingState.isButtonEnabled && agreementState.contains('all'),
-          onTap: onboardingState.isButtonEnabled &&
-                  agreementState.contains('all')
-              ? () async {
-                  try {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                      onboardingNotifier.uploadTerms(
-                        terms: agreementState,
-                      );
+        Padding(
+          padding: const EdgeInsets.only(bottom: 27),
+          child: SLButton(
+            text: '다음',
+            isActive: onboardingState.isButtonEnabled &&
+                agreementState.contains('all'),
+            onTap: onboardingState.isButtonEnabled &&
+                    agreementState.contains('all')
+                ? () async {
+                    try {
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        onboardingNotifier.uploadTerms(
+                          terms: agreementState,
+                        );
 
-                      UserModel basicUserInfo = onboardingState.userInfo!.user!;
+                        UserModel basicUserInfo =
+                            onboardingState.userInfo!.user!;
 
-                      // var res = await authNotifier.signup(
-                      // name: basicUserInfo.name!,
-                      // email: basicUserInfo.email!,
-                      // password: password,
-                      // passwordConfirm: passwordConfirm,
-                      // nickname: basicUserInfo.name!,
-                      // );
+                        // var res = await authNotifier.signup(
+                        // name: basicUserInfo.name!,
+                        // email: basicUserInfo.email!,
+                        // password: password,
+                        // passwordConfirm: passwordConfirm,
+                        // nickname: basicUserInfo.name!,
+                        // );
 
-                      var res = await authNotifier.updateUser(
-                        userId: basicUserInfo.id!,
-                        name: basicUserInfo.name!,
-                        password: password,
-                        passwordConfirm: passwordConfirm,
-                        nickname: basicUserInfo.name!,
-                      );
+                        var res = await authNotifier.updateUser(
+                          userId: basicUserInfo.id!,
+                          name: basicUserInfo.name!,
+                          password: password,
+                          passwordConfirm: passwordConfirm,
+                          nickname: basicUserInfo.name!,
+                        );
 
-                      await userInfoNotifier.setBasicUserInfo(res);
-                      onboardingNotifier.setNewUser(res);
+                        await userInfoNotifier.setBasicUserInfo(res);
+                        onboardingNotifier.setNewUser(res);
+                      }
+
+                      Future.delayed(Duration.zero, () {
+                        context.push('/welcome');
+                      });
+                    } catch (e) {
+                      print('pw_confirm_section error: $e');
                     }
-
-                    Future.delayed(Duration.zero, () {
-                      context.push('/welcome');
-                    });
-                  } catch (e) {
-                    print('pw_confirm_section error: $e');
                   }
-                }
-              : null,
+                : null,
+          ),
         ),
       ],
     );

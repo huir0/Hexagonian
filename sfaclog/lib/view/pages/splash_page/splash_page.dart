@@ -19,6 +19,7 @@ class _SplashPageState extends ConsumerState<SplashPage>
     with TickerProviderStateMixin {
   late final AnimationController controller;
   List<SFACLogModel> popularLogList = [];
+  List<SFACLogModel> newLogList = [];
   @override
   void initState() {
     super.initState();
@@ -36,6 +37,11 @@ class _SplashPageState extends ConsumerState<SplashPage>
 
     popularLogList = await ref.read(logProvider.notifier).getPopularLog();
     ref.read(logProvider.notifier).setPopularLog(popularLogList);
+    newLogList = await ref
+        .read(logProvider.notifier)
+        .getLogDataOrderBy(ref.watch(logProvider).orderBy);
+
+    ref.read(logProvider.notifier).setLog(newLogList);
   }
 
   void navigateToNextPage() {

@@ -19,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LogReadPage extends ConsumerStatefulWidget {
   final String tagId;
+
   const LogReadPage({super.key, required this.tagId});
 
   @override
@@ -27,6 +28,8 @@ class LogReadPage extends ConsumerStatefulWidget {
 
 class _LogReadPageState extends ConsumerState<LogReadPage> {
   FleatherController? _controller;
+  dynamic userInfo;
+  String avatarUrl = '';
 
   SFACLogModel? sfacLogModel;
   @override
@@ -52,6 +55,10 @@ class _LogReadPageState extends ConsumerState<LogReadPage> {
         await ref
             .read(logReadProvider.notifier)
             .updateViewCount(sfacLogModel!.view, widget.tagId);
+        userInfo =
+            await ref.read(logProvider.notifier).getUserInfo(widget.tagId);
+        avatarUrl =
+            await ref.read(logProvider.notifier).getAvatarUrl(userInfo['id']);
       }
 
       // 로그 본문 처리
@@ -93,6 +100,8 @@ class _LogReadPageState extends ConsumerState<LogReadPage> {
                       children: [
                         LogReadHeaderWidget(
                           sfacLogModel: sfacLogModel!,
+                          avatarUrl: avatarUrl,
+                          userInfo: userInfo,
                         ),
                         Divider(
                           height: 1,

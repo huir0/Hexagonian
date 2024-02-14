@@ -60,12 +60,13 @@ class RemoteDataSource {
     }
   }
 
-  Future<RecordModel> getDataOne(String tableName, String recordId) async {
+  Future<RecordModel> getDataOne(
+      String tableName, String recordId, String expand) async {
     try {
       // 데이터를 가져옵니다.
       var data = await pb.collection(tableName).getOne(
             recordId,
-            expand: 'relField1,relField2.subRelField',
+            expand: expand,
           );
 
       return data;
@@ -171,6 +172,10 @@ class RemoteDataSource {
             logModel.public,
           ),
           http.MultipartFile.fromString(
+            'user',
+            logModel.user,
+          ),
+          http.MultipartFile.fromString(
             'tag',
             tagsJson,
           ),
@@ -191,6 +196,23 @@ class RemoteDataSource {
       var record = await pb.collection(tableName).getOne(recordId);
       final img = record.getListValue<String>('images')[index];
       imgUrl = pb.files.getUrl(record, img, thumb: '100x250').toString();
+      return imgUrl;
+    } catch (e) {
+      print(e);
+      return '';
+    }
+  }
+
+  Future<String> getAvatarURL(
+    String tableName,
+    String recordId,
+    String avatarField,
+  ) async {
+    try {
+      String imgUrl = '';
+      var record = await pb.collection(tableName).getOne(recordId);
+      final img = record.getListValue<String>(avatarField)[0];
+      imgUrl = pb.files.getUrl(record, img, thumb: '15x15').toString();
       return imgUrl;
     } catch (e) {
       print(e);

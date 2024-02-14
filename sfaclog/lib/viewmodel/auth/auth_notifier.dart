@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
+import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -63,6 +65,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       print('verified error: $e');
       rethrow;
     }
+  }
+
+  Future<void> setUserInfoById(String tagId) async {
+    PocketbaseAuth pb = PocketbaseAuth();
+    var data = await pb.findUser(tagId);
+    dynamic userInfo = jsonDecode(data.toString())['items'][0];
+    state = state.copyWith(userInfo: userInfo);
   }
 
   Future<String> login({
