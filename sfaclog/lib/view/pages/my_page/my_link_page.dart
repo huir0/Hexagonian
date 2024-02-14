@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sfaclog/model/link_model.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
+import '../../../data/datasource/remote_datasource.dart';
 import '../../widgets/mypage_widgets/my_appbar_widget.dart';
 
-class MypageAddLink extends StatelessWidget {
+class MypageAddLink extends StatefulWidget {
   const MypageAddLink({
     super.key,
     required this.userId,
@@ -12,8 +15,32 @@ class MypageAddLink extends StatelessWidget {
   final String userId;
 
   @override
+  State<MypageAddLink> createState() => _MypageAddLinkState();
+}
+
+class _MypageAddLinkState extends State<MypageAddLink> {
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  final link = TextEditingController();
+  final title = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    title.addListener(updateTextLength);
+  }
+
+  @override
+  void dispose() {
+    title.removeListener(updateTextLength);
+    title.dispose();
+    super.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final title = TextEditingController();
     return Scaffold(
       appBar: MyAppbar(
         onPressed: (e) {},
@@ -22,9 +49,16 @@ class MypageAddLink extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: () {
-                // TODO: 저장
-                Navigator.pop(context);
+              onTap: () async {
+                if (title.text.isNotEmpty && link.text.isNotEmpty) {
+                  final body = <String, dynamic>{
+                    "name": title.text,
+                    "user": widget.userId,
+                    'link': link.text
+                  };
+                  await _remoteDataSource.createTableData('link', body);
+                }
+                context.push('/home');
               },
               child: Text(
                 '확인',
@@ -66,6 +100,7 @@ class MypageAddLink extends StatelessWidget {
               height: 16,
             ),
             SFACTextField(
+              controller: link,
               height: 46,
               width: 312,
               border: Border.all(color: SLColor.neutral[70]!),
@@ -105,6 +140,7 @@ class MypageAddLink extends StatelessWidget {
               height: 16,
             ),
             SFACTextField(
+              controller: title,
               height: 46,
               width: 312,
               border: Border.all(color: SLColor.neutral[70]!),
@@ -118,12 +154,56 @@ class MypageAddLink extends StatelessWidget {
   }
 }
 
-class MypageEditLink extends StatelessWidget {
+class MypageEditLink extends StatefulWidget {
   const MypageEditLink({
     super.key,
     required this.linkId,
   });
   final String linkId;
+
+  @override
+  State<MypageEditLink> createState() => _MypageEditLinkState();
+}
+
+class _MypageEditLinkState extends State<MypageEditLink> {
+  final RemoteDataSource _remoteDataSource = RemoteDataSource();
+  final link = TextEditingController();
+  final title = TextEditingController();
+  late LinkModel linkRecord;
+  @override
+  void initState() {
+    super.initState();
+    title.addListener(updateTextLength);
+    Future.microtask(() => _init());
+  }
+
+  @override
+  void dispose() {
+    title.removeListener(updateTextLength);
+    title.dispose();
+    super.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
+
+  Future<void> _init() async {
+    try {
+      linkRecord = await _remoteDataSource
+          .getOneRecord('link', widget.linkId)
+          .then((value) {
+        linkRecord = LinkModel.fromJson(value.toJson());
+        return linkRecord;
+      });
+
+      title.text = linkRecord.name;
+      link.text = linkRecord.link;
+    } catch (e) {
+      print('experience edit $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = TextEditingController();
@@ -135,9 +215,14 @@ class MypageEditLink extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: () {
-                // TODO: 저장
-                Navigator.pop(context);
+              onTap: () async {
+                final body = <String, dynamic>{
+                  "name": title.text,
+                  'link': link.text
+                };
+                await _remoteDataSource.updateTableData(
+                    'link', linkRecord.id, body);
+                context.push('/home');
               },
               child: Text(
                 '확인',
@@ -179,6 +264,7 @@ class MypageEditLink extends StatelessWidget {
               height: 16,
             ),
             SFACTextField(
+              controller: link,
               height: 46,
               width: 312,
               border: Border.all(color: SLColor.neutral[70]!),
@@ -218,6 +304,7 @@ class MypageEditLink extends StatelessWidget {
               height: 16,
             ),
             SFACTextField(
+              controller: title,
               height: 46,
               width: 312,
               border: Border.all(color: SLColor.neutral[70]!),
@@ -228,7 +315,8 @@ class MypageEditLink extends StatelessWidget {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                // TODO: delete logic
+                _remoteDataSource.deleteRecord('link', widget.linkId);
+                context.push('/home');
               },
               child: Container(
                 width: 63,

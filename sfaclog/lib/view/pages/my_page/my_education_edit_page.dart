@@ -68,8 +68,7 @@ class _MypageEditEducationState extends ConsumerState<MypageEditEducation> {
         studying = education.studying;
         return education;
       });
-      print(startDate);
-      print(endDate);
+
     } catch (e) {
       print("Error loading education data: $e");
     }

@@ -2,47 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sfaclog/model/profile_model.dart';
+import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/dash_divider.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/experience_card.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/resume_widgets/link_card.dart';
-import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
 import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 import 'package:sfaclog/viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 import 'package:sfaclog/viewmodel/my_qna_viewmodel/my_qna_notifier.dart';
-import 'package:sfaclog/viewmodel/mypage_state_viewmodel/mypage_states.dart';
+import 'package:sfaclog/viewmodel/mypage_state_viewmodel/toggle_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 
+import '../../../viewmodel/log_viewmodel/log_notifier.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
 import '../../router.dart';
 import '../../widgets/mypage_widgets/resume_widgets/education_card.dart';
 
 const List<Map<String, dynamic>> reviews = [
   {
-    'profile_image': 'dfdfd.jpg',
+    'profile_image': 'assets/avatars/avatar_00',
     'reviewer': '김개발',
     'rating': 5,
     'updatedOn': 2023 - 12 - 31,
     'content': '너무 잘하십니다.',
   },
   {
-    'profile_image': 'dfdfd.jpg',
+    'profile_image': 'assets/avatars/avatar_08',
     'reviewer': '장개발',
     'rating': 3,
     'updatedOn': 2022 - 12 - 31,
     'content': '그냥 그래요.',
   },
   {
-    'profile_image': 'dfdfd.jpg',
+    'profile_image': 'assets/avatars/avatar_09',
     'reviewer': '이개발',
     'rating': 4.5,
     'updatedOn': 2023 - 11 - 30,
     'content': '너무 잘하십니다.',
   },
   {
-    'profile_image': 'dfdfd.jpg',
+    'profile_image': 'assets/avatars/avatar_01',
     'reviewer': '박개발',
     'rating': 1,
     'updatedOn': 2023 - 12 - 31,
@@ -53,59 +53,73 @@ const List<Map<String, dynamic>> reviews = [
 class MyProfilePage extends ConsumerStatefulWidget {
   const MyProfilePage({
     super.key,
+    required this.userInfo,
     required this.userId,
   });
+  final dynamic userInfo;
   final String userId;
-
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyProfilePageState();
 }
 
 class _MyProfilePageState extends ConsumerState<MyProfilePage> {
-  List<String> skills = ['javascript', 'css', 'html'];
-  late List<dynamic> experiences = [];
+  late List<dynamic> skills = [];
   late List<dynamic> educations = [];
   late List<dynamic> links = [];
   late List<dynamic> likedPosts = [];
   late List<dynamic> qnaAnswers = [];
-  bool resumePublic = false;
-  double progressValue = 0;
-  String userId = '7n5leq73rgpoutw';
-  ProfileInfo userInfo = ProfileInfo(
-      recentSearch: '',
-      nickname: '',
-      agreement: [],
-      profile: '',
-      proposeState: '',
-      collectionId: '',
-      collectionName: '',
-      updated: '',
-      created: '',
-      skill: []);
+  String avatarUrl = '';
+  int following = 0;
+  int follower = 0;
+  dynamic userInfo;
   @override
   void initState() {
     super.initState();
+    userInfo = widget.userInfo;
     _init();
   }
 
   Future<void> _init() async {
     try {
-      experiences =
-          await ref.read(MyPageProfileProvider.notifier).getExperiences(userId);
-      educations =
-          await ref.read(MyPageProfileProvider.notifier).getEducations(userId);
-      links = await ref.read(MyPageProfileProvider.notifier).getLinks(userId);
-      userInfo =
-          await ref.read(MyPageProfileProvider.notifier).getUserInfo(userId);
-      likedPosts =
-          await ref.read(myPageLogProvider.notifier).getLikedPosts(userId);
-      qnaAnswers =
-          await ref.read(myPageQnaProvider.notifier).getUserQnaAnswers(userId);
+      var newUserInfo = await ref
+          .read(MyPageProfileProvider.notifier)
+          .getUserInfo(widget.userId);
+      skills = await ref
+          .read(MyPageProfileProvider.notifier)
+          .getTags('skills', userInfo['skill']);
+      var newAvatarUrl =
+          await ref.read(logProvider.notifier).getAvatarUrl(widget.userId);
+      var newExperiences = await ref
+          .read(MyPageProfileProvider.notifier)
+          .getExperiences(widget.userId);
+      var newEducations = await ref
+          .read(MyPageProfileProvider.notifier)
+          .getEducations(widget.userId);
+      var newLinks = await ref
+          .read(MyPageProfileProvider.notifier)
+          .getLinks(widget.userId);
+      likedPosts = await ref
+          .read(myPageLogProvider.notifier)
+          .getLikedPosts(widget.userId);
+      qnaAnswers = await ref
+          .read(myPageQnaProvider.notifier)
+          .getUserQnaAnswers(widget.userId);
+      var followerList = await ref
+          .watch(MyPageProfileProvider.notifier)
+          .getFollowers(widget.userId);
+      var followingList = await ref
+          .watch(MyPageProfileProvider.notifier)
+          .getFollowings(widget.userId);
+      ref.read(MyPageProfileProvider.notifier).setEducations(newEducations);
+      ref.read(MyPageProfileProvider.notifier).setExperiences(newExperiences);
+      ref.read(MyPageProfileProvider.notifier).setLinks(newLinks);
+      ref.read(MyPageProfileProvider.notifier).setUserInfo(newUserInfo);
+
+
       setState(() {
-        progressValue = ((experiences.isNotEmpty ? 1 : 0) +
-                (educations.isNotEmpty ? 1 : 0) +
-                (links.isNotEmpty ? 1 : 0)) /
-            3;
+        avatarUrl = newAvatarUrl;
+        follower = followerList.length;
+        following = followingList.length;
       });
     } catch (e) {
       print("Error loading profile data: $e");
@@ -123,6 +137,31 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    var experiences = ref.watch(MyPageProfileProvider).experiences!;
+    var educations = ref.watch(MyPageProfileProvider).educations!;
+    var links = ref.watch(MyPageProfileProvider).links!;
+    var idUserInfo = ref.watch(MyPageProfileProvider).userInfo;
+    double progressValue = ((experiences.isNotEmpty ? 1 : 0) +
+            (educations.isNotEmpty ? 1 : 0) +
+            (links.isNotEmpty ? 1 : 0)) /
+        3;
+    // 이력서 업데이트 날짜
+    DateTime latestUpdate = DateTime.parse(experiences[0].updated);
+    for (var experience in experiences) {
+      if (DateTime.parse(experience.updated).isAfter(latestUpdate)) {
+        latestUpdate = DateTime.parse(experience.updated);
+      }
+    }
+    for (var education in educations) {
+      if (DateTime.parse(education.updated).isAfter(latestUpdate)) {
+        latestUpdate = DateTime.parse(education.updated);
+      }
+    }
+    for (var link in links) {
+      if (DateTime.parse(link.updated).isAfter(latestUpdate)) {
+        latestUpdate = DateTime.parse(link.updated);
+      }
+    }
     return Material(
       child: Container(
         width: 360,
@@ -148,9 +187,17 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     Row(
                       // profile picture
                       children: [
-                        const SizedBox(
+                        Container(
                           height: 92,
                           width: 92,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: avatarUrl != ''
+                              ? SvgPicture.network(
+                                  avatarUrl,
+                                )
+                              : SizedBox(),
                         ),
                         const SizedBox(
                           width: 24,
@@ -159,9 +206,9 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // nickname
-                            const SizedBox(
+                            SizedBox(
                               height: 21,
-                              child: Text(userInfo.nickname ?? '로딩중'),
+                              child: Text(idUserInfo!.nickname),
                             ),
                             const SizedBox(
                               height: 12,
@@ -169,38 +216,41 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             Row(
                               children: [
                                 GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
                                     onTap: () {
-                                      context.push('/my/follow/$userId');
+                                      context
+                                          .push('/my/follow/${widget.userId}');
                                       ref
                                           .read(myFollowPageProvider.notifier)
                                           .tabChanged(0);
                                     },
-                                    child: const Row(
+                                    child: Row(
                                       children: [
                                         Text('팔로잉'),
                                         SizedBox(
                                           width: 10,
                                         ),
-                                        Text('1'),
+                                        Text(following.toString()),
                                       ],
                                     )),
                                 const SizedBox(
                                   width: 20,
                                 ),
                                 GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
                                   onTap: () {
-                                    context.push('/my/follow/$userId');
+                                    context.push('/my/follow/${widget.userId}');
                                     ref
                                         .read(myFollowPageProvider.notifier)
                                         .tabChanged(1);
                                   },
-                                  child: const Row(
+                                  child: Row(
                                     children: [
                                       Text('팔로워'),
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text('10'),
+                                      Text(follower.toString()),
                                     ],
                                   ),
                                 ),
@@ -213,9 +263,9 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     const SizedBox(
                       height: 16,
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 50,
-                      child: Text(userInfo.introduction ?? '로딩중'),
+                      child: Text(idUserInfo.introduction!),
                     ),
                     const SizedBox(
                       height: 4,
@@ -229,7 +279,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         separatorBuilder: (context, index) =>
                             const SizedBox(width: 8),
                         itemBuilder: (context, index) {
-                          final skill = userInfo.skill?[index];
+                          final skill = skills[index];
                           return SFACSkillChip(
                             height: 32,
                             padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -261,7 +311,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   backgroundColor: SLColor.neutral[90],
                                   padding: const EdgeInsets.all(0)),
                               onPressed: () {
-                                context.push('/my/profile/setting/$userId');
+                                context.push(
+                                    '/my/profile/setting/${widget.userId}');
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -337,6 +388,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               const SizedBox(
                 height: 16,
               ),
+              // 이력서
               // 이력서 공개
               Container(
                 width: 312,
@@ -355,7 +407,10 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                           color: Colors.white),
                     ),
                     const Spacer(),
-                    MypageToggle(toggleProvider: resumePublicProvider),
+                    MypageToggle(
+                      userId: widget.userId,
+                      profileProvider: toggleProvider,
+                    ),
                     const SizedBox(
                       width: 12,
                     ),
@@ -393,7 +448,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                               ),
                             ),
                             child: Text(
-                              '업데이트 ${formatDateDifference(DateTime.now().toUtc().difference(DateTime.parse(experiences[0].updated)))}',
+                              '업데이트 ${formatDateDifference(DateTime.now().toUtc().difference(latestUpdate))}',
                               style: TextStyle(
                                   fontSize: 8,
                                   fontWeight: FontWeight.w500,
@@ -419,7 +474,6 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               Container(
                 height: 6,
                 child: LinearProgressIndicator(
-                  // TODO: 채워진 만큼 밸류 바꿔주기
                   value: progressValue,
                   color: SLColor.primary[100],
                   borderRadius: BorderRadius.circular(2.5),
@@ -434,7 +488,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                   children: [
                     SFACResumeButton(
                       onPressed: () {
-                        context.push('/my/profile/experience_add/$userId');
+                        context.push(
+                            '/my/profile/experience_add/${widget.userId}');
                       },
                       title: '경력',
                       // FIXME: 경력 계산해서 집어넣기
@@ -476,7 +531,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     SFACResumeButton(
                         onPressed: () {
-                          context.push('/my/profile/education_add/$userId');
+                          context.push(
+                              '/my/profile/education_add/${widget.userId}');
                         },
                         title: '학력/교육'),
                     // 교육 데이터
@@ -513,7 +569,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     SFACResumeButton(
                         onPressed: () {
-                          context.push('/my/profile/link_add/$userId');
+                          context.push('/my/profile/link_add/${widget.userId}');
                         },
                         title: '링크'),
                     links.isNotEmpty

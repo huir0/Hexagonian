@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -19,14 +21,15 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   late List<bool> isExpandedList;
 
-  String extractTextFromPostBody(List<dynamic> body) {
-    return body.map((item) {
-      if (item['insert'] is String) {
-        return (item['insert'] as String).replaceAll(RegExp('<[^>]*>'), '');
-      } else {
-        return ''; // 이미지 정보는 무시합니다.
+  String extractTextFromPostBody(String bodyText) {
+    var data = jsonDecode(bodyText);
+    StringBuffer sb = StringBuffer();
+    for (var item in data) {
+      if (item['insert'].runtimeType == String) {
+        sb.write(item['insert']);
       }
-    }).join('');
+    }
+    return sb.toString();
   }
 
   @override
@@ -44,6 +47,17 @@ class _PostCardState extends State<PostCard> {
         itemCount: widget.posts.length,
         itemBuilder: (context, index) {
           final post = widget.posts[index];
+          String text;
+          bool isShortText;
+          if (post.collectionName == 'log') {
+            String extractedText = extractTextFromPostBody(post.body);
+            isShortText = extractedText.length <= 100;
+            text =
+                isShortText ? extractedText : extractedText.substring(0, 100);
+          } else {
+            isShortText = post.content.length <= 100;
+            text = isShortText ? post.content : post.content.substring(0, 100);
+          }
           return Container(
             child: Column(
               children: [
@@ -131,31 +145,21 @@ class _PostCardState extends State<PostCard> {
                                 color: Colors.white, fontFamily: 'Pretendard'),
                             children: [
                               TextSpan(
-                                text: post.collectionName == 'log'
-                                    ? extractTextFromPostBody(post.body)
-                                            .length >
-                                        100
-                                    : post.content.length > 100
-                                        ? post.collectionName == 'log'
-                                            ? extractTextFromPostBody(post.body)
-                                                .substring(0, 100)
-                                            : post.content.substring(0, 100)
-                                        : post.collectionName == 'log'
-                                            ? extractTextFromPostBody(post.body)
-                                            : post.content,
+                                text: text,
                               ),
-                              TextSpan(
-                                text: '...더보기',
-                                style: SLTextStyle.Text_XS_Medium?.copyWith(
-                                    color: SLColor.neutral[40],
-                                    fontFamily: 'Pretendard'),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    setState(() {
-                                      isExpandedList[index] = true;
-                                    });
-                                  },
-                              ),
+                              if (!isShortText)
+                                TextSpan(
+                                  text: '...더보기',
+                                  style: SLTextStyle.Text_XS_Medium?.copyWith(
+                                      color: SLColor.neutral[40],
+                                      fontFamily: 'Pretendard'),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      setState(() {
+                                        isExpandedList[index] = true;
+                                      });
+                                    },
+                                ),
                             ],
                           ),
                         ),

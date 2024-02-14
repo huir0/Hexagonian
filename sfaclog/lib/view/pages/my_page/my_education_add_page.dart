@@ -49,6 +49,7 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
   void updateTextLength() {
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,16 +61,18 @@ class _MypageAddEducationState extends ConsumerState<MypageAddEducation> {
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
               onTap: () async {
-                final body = <String, dynamic>{
-                  "institute": institute.text,
-                  "major": major.text,
-                  "startDate": startDate!.toIso8601String(),
-                  "endDate": endDate != null ? endDate!.toIso8601String() : null,
-                  "studying": endDate == null ? true : studying,
-                  "user": widget.userId,
-                  "content": content.text
-                };
-                await _remoteDataSource.createTableData('education', body);
+                if (institute.text.isNotEmpty && major.text.isNotEmpty) {
+                  final body = <String, dynamic>{
+                    "institute": institute.text,
+                    "major": major.text,
+                    "startDate": startDate!.toIso8601String(),
+                    "endDate": endDate!.toIso8601String(),
+                    "studying": endDate == null ? true : studying,
+                    "user": widget.userId,
+                    "content": content.text
+                  };
+                  await _remoteDataSource.createTableData('education', body);
+                }
                 context.push('/home/');
               },
               child: Text(

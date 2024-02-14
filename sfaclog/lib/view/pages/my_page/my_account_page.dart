@@ -1,27 +1,53 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sfaclog/view/pages/my_page/my_email_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_mobile_page.dart';
-import 'package:sfaclog/view/pages/my_page/my_password_page.dart';
+import 'package:pocketbase/pocketbase.dart';
+import 'package:sfaclog/model/profile_model.dart';
+import 'package:sfaclog/model/users_model.dart';
+import 'package:sfaclog/viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 
 import '../../../common.dart';
-import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
 
-class MypageAccount extends ConsumerWidget {
-  const MypageAccount({super.key});
+class MypageAccount extends ConsumerStatefulWidget {
+  const MypageAccount({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MypageAccount> createState() => _MypageAccountState();
+}
+
+class _MypageAccountState extends ConsumerState<MypageAccount> {
+  UsersModel userInfo = UsersModel(id: '', email: '', name: '');
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    var newUsersInfo = await ref
+        .read(MyPageProfileProvider.notifier)
+        .getUsersInfo(widget.userId);
+
+    setState(() {
+      userInfo = newUsersInfo;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         appBar: AppBar(
           scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
-              final currentTab = ref.read(myPageProvider).tab;
-              ref.read(myPageProvider.notifier).tabChanged(currentTab);
               context.pop();
             },
             icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
@@ -55,11 +81,12 @@ class MypageAccount extends ConsumerWidget {
               behavior: HitTestBehavior.opaque,
               onTap: () {},
               child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-                  child: const Row(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  child:  Row(
                     children: [
                       // FIXME: 유저정보 불러와서 집어넣기
-                      Text('계정정보'),
+                      Text(userInfo.email),
                       Spacer(),
                       SizedBox(
                         width: 55,
@@ -83,17 +110,18 @@ class MypageAccount extends ConsumerWidget {
                 context.push('/my/setting/account/email/');
               },
               child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
                     children: [
                       const Text('이메일 변경'),
                       const Spacer(),
-                      const SizedBox(
+                       SizedBox(
                         width: 134,
                         height: 22,
                         // FIXME: 데이터 불러오기
                         child: Text(
-                          '이메일주소',
+                          userInfo.email,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -118,7 +146,8 @@ class MypageAccount extends ConsumerWidget {
                 context.push('/my/setting/account/mobile/');
               },
               child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
                     children: [
                       const Text('휴대폰 번호 변경'),
@@ -127,7 +156,7 @@ class MypageAccount extends ConsumerWidget {
                         width: 134,
                         height: 22,
                         // FIXME: 데이터 불러오기
-                        child: Text('전화번호'),
+                        child: Text('010-1234-2951'),
                       ),
                       const SizedBox(
                         width: 9,
@@ -150,7 +179,8 @@ class MypageAccount extends ConsumerWidget {
                 context.push('/my/setting/account/password/');
               },
               child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   child: Row(
                     children: [
                       const Text('비밀번호 변경'),

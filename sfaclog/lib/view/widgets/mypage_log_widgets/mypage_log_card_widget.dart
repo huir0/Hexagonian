@@ -1,21 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_card_provider.dart';
 import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
+import '../../../viewmodel/log_viewmodel/log_notifier.dart';
 
-class MypageLogBigCard extends ConsumerWidget {
+class MypageLogBigCard extends ConsumerStatefulWidget {
   const MypageLogBigCard({
     super.key,
     required this.log,
+    this.bookmarked = false,
   });
   final SFACLogModel log;
+  final bool bookmarked;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MypageLogBigCard> createState() => _MypageLogBigCardState();
+}
+
+class _MypageLogBigCardState extends ConsumerState<MypageLogBigCard> {
+  String avatarUrl = '';
+  String imgUrl = '';
+  int replyCnt = 0;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _init());
+  }
+
+  Future<void> _init() async {
+    var newAvatarUrl = await ref
+        .read(logProvider.notifier)
+        .getAvatarUrl(widget.log.expand['user']['id']);
+    var newImgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.log.id);
+    var newReplyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.log.id);
+    setState(() {
+      avatarUrl = newAvatarUrl;
+      imgUrl = newImgUrl;
+      replyCnt = newReplyCnt;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20, top: 12),
       padding: const EdgeInsets.symmetric(horizontal: 23),
@@ -24,19 +58,20 @@ class MypageLogBigCard extends ConsumerWidget {
       child: Column(
         children: [
           Container(
+            clipBehavior: Clip.hardEdge,
             width: 313,
             height: 157,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                  log.thumbnail,
-                ),
-              ),
             ),
             child: Stack(
               children: [
+                Container(
+                  child: Image.network(
+                    imgUrl,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
                 Positioned(
                   top: 10,
                   left: 12,
@@ -47,14 +82,17 @@ class MypageLogBigCard extends ConsumerWidget {
                     ),
                     height: 18,
                     width: 18,
-                    // child: Image.asset(log.user['picture']),
+                    child: SvgPicture.network(
+                      avatarUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Positioned(
                   left: 34.82,
                   top: 10,
                   child: Text(
-                    log.user,
+                    widget.log.expand['user']['nickname'],
                     style: SLTextStyle.Text_M_Medium?.copyWith(
                         color: Colors.white),
                   ),
@@ -62,7 +100,11 @@ class MypageLogBigCard extends ConsumerWidget {
                 Positioned(
                   right: 15,
                   top: 11,
-                  child: SvgPicture.asset('assets/icons/bookmark_outline.svg'),
+                  child: GestureDetector(
+                      onTap: () {},
+                      child: widget.bookmarked
+                          ? SvgPicture.asset('assets/icons/bookmark_filled.svg')
+                          : SvgPicture.asset('assets/icons/bookmark.svg')),
                 ),
               ],
             ),
@@ -74,7 +116,7 @@ class MypageLogBigCard extends ConsumerWidget {
             alignment: Alignment.centerLeft,
             height: 14,
             child: Text(
-              log.category,
+              widget.log.category,
               style: SLTextStyle.Text_XS_Regular?.copyWith(
                   color: SLColor.neutral[50]),
             ),
@@ -86,7 +128,7 @@ class MypageLogBigCard extends ConsumerWidget {
             alignment: Alignment.centerLeft,
             height: 19,
             child: Text(
-              log.title,
+              widget.log.title,
               style: SLTextStyle.Text_M_Bold?.copyWith(
                 color: Colors.white,
               ),
@@ -104,16 +146,12 @@ class MypageLogBigCard extends ConsumerWidget {
                 const SizedBox(
                   width: 4,
                 ),
-                ref.watch(logRepliesProvider(log.id)).when(
-                      data: (replies) => Text(
-                        replies.toString(),
-                        style: SLTextStyle.Text_S_Bold?.copyWith(
-                          color: SLColor.neutral[50],
-                        ),
-                      ),
-                      loading: () => CircularProgressIndicator(),
-                      error: (error, _) => Text('Error: $error'),
-                    ),
+                Text(
+                  replyCnt.toString(),
+                  style: SLTextStyle.Text_S_Bold?.copyWith(
+                    color: SLColor.neutral[50],
+                  ),
+                ),
                 SizedBox(
                   width: 10,
                 ),
@@ -131,7 +169,7 @@ class MypageLogBigCard extends ConsumerWidget {
                   width: 4,
                 ),
                 Text(
-                  log.like.toString(),
+                  widget.log.like.toString(),
                   style: SLTextStyle.Text_S_Bold?.copyWith(
                     color: SLColor.neutral[50],
                   ),
@@ -147,14 +185,14 @@ class MypageLogBigCard extends ConsumerWidget {
             width: 313,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: log.tag.length,
+              itemCount: widget.log.tag.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const SizedBox(width: 5);
               },
               itemBuilder: (BuildContext context, int index) {
                 return SFACTag(
                     text: Text(
-                  '# ${log.tag[index]}',
+                  '${widget.log.tag[index]}',
                   style: SLTextStyle.Text_XS_Regular?.copyWith(
                     color: SLColor.neutral[50],
                   ),
@@ -168,18 +206,46 @@ class MypageLogBigCard extends ConsumerWidget {
   }
 }
 
-class MypageLogSmallCard extends ConsumerWidget {
+class MypageLogSmallCard extends ConsumerStatefulWidget {
   const MypageLogSmallCard({
     super.key,
     required this.log,
+    this.bookmarked = false,
   });
   final SFACLogModel log;
+  final bool bookmarked;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final logReplies =
-        ref.read(myPageLogProvider.notifier).getLogReplies(log.id);
+  ConsumerState<MypageLogSmallCard> createState() => _MypageLogSmallCardState();
+}
 
+class _MypageLogSmallCardState extends ConsumerState<MypageLogSmallCard> {
+  String avatarUrl = '';
+  String imgUrl = '';
+  int replyCnt = 0;
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _init());
+  }
+
+  Future<void> _init() async {
+    var newAvatarUrl = await ref
+        .read(logProvider.notifier)
+        .getAvatarUrl(widget.log.expand['user']['id']);
+    var newImgUrl =
+        await ref.read(logProvider.notifier).getThumbNailUrl(widget.log.id);
+    var newReplyCnt =
+        await ref.read(logProvider.notifier).getReplyCnt(widget.log.id);
+    setState(() {
+      avatarUrl = newAvatarUrl;
+      imgUrl = newImgUrl;
+      replyCnt = newReplyCnt;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 12),
       padding: EdgeInsets.zero,
@@ -196,12 +262,15 @@ class MypageLogSmallCard extends ConsumerWidget {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: AssetImage(
-                    log.thumbnail,
+                    widget.log.thumbnail,
                   ),
                 ),
               ),
               child: Stack(
                 children: [
+                  Container(
+                    child: Image.network(imgUrl),
+                  ),
                   Positioned(
                     top: 6,
                     left: 8,
@@ -212,7 +281,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                       ),
                       height: 15,
                       width: 15,
-                      // child: Image.asset(log['profile_picture']),
+                      child: SvgPicture.network(avatarUrl),
                     ),
                   ),
                   Positioned(
@@ -221,7 +290,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                     child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        log.user,
+                        widget.log.expand['user']['nickname'],
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white,
                           letterSpacing: -0.14,
@@ -232,8 +301,9 @@ class MypageLogSmallCard extends ConsumerWidget {
                   Positioned(
                     right: 10,
                     top: 7,
-                    child:
-                        SvgPicture.asset('assets/icons/bookmark_outline.svg'),
+                    child: widget.bookmarked
+                        ? SvgPicture.asset('assets/icons/bookmark_filled.svg')
+                        : SvgPicture.asset('assets/icons/bookmark.svg'),
                   ),
                 ],
               ),
@@ -251,7 +321,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                     padding: EdgeInsets.zero,
                     height: 14,
                     child: Text(
-                      log.category,
+                      widget.log.category,
                       style: SLTextStyle.Text_XS_Regular?.copyWith(
                           color: SLColor.neutral[50]),
                     ),
@@ -261,7 +331,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                     height: 19,
                     padding: EdgeInsets.zero,
                     child: Text(
-                      log.title,
+                      widget.log.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       // FIXME: semibold
@@ -290,16 +360,12 @@ class MypageLogSmallCard extends ConsumerWidget {
                         const SizedBox(
                           width: 4,
                         ),
-                        ref.watch(logRepliesProvider(log.id)).when(
-                              data: (replies) => Text(
-                                replies.toString(),
-                                style: SLTextStyle.Text_S_Bold?.copyWith(
-                                  color: SLColor.neutral[50],
-                                ),
-                              ),
-                              loading: () => CircularProgressIndicator(),
-                              error: (error, _) => Text('Error: $error'),
-                            ),
+                        Text(
+                          replyCnt.toString(),
+                          style: SLTextStyle.Text_S_Bold?.copyWith(
+                            color: SLColor.neutral[50],
+                          ),
+                        ),
                         SizedBox(
                           width: 10,
                         ),
@@ -320,7 +386,7 @@ class MypageLogSmallCard extends ConsumerWidget {
                           width: 4,
                         ),
                         Text(
-                          log.like.toString(),
+                          widget.log.like.toString(),
                           style: SLTextStyle.Text_S_Bold?.copyWith(
                             color: SLColor.neutral[50],
                           ),
@@ -336,14 +402,14 @@ class MypageLogSmallCard extends ConsumerWidget {
               height: 22,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: log.tag.length,
+                itemCount: widget.log.tag.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(width: 5);
                 },
                 itemBuilder: (BuildContext context, int index) {
                   final tag = SFACTag(
                     text: Text(
-                      '# ${log.tag[index]}',
+                      '${widget.log.tag[index]}',
                       style: SLTextStyle.Text_XS_Regular?.copyWith(
                         color: SLColor.neutral[50],
                       ),

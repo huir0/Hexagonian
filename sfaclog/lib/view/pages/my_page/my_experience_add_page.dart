@@ -62,16 +62,18 @@ class _MypageAddExperienceState extends ConsumerState<MypageAddExperience> {
             padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
               onTap: () async {
-                final body = <String, dynamic>{
-                  "company": company.text,
-                  "title": title.text,
-                  "user": widget.userId,
-                  "working": working,
-                  "startDate": startDate!.toIso8601String(),
-                  "endDate": endDate != null ? endDate!.toIso8601String() : null,
-                  "content": content.text,
-                };
-                await _remoteDataSource.createTableData('experience', body);
+                if (company.text.isNotEmpty) {
+                  final body = <String, dynamic>{
+                    "company": company.text,
+                    "title": title.text,
+                    "user": widget.userId,
+                    "working": working,
+                    "startDate": startDate?.toIso8601String(),
+                    "endDate": endDate!.toIso8601String(),
+                    "content": content.text,
+                  };
+                  await _remoteDataSource.createTableData('experience', body);
+                }
                 context.push('/home');
               },
               child: Text(

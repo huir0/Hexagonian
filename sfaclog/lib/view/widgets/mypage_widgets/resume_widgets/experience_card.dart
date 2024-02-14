@@ -15,7 +15,6 @@ class ResumeExperienceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String endDateText = '';
-    print(experience.endDate);
     if (experience.endDate == null) {
       endDateText = '현재';
     } else {
@@ -51,8 +50,9 @@ class ResumeExperienceCard extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                   onTap: () {
+                    print(experience.id);
                     context
-                        .push('/my/profile/experience_edit/${experience.user}');
+                        .push('/my/profile/experience_edit/${experience.id}');
                   },
                   child: SvgPicture.asset('assets/icons/pencil_grey.svg')),
             ],

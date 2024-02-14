@@ -2,6 +2,13 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/alarm_page/alarm_page.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_education_add_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_education_edit_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_experience_edit_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_link_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_profile_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_profile_setting_page.dart';
 import 'package:sfaclog/view/pages/walkthrough_page/walkthrough_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
@@ -25,10 +32,12 @@ import 'package:sfaclog/view/pages/my_page/my_notification_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_privacy_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_proposal_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_setting_page.dart';
-import 'package:sfaclog/view/pages/my_page/mye_terms_page.dart';
 import 'package:sfaclog/view/pages/my_page/my_withdrawal_page.dart';
 import 'package:sfaclog/view/pages/onboarding_page/profile_edit_page.dart';
 import 'package:sfaclog/view/pages/splash_page/splash_page.dart';
+
+import 'pages/my_page/my_experience_add_page.dart';
+import 'pages/my_page/my_terms_page.dart';
 
 // final router = GoRouter(initialLocation: '/home', routes: [
 final router = GoRouter(initialLocation: '/splash', routes: [
@@ -114,20 +123,29 @@ final router = GoRouter(initialLocation: '/splash', routes: [
       builder: (context, state) => const MypageSetting(),
       routes: [
         GoRoute(
-          path: 'account',
-          builder: (context, state) => const MypageAccount(),
+          path: 'account/:userId',
+          builder: (context, state) {
+            final userId = state.pathParameters['userId'];
+            return MypageAccount(userId: userId!);
+          },
         ),
         GoRoute(
-          path: 'proposestate',
-          builder: (context, state) => const MypageProposal(),
+          path: 'proposestate/:userId',
+          builder: (context, state) {
+            final userId = state.pathParameters['userId'];
+            return MypageProposal(userId: userId!);
+          },
         ),
         GoRoute(
           path: 'notification',
           builder: (context, state) => const MypageNotification(),
         ),
         GoRoute(
-          path: 'withdrawal',
-          builder: (context, state) => const MypageWithdrawal(),
+          path: 'withdrawal/:userId',
+          builder: (context, state) {
+            final userId = state.pathParameters['userId'];
+            return MypageWithdrawal(userId: userId!);
+          },
         ),
         GoRoute(
           path: 'terms',
@@ -140,14 +158,86 @@ final router = GoRouter(initialLocation: '/splash', routes: [
       ],
     ),
     GoRoute(
-      path: 'follow',
+      path: 'follow/:userId',
       builder: (context, state) {
         final userId = state.pathParameters['userId'];
         return MyFollowPage(
-          userName: userId ?? '닉네임',
+          userId: userId!,
         );
       },
     ),
+    GoRoute(
+      path: 'profile/setting/:userId',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId'];
+        return MypageProfileSetting(
+          userId: userId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'profile/experience_edit/:experienceId',
+      builder: (context, state) {
+        final experiencId = state.pathParameters['experienceId'];
+        return MypageEditExperience(
+          experienceId: experiencId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'profile/education_edit/:educationId',
+      builder: (context, state) {
+        final educationId = state.pathParameters['educationId'];
+        return MypageEditEducation(
+          educationId: educationId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'profile/link_edit/:linkId',
+      builder: (context, state) {
+        final linkId = state.pathParameters['linkId'];
+        return MypageEditLink(
+          linkId: linkId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'profile/experience_add/:userId',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId'];
+        return MypageAddExperience(
+          userId: userId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'profile/education_add/:userId',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId'];
+        return MypageAddEducation(
+          userId: userId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'profile/link_add/:userId',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId'];
+        return MypageAddLink(
+          userId: userId!,
+        );
+      },
+    ),
+    GoRoute(
+      path: 'log/category/:userId',
+      builder: (context, state) {
+        final userId = state.pathParameters['userId'];
+        return MypageCategory(
+          userId: userId!,
+        );
+      },
+    )
   ]),
   GoRoute(
     path: '/login',

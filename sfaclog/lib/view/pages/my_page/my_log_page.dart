@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
 import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 
+import '../../../viewmodel/auth/auth_notifier.dart';
 import '../../widgets/mypage_log_widgets/mypage_log_card_widget.dart';
-
 
 class MyLogPage extends ConsumerStatefulWidget {
   const MyLogPage({
@@ -19,9 +20,7 @@ class MyLogPage extends ConsumerStatefulWidget {
 }
 
 class _MyLogPageState extends ConsumerState<MyLogPage> {
-  late String category = '전체 로그';
   bool tiled = false;
-  List<dynamic> logList = [];
 
   @override
   void initState() {
@@ -33,18 +32,20 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
 
   Future<void> _init() async {
     try {
-      logList = await ref
+      var newLogList = await ref
           .read(myPageLogProvider.notifier)
-          .getUserLogs('7n5leq73rgpoutw');
-      ref.read(myPageLogProvider.notifier).setUserLogs(logList);
-    } catch (e) {
-      print("Error loading logs: $e");
+          .getUserLogs(userId: widget.userId, expand: 'user');
+
+      ref.read(myPageLogProvider.notifier).setUserLogs(newLogList);
+    } catch (e, st) {
+      print("Error loading logs: $e\\n$st");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final logListState = ref.watch(myPageLogProvider).userLogs;
+    final logList = ref.watch(myPageLogProvider).userLogs;
+    final category = ref.watch(myPageLogProvider).category;
     return Material(
       child: Container(
         child: SingleChildScrollView(
@@ -54,8 +55,8 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                 height: 16,
               ),
               Container(
-                padding:
-                    const EdgeInsets.only(top: 12, bottom: 11, left: 25, right: 33),
+                padding: const EdgeInsets.only(
+                    top: 12, bottom: 11, left: 25, right: 33),
                 width: 360,
                 height: 42,
                 child: Row(
@@ -67,11 +68,7 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                       padding: const EdgeInsets.all(0),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MypageCategory()));
+                          context.push('/my/log/category/${widget.userId}');
                         },
                         child: Row(
                           children: [
@@ -146,21 +143,32 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
                           spacing: 16,
                           runSpacing: 24,
                           children: [
-                            for (var i = 0; i < logListState.length; i++)
-                              MypageLogSmallCard(log: logListState[i])
+                            for (var i = 0; i < logList.length; i++)
+                              GestureDetector(
+                                  onTap: () {
+                                    context.push('/log/read/${logList[i].id}');
+                                  },
+                                  behavior: HitTestBehavior.opaque,
+                                  child: MypageLogSmallCard(log: logList[i]))
                           ],
                         ),
                       )
                     : ListView.separated(
-                        itemCount: logListState.length,
+                        itemCount: logList.length,
                         separatorBuilder: (BuildContext context, int index) {
                           return const SizedBox(
                             height: 8,
                           );
                         },
                         itemBuilder: (BuildContext context, int index) {
-                          return MypageLogBigCard(
-                            log: logListState[index],
+                          return GestureDetector(
+                            onTap: () {
+                              context.push('/log/read/${logList[index].id}');
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child: MypageLogBigCard(
+                              log: logList[index],
+                            ),
                           );
                         },
                       ),

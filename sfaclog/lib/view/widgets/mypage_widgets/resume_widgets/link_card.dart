@@ -19,8 +19,8 @@ class ResumeLinkCard extends StatelessWidget {
     final Uri _url = Uri.parse(link.link);
     
     Future<void> _launchUrl() async {
-      if (!await launchUrl(url)) {
-        throw Exception('Could not launch $url');
+      if (!await launchUrl(_url)) {
+        throw Exception('Could not launch $_url');
       }
     }
 
@@ -50,7 +50,7 @@ class ResumeLinkCard extends StatelessWidget {
                 const Spacer(),
                 GestureDetector(
                     onTap: () {
-                      context.push('/my/profile/link_edit/${link.user}');
+                      context.push('/my/profile/link_edit/${link.id}');
                     },
                     child: SvgPicture.asset('assets/icons/pencil_grey.svg')),
               ],

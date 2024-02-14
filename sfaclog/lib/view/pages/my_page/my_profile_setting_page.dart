@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/profile_model.dart';
 import 'package:sfaclog/view/pages/my_page/my_profile_picture_page.dart';
+import 'package:sfaclog/viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
@@ -21,9 +24,70 @@ class MypageProfileSetting extends ConsumerStatefulWidget {
 }
 
 class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
-  final nickname = TextEditingController();
+  RemoteDataSource _remoteDataSource = RemoteDataSource();
+  TextEditingController nickname = TextEditingController();
+  TextEditingController introduction = TextEditingController();
   final skill = TextEditingController();
-  late List<String> skills = [];
+  List<dynamic> skills = [];
+  ProfileInfo userInfo = ProfileInfo(
+      nickname: '',
+      agreement: [],
+      profile: '',
+      recentSearch: '',
+      proposeState: '',
+      collectionId: '',
+      collectionName: '',
+      updated: '',
+      created: '');
+  String avatarUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    nickname = TextEditingController();
+    introduction = TextEditingController();
+    Future.microtask(() => _init());
+    nickname.addListener(updateTextLength);
+    introduction.addListener(updateTextLength);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    nickname.removeListener(updateTextLength);
+    introduction.removeListener(updateTextLength);
+    nickname.dispose();
+    introduction.dispose();
+  }
+
+  void updateTextLength() {
+    setState(() {});
+  }
+
+  Future<void> _init() async {
+    var newUserInfo = await ref
+        .watch(MyPageProfileProvider.notifier)
+        .getUserInfo(widget.userId);
+
+    introduction.text = newUserInfo.introduction!;
+    nickname.text = newUserInfo.nickname;
+
+    if (userInfo.skill != null) {
+      var newSkills = await ref
+          .watch(MyPageProfileProvider.notifier)
+          .getTags('skill', userInfo.skill!);
+      setState(() {
+        skills = newSkills;
+      });
+    }
+    var newAvatarUrl =
+        await _remoteDataSource.getAvatarURL('user', widget.userId, 'picture');
+    setState(() {
+      userInfo = newUserInfo;
+      avatarUrl = newAvatarUrl;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +110,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
             child: GestureDetector(
               onTap: () {
                 // TODO: 저장
-                Navigator.pop(context);
+                context.pop();
               },
               child: Text(
                 '확인',
@@ -69,11 +133,15 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 height: 108,
                 child: Stack(
                   children: [
-                    // TODO: profile picture
                     Container(
+                      alignment: Alignment.center,
                       clipBehavior: Clip.hardEdge,
                       decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.white),
+                          shape: BoxShape.circle, color: Colors.blue),
+                      child: SvgPicture.network(
+                        avatarUrl,
+                        height: 108,
+                      ),
                     ),
                     Positioned(
                       bottom: 0,
@@ -101,7 +169,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                               height: 28,
                               padding: const EdgeInsets.all(5),
                               child: SvgPicture.asset(
-                                'assets/icons/plus.svg',
+                                'assets/icons/add.svg',
                                 color: Colors.white,
                               )),
                         ),
@@ -143,6 +211,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 height: 12,
               ),
               SFACTextField(
+                controller: nickname,
                 height: 46,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[60]!),
@@ -175,6 +244,7 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 height: 12,
               ),
               SFACTextField(
+                controller: introduction,
                 height: 104,
                 width: 312,
                 border: Border.all(color: SLColor.neutral[60]!),
@@ -207,7 +277,9 @@ class _MypageProfileSettingState extends ConsumerState<MypageProfileSetting> {
                 height: 36,
               ),
               const Wrap(
-                children: [],
+                children: [
+                  
+                ],
               ),
               const SizedBox(
                 height: 30,

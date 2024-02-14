@@ -5,6 +5,7 @@ import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/model/liked_posts_model.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
 import '../../data/datasource/remote_datasource.dart';
+import '../../model/log_category_model.dart';
 import '../../model/sfac_qna_model.dart';
 import 'my_log_state.dart';
 
@@ -15,15 +16,24 @@ class MyPageLogNotifier extends StateNotifier<MyPageLogState> {
           likedPosts: [],
           bookmarkedLogs: [],
           replies: 0,
+          categoryList: [],
+          category: '전체로그',
+          categoryIndex: 0,
         ));
   final RemoteDataSource _remoteDataSource = RemoteDataSource();
 
-  Future<List<dynamic>> getUserLogs(String userId) async {
+  Future<List<dynamic>> getUserLogs(
+      {required String userId, String? expand, String? filter}) async {
     try {
       // 사용자의 로그를 가져오는 비동기 함수를 호출합니다.
-      List<dynamic> logList = await _remoteDataSource.getTableData(
+      String finalFilter = 'user.id = "$userId"';
+      if (filter != '') {
+        finalFilter += "&&$filter";
+      }
+      List<dynamic> logList = await _remoteDataSource.getExpandedTableData(
         tableName: 'log',
-        filter: 'user.id = "$userId"', // 특정 사용자의 로그만 가져오도록 필터링합니다.
+        expand: expand,
+        filter: finalFilter,
       );
       // 가져온 로그 데이터를 MyLogModel로 변환합니다.
       List<dynamic> userLogs = logList
@@ -40,12 +50,12 @@ class MyPageLogNotifier extends StateNotifier<MyPageLogState> {
     try {
       // 사용자의 좋아요를 누른 게시물을 가져오는 비동기 함수를 호출합니다.
       RecordModel postList = await _remoteDataSource.getFilteredRecord(
-        'liked_posts', 'user.id = "$userId"', // 특정 사용자의 게시물만 가져오도록 필터링합니다.
-      );
+          'liked_posts', 'user.id = "$userId"', '' // 특정 사용자의 게시물만 가져오도록 필터링합니다.
+          );
       LikedPostModel postModel = LikedPostModel.fromJson(postList.data);
 
       List<Future<dynamic>> logFutures = postModel.logs?.map((logId) async {
-            return await _remoteDataSource.getLogData('log', logId);
+            return await _remoteDataSource.getOneRecord('log', logId);
           }).toList() ??
           [];
 
@@ -68,6 +78,20 @@ class MyPageLogNotifier extends StateNotifier<MyPageLogState> {
     } catch (e) {
       // 오류 처리 로직을 추가합니다.
       print('getLikedPosts $e');
+      rethrow;
+    }
+  }
+
+  Future<List<dynamic>> getBookmaredLogs(String userId) async {
+    try {
+      RecordModel loglist = await _remoteDataSource.getFilteredRecord(
+          'bookmark', 'user.id = "$userId"', 'log,log.user');
+      List<dynamic> bookmarkedLogs = loglist.expand['log']!
+          .map((log) => SFACLogModel.fromJson(jsonDecode(log.toString())))
+          .toList();
+      return bookmarkedLogs;
+    } catch (e) {
+      print('getBookmaredLogs $e');
       rethrow;
     }
   }
@@ -103,6 +127,18 @@ class MyPageLogNotifier extends StateNotifier<MyPageLogState> {
 
   void setLogReplies(int replies) {
     state = state.copyWith(replies: replies);
+  }
+
+  void setCategoryList(List<LogCategoryModel> categoryList) {
+    state = state.copyWith(categoryList: categoryList);
+  }
+
+  void setCategory(String category) {
+    state = state.copyWith(category: category);
+  }
+
+  void setCategoryIndex(int index) {
+    state = state.copyWith(categoryIndex: index);
   }
 }
 

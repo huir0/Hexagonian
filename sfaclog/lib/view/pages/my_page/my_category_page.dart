@@ -1,23 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pocketbase/pocketbase.dart';
+import 'package:sfaclog/data/datasource/remote_datasource.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_add_page.dart';
+import 'package:sfaclog/viewmodel/my_log_viewmodel/my_log_notifier.dart';
 
 import '../../../common.dart';
+import '../../../model/log_category_model.dart';
 import '../../widgets/mypage_widgets/my_appbar_widget.dart';
 import 'my_category_edit_page.dart';
 
-class MypageCategory extends StatefulWidget {
-  const MypageCategory({super.key});
-
+class MypageCategory extends ConsumerStatefulWidget {
+  const MypageCategory({
+    super.key,
+    required this.userId,
+  });
+  final String userId;
   @override
-  State<MypageCategory> createState() => _MypageCategoryState();
+  ConsumerState<MypageCategory> createState() => _MypageCategoryState();
 }
 
-const List<String> category = ['회고록', '개발자 일상'];
+class _MypageCategoryState extends ConsumerState<MypageCategory> {
+  RemoteDataSource _remoteDataSource = RemoteDataSource();
+  List<LogCategoryModel> categoryList = [
+    LogCategoryModel(name: '전체로그', log: '', user: '', public: 'public')
+  ];
 
-class _MypageCategoryState extends State<MypageCategory> {
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() async {
+    List<RecordModel> categoryData = await _remoteDataSource.getTableData(
+        tableName: 'category',
+        filter: 'user.id = "${widget.userId}"') as List<RecordModel>;
+    setState(() {
+      for (RecordModel item in categoryData) {
+        LogCategoryModel data = LogCategoryModel.fromJson(item.data);
+        categoryList.add(data);
+      }
+    });
+    ref.read(myPageLogProvider.notifier).setCategoryList(categoryList);
+  }
+
   @override
   Widget build(BuildContext context) {
+    var categorys = ref.watch(myPageLogProvider).categoryList;
+    var selectedIndex = ref.watch(myPageLogProvider).categoryIndex;
     return Scaffold(
       appBar: MyAppbar(
         onPressed: (e) {},
@@ -28,35 +61,45 @@ class _MypageCategoryState extends State<MypageCategory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                height: 51,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  children: [
-                    Text(
-                      '전체로그',
-                      style: SLTextStyle.Text_M_Medium?.copyWith(
-                          color: Colors.white),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    const Text('number'),
-                    const Spacer(),
-                    SvgPicture.asset(
-                      'assets/icons/check_blue.svg',
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                color: SLColor.neutral[80],
-                height: 1,
-              ),
-              for (var i = 0; i < category.length; i++) ...[
+              for (var i = 0; i < categorys.length; i++) ...[
                 GestureDetector(
-                  onTap: () {
-                    // TODO: locked, 메뉴 설정
+                  onTap: () async {
+                    selectedIndex = i;
+                    if (i != 0) {
+                      var newLogList = await ref
+                          .read(myPageLogProvider.notifier)
+                          .getUserLogs(
+                              userId: widget.userId,
+                              expand: 'user',
+                              filter: 'category = "${categorys[i].name}"');
+
+                      ref
+                          .read(myPageLogProvider.notifier)
+                          .setUserLogs(newLogList);
+                      ref
+                          .read(myPageLogProvider.notifier)
+                          .setCategory(categorys[i].name);
+                      ref.read(myPageLogProvider.notifier).setCategoryIndex(i);
+                    } else {
+                      var newLogList = await ref
+                          .read(myPageLogProvider.notifier)
+                          .getUserLogs(
+                            userId: widget.userId,
+                            expand: 'user',
+                            filter: '',
+                          );
+
+                      ref
+                          .read(myPageLogProvider.notifier)
+                          .setUserLogs(newLogList);
+                      ref
+                          .read(myPageLogProvider.notifier)
+                          .setCategory(categorys[i].name);
+                      ref.read(myPageLogProvider.notifier).setCategoryIndex(i);
+                    }
+
+                    setState(() {});
+                    context.pop();
                   },
                   child: Container(
                     width: 312,
@@ -65,19 +108,27 @@ class _MypageCategoryState extends State<MypageCategory> {
                     child: Row(
                       children: [
                         Text(
-                          category[i],
+                          categorys[i].name,
                           style: SLTextStyle.Text_M_Medium?.copyWith(
-                              color: SLColor.neutral[50]),
+                              color:
+                                  i == 0 ? Colors.white : SLColor.neutral[50]),
                         ),
                         const SizedBox(
                           width: 12,
                         ),
                         // TODO: 글 개수 연결
-                        const Text('number'),
+                        Text(categorys.length.toString()),
                         const SizedBox(
                           width: 12,
                         ),
-                        SvgPicture.asset('assets/icons/padlock.svg'),
+                        if (categorys[i].public != 'public')
+                          SizedBox(
+                            width: 12,
+                            child: SvgPicture.asset('assets/icons/padlock.svg'),
+                          ),
+                        Spacer(),
+                        if (selectedIndex == i)
+                          SvgPicture.asset('assets/icons/check_blue.svg'),
                       ],
                     ),
                   ),
@@ -105,10 +156,6 @@ class _MypageCategoryState extends State<MypageCategory> {
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                             color: Colors.white),
                       ),
-                      const Spacer(),
-                      SvgPicture.asset(
-                        'assets/icons/check_blue.svg',
-                      ),
                     ],
                   ),
                 ),
@@ -119,7 +166,7 @@ class _MypageCategoryState extends State<MypageCategory> {
               ),
               GestureDetector(
                 onTap: () {
-                   Navigator.push(
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const MypageEditCategory()));
@@ -134,10 +181,6 @@ class _MypageCategoryState extends State<MypageCategory> {
                         '카테고리 편집',
                         style: SLTextStyle.Text_M_Medium?.copyWith(
                             color: Colors.white),
-                      ),
-                      const Spacer(),
-                      SvgPicture.asset(
-                        'assets/icons/check_blue.svg',
                       ),
                     ],
                   ),

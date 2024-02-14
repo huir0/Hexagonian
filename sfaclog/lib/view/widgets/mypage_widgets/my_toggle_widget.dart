@@ -2,13 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../common.dart';
+import '../../../viewmodel/mypage_state_viewmodel/toggle_notifier.dart';
 
 class MypageToggle extends ConsumerWidget {
   const MypageToggle({
-    super.key,
-    required this.toggleProvider,
+    this.userId,
+    this.toggleProvider,
+    this.profileProvider,
   });
-  final StateProvider<bool> toggleProvider;
+  final String? userId;
+  final StateProvider<bool>? toggleProvider;
+  final StateNotifierProvider<ToggleState, bool>? profileProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,9 +23,15 @@ class MypageToggle extends ConsumerWidget {
         fit: BoxFit.fitWidth,
         child: CupertinoSwitch(
           activeColor: SLColor.primary[100],
-          value: ref.watch(toggleProvider),
+          value: userId == null
+              ? ref.watch(toggleProvider!)
+              : ref.watch(profileProvider!),
           onChanged: (value) {
-             ref.read(toggleProvider.notifier).state = value;
+            userId == null
+                ? ref.read(toggleProvider!.notifier).state = value
+                : ref
+                    .read(profileProvider!.notifier)
+                    .updateValue(value, userId!);
           },
         ),
       ),

@@ -1,171 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/pages/my_page/my_category_page.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
-
 import '../../../viewmodel/my_log_viewmodel/my_log_notifier.dart';
 import '../../widgets/mypage_log_widgets/mypage_log_card_widget.dart';
 
-List<Map<String, dynamic>> logs = [
-  {
-    'title': '제목',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': [
-      'tag1',
-      'tag2',
-      'tag3',
-      'tag4',
-      'tag5',
-      'tag6',
-      'tag7',
-      'tag8',
-      'tag9'
-    ],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-  {
-    'title': 'test1',
-    'answer': ['answer1', 'answer2'],
-    'profile_picture': 'assets/images/basic_profile_sm.png',
-    'tags': ['tag1', 'tag2', 'tag3', 'tag4'],
-    'like': ['user1', 'user2', 'user3'],
-    'author': 'test_user1',
-    'category': '회고록',
-    'image': 'assets/images/mypage_log_image.png'
-  },
-];
-
 class MyBookmarkPage extends ConsumerStatefulWidget {
   const MyBookmarkPage({
-    required this.userId,
+    super.key,
+    required this.userInfo,
   });
-final String userId;
+  final dynamic userInfo;
   @override
   ConsumerState<MyBookmarkPage> createState() => _MyBookmarkPageState();
 }
 
 class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
-  late String category = '전체 로그';
   bool tiled = false;
-
-   List<dynamic> logList = [];
-
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      return _init();
-    });
+    Future.microtask(() => _init());
   }
 
   Future<void> _init() async {
     try {
-      logList =
-          await ref.read(myPageLogProvider.notifier).getUserLogs(widget.userId);
-          ref.read(myPageLogProvider.notifier).setBookmarkedLogs(logList);
+      var newLogList = await ref
+          .read(myPageLogProvider.notifier)
+          .getBookmaredLogs(widget.userInfo['id']);
+      newLogList.sort((a, b) =>
+          DateTime.parse(b.created).compareTo(DateTime.parse(a.created)));
+
+      ref.read(myPageLogProvider.notifier).setBookmarkedLogs(newLogList);
     } catch (e) {
       print("Error loading popular logs: $e");
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    List<dynamic> logList = ref.watch(myPageLogProvider).bookmarkedLogs;
     return Material(
       child: Container(
         child: SingleChildScrollView(
@@ -175,8 +51,8 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                 height: 16,
               ),
               Container(
-                padding:
-                    const EdgeInsets.only(top: 12, bottom: 11, left: 25, right: 33),
+                padding: const EdgeInsets.only(
+                    top: 12, bottom: 11, left: 25, right: 33),
                 width: 360,
                 height: 42,
                 child: Row(
@@ -186,16 +62,24 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                     Container(
                       width: 67,
                       padding: const EdgeInsets.all(0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MypageCategory()));
-                        },
-                        child: SFACMenuButton(items: const ['등록순','최신순'], onItemSelected: (index) {})
-                      ),
+                      child: SFACMenuButton(
+                          items: const ['등록순', '최신순'],
+                          onItemSelected: (value) {
+                            if (value != 0) {
+                              logList.sort((a, b) =>
+                                  DateTime.parse(b.created).compareTo(
+                                      DateTime.parse(a.created)));
+                            } else {
+                              logList.sort((a, b) =>
+                                  DateTime.parse(a.created).compareTo(
+                                      DateTime.parse(b.created)));
+                            }
+                            setState(() {
+                              ref
+                                  .read(myPageLogProvider.notifier)
+                                  .setBookmarkedLogs(logList);
+                            });
+                          }),
                     ),
                     const Spacer(),
                     SizedBox(
@@ -246,21 +130,31 @@ class _MyBookmarkPageState extends ConsumerState<MyBookmarkPage> {
                           spacing: 16,
                           runSpacing: 24,
                           children: [
-                            for (var i = 0; i < logs.length; i++)
-                              MypageLogSmallCard(log: logList[i])
+                            for (var i = 0; i < logList.length; i++)
+                              MypageLogSmallCard(
+                                log: logList[i],
+                                bookmarked: true,
+                              )
                           ],
                         ),
                       )
                     : ListView.separated(
-                        itemCount: logs.length,
+                        itemCount: logList.length,
                         separatorBuilder: (BuildContext context, int index) {
                           return const SizedBox(
                             height: 8,
                           );
                         },
                         itemBuilder: (BuildContext context, int index) {
-                          return MypageLogBigCard(
-                            log: logList[index],
+                          return GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              context.push('/log/read/${logList[index].id}');
+                            },
+                            child: MypageLogBigCard(
+                              log: logList[index],
+                              bookmarked: true,
+                            ),
                           );
                         },
                       ),

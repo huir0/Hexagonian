@@ -7,6 +7,7 @@ import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../viewmodel/auth/auth_state.dart';
+import '../../../viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 import '../../../viewmodel/mypage_tab_viewmodel/mypage_tab_notifier.dart';
 import '../../router.dart';
 import 'my_bookmark_page.dart';
@@ -17,12 +18,6 @@ class MyPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-//     final authState = ref.watch<AuthState>(authProvider);
-// // 로그인 상태가 아니면 로그인 페이지로 리다이렉트
-//     if (authState.authStatus != AuthStatus.authenticated) {
-//       router.go('/home/home');
-//       // return Container();  // 로그인 페이지로 리다이렉트하므로 여기서는 빈 컨테이너를 반환
-//     }
     return Container(
       child: Column(children: [
         Container(
@@ -49,22 +44,23 @@ class MyPage extends ConsumerWidget {
   }
 }
 
-class MyPageBody extends ConsumerWidget {
+class MyPageBody extends ConsumerStatefulWidget {
   const MyPageBody({super.key});
+  ConsumerState<ConsumerStatefulWidget> createState() => _MyPageBodyState();
+}
 
+class _MyPageBodyState extends ConsumerState<MyPageBody> {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final selectedTab = ref.watch(myPageProvider).tab;
-    // final userId = ref.read(userInfoProvider.notifier).getId();
-    final userId = '7n5leq73rgpoutw';
-    
+    final userInfo = ref.watch(authProvider).userInfo;
     switch (selectedTab) {
       case 0:
-        return MyProfilePage(userId: userId);
+        return MyProfilePage(userInfo: userInfo, userId: userInfo['id']);
       case 1:
-        return MyLogPage(userId: userId);
+        return MyLogPage(userId: userInfo['id']);
       case 2:
-        return MyBookmarkPage(userId: userId);
+        return MyBookmarkPage(userInfo: userInfo);
       default:
         return Container();
     }

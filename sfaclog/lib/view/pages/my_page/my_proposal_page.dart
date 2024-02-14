@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/widgets/mypage_widgets/my_toggle_widget.dart';
-import 'package:sfaclog/viewmodel/mypage_state_viewmodel/mypage_states.dart';
 
 import '../../../common.dart';
+import '../../../viewmodel/mypage_state_viewmodel/toggle_notifier.dart';
 
 class MypageProposal extends StatefulWidget {
-  const MypageProposal({super.key});
-
+  const MypageProposal({
+    super.key,
+    required this.userId,
+  });
+final String userId;
   @override
   State<MypageProposal> createState() => _MypageProposalState();
 }
@@ -55,7 +58,10 @@ class _MypageProposalState extends State<MypageProposal> {
                         color: Colors.white),
                   ),
                   const Spacer(),
-                  MypageToggle(toggleProvider: proposalStateProvider),
+                  MypageToggle(
+                      userId: widget.userId,
+                      profileProvider: toggleProvider,
+                    )
                 ],
               ),
             ),
