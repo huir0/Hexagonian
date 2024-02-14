@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/main_title.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/today_contents_widgets/today_log.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/today_contents_widgets/today_program.dart';
+import 'package:sfaclog/view/widgets/main_page_widgets/today_contents_widgets/today_project.dart';
+import 'package:sfaclog/view/widgets/main_page_widgets/today_contents_widgets/today_qna.dart';
 import 'package:sfaclog_widgets/buttons/sl_main_tab_button.dart';
 
 class TodaysContents extends StatefulWidget {
@@ -49,8 +51,8 @@ class _TodaysContentsState extends State<TodaysContents> {
           index: curTab,
           children: const [
             TodayLog(), //로그
-            TodayLog(), //프로젝트
-            TodayLog(), //큐앤에이
+            TodayProject(), //프로젝트
+            TodayQna(), //큐앤에이
             TodayProgram(), //스팩프로그램
           ],
         ),
