@@ -75,10 +75,10 @@ class _LogPageState extends ConsumerState<LogPage> {
         popularLogList.isNotEmpty
             ? CarouselSlider(
                 options: CarouselOptions(
-                  height: 200,
-                  viewportFraction: 0.725,
-                  enlargeCenterPage: true,
-                ),
+                    height: 200,
+                    viewportFraction: 0.725,
+                    enlargeCenterPage: true,
+                    autoPlay: true),
                 items: List.generate(popularLogState?.length ?? 0, (index) {
                   return InkWell(
                       onTap: () {

@@ -41,7 +41,7 @@ class LogReadHeaderWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SizedBox(
-        height: 122,
+        height: 148,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -109,15 +109,12 @@ class LogReadHeaderWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const reviselabel(
                   fontSize: 10,
                   width: 46,
                   height: 32,
                   text: '팔로우',
                 ),
-
-                //ElevatedButton(onPressed: () {}, child: const Text('팔로우'))
               ],
             ),
           ],

@@ -84,7 +84,7 @@ class RemoteDataSource {
       for (int i = 0; i < logModel.images.length; i++) {
         File imageFile = File(logModel.images[i]['insert']['source']);
         List<int> imageBytes = await imageFile.readAsBytes();
-        final record = await pb.collection(tableName).update(
+        await pb.collection(tableName).update(
           tagId,
           files: [
             http.MultipartFile.fromBytes(
@@ -109,39 +109,43 @@ class RemoteDataSource {
     String existId = '';
     List<int> imageBytes = [];
     try {
+      //게시글 내의 이미지를 썸네일로 선택시
       if (imagePath.contains('cache')) {
         File imageFile = File(imagePath);
         imageBytes = await imageFile.readAsBytes();
-      } else {
+      }
+      //기본 썸네일 선택시
+      else {
         ByteData data = await rootBundle.load(imagePath);
         imageBytes = data.buffer.asUint8List();
       }
 
-      existId = await _getExistId(tableName, title);
-      if (existId != '') {
-        final record = await pb.collection(tableName).update(
-          existId,
-          files: [
-            http.MultipartFile.fromBytes(
-              'thumbnail',
-              imageBytes,
-              filename: 'thumbnail.png',
-            ),
-          ],
-        );
-        return record.id;
-      } else {
-        final record = await pb.collection(tableName).create(
-          files: [
-            http.MultipartFile.fromBytes(
-              'thumbnail',
-              imageBytes,
-              filename: 'thumbnail.png',
-            ),
-          ],
-        );
-        return record.id;
-      }
+      final record = await pb.collection(tableName).create(
+        files: [
+          http.MultipartFile.fromBytes(
+            'thumbnail',
+            imageBytes,
+            filename: 'thumbnail.png',
+          ),
+        ],
+      );
+      return record.id;
+      // existId = await _getExistId(tableName, title);
+      // if (existId != '') {
+      //   final record = await pb.collection(tableName).update(
+      //     existId,
+      //     files: [
+      //       http.MultipartFile.fromBytes(
+      //         'thumbnail',
+      //         imageBytes,
+      //         filename: 'thumbnail.png',
+      //       ),
+      //     ],
+      //   );
+      //   return record.id;
+      // } else {
+
+      // }
     } catch (e) {
       print(e);
       return '';
