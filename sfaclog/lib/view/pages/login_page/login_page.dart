@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/view/widgets/github_login_button.dart';
 import 'package:sfaclog/view/widgets/kakao_login_button.dart';
+import 'package:sfaclog/view/widgets/naver_login_button.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:sfaclog_widgets/buttons/sl_button.dart';
@@ -139,9 +141,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     alignment: WrapAlignment.center,
                     spacing: 18,
                     children: [
+                      NaverLoginButton(),
                       KakaoLoginButton(),
-                      KakaoLoginButton(),
-                      KakaoLoginButton(),
+                      GithubLoginButton(),
                     ],
                   ),
                 ],
