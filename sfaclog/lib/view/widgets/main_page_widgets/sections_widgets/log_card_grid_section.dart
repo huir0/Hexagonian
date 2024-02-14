@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/log_card_mini.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/more_button.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 
-class LogCardGridSection extends StatelessWidget {
+class LogCardGridSection extends ConsumerWidget {
   const LogCardGridSection({
     super.key,
     this.thumbnail,
@@ -16,7 +19,9 @@ class LogCardGridSection extends StatelessWidget {
   final String subtitle;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var logList = ref.watch(logProvider).logModelList;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -26,21 +31,30 @@ class LogCardGridSection extends StatelessWidget {
           onPressed: () {},
         ),
         const SizedBox(height: 20),
-        GridView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: 4,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            mainAxisSpacing: 24,
-            crossAxisSpacing: 16,
-            crossAxisCount: 2,
-            childAspectRatio: 148 / 190,
-          ),
-          itemBuilder: (context, index) {
-            return LogCardMini(image: thumbnail);
-          },
-        ),
+        logList != []
+            ? GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 4,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  mainAxisSpacing: 24,
+                  crossAxisSpacing: 16,
+                  crossAxisCount: 2,
+                  childAspectRatio: 148 / 190,
+                ),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/log/read/${logList[index].id}');
+                    },
+                    child: LogCardMini(
+                      logData: logList![index],
+                    ),
+                  );
+                },
+              )
+            : const CircularProgressIndicator(),
         const SizedBox(height: 40),
       ],
     );
