@@ -59,7 +59,8 @@ class _MyFollowCardState extends ConsumerState<MyFollowCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
       width: 312,
       height: 52,
       child: Row(
