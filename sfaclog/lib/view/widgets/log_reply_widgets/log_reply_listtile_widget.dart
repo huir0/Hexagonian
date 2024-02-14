@@ -4,9 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/log_reply_model.dart';
 import 'package:sfaclog/viewmodel/log_reply_viewmodel/log_reply_notifier.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/bottomsheets/sl_bottom_sheets.dart';
 
-class LogReplyListTileWidget extends ConsumerWidget {
+class LogReplyListTileWidget extends ConsumerStatefulWidget {
   final LogReplyModel? reply;
   const LogReplyListTileWidget({
     super.key,
@@ -14,25 +15,72 @@ class LogReplyListTileWidget extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LogReplyListTileWidget> createState() =>
+      _LogReplyListTileWidgetState();
+}
+
+class _LogReplyListTileWidgetState
+    extends ConsumerState<LogReplyListTileWidget> {
+  var userInfo;
+  String avatarUrl = '';
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    userInfo = await ref
+        .read(logReplyProvider.notifier)
+        .getUserInfo(widget.reply!.id!);
+    avatarUrl =
+        await ref.read(logReplyProvider.notifier).getAvatarUrl(userInfo['id']);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var state = ref.watch(logReplyProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        reply == null
+        widget.reply == null
             ? const SizedBox()
             : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Row(
-                    children: [Icon(Icons.people), Text('Name')],
-                  ),
+                  userInfo == null
+                      ? const SizedBox()
+                      : Row(
+                          children: [
+                            SvgPicture.network(
+                              avatarUrl,
+                              height: 30,
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(userInfo['nickname']),
+                          ],
+                        ),
                   Row(
                     children: [
-                      reply!.created == null
-                          ? Text(DateTime.now().toString().split('.')[0])
-                          : Text(reply!.created!.split('.')[0]),
+                      widget.reply!.created == null
+                          ? Text(
+                              DateTime.now().toString().split('.')[0],
+                              style: SLTextStyle(
+                                      style: SLStyle.Text_XS_Medium,
+                                      color: SLColor.neutral.shade50)
+                                  .textStyle,
+                            )
+                          : Text(
+                              widget.reply!.created!.split('.')[0],
+                              style: SLTextStyle(
+                                      style: SLStyle.Text_XS_Medium,
+                                      color: SLColor.neutral.shade50)
+                                  .textStyle,
+                            ),
                       InkWell(
                           onTap: () {
                             SLSheet.bottomSheet(
@@ -60,7 +108,8 @@ class LogReplyListTileWidget extends ConsumerWidget {
                                 height: 180,
                                 width: 360);
                           },
-                          child: SvgPicture.asset('assets/icons/menu_dots.svg'))
+                          child: SvgPicture.asset('assets/icons/menu_dots.svg',
+                              color: SLColor.neutral.shade50))
                     ],
                   )
                 ],
@@ -69,7 +118,7 @@ class LogReplyListTileWidget extends ConsumerWidget {
           height: 12,
         ),
         Text(
-          reply!.content,
+          widget.reply!.content,
           style: SLTextStyle(
                   style: SLStyle.Text_M_Medium, color: SLColor.neutral.shade10)
               .textStyle,
@@ -83,10 +132,10 @@ class LogReplyListTileWidget extends ConsumerWidget {
             InkWell(
               onTap: () {
                 final currentParentId = state.parentReplyId;
-                final shouldClear = currentParentId == reply!.id;
+                final shouldClear = currentParentId == widget.reply!.id;
                 ref
                     .read(logReplyProvider.notifier)
-                    .setParentReplyId(shouldClear ? '' : reply!.id!);
+                    .setParentReplyId(shouldClear ? '' : widget.reply!.id!);
               },
               child: Text(
                 '답글',
@@ -102,7 +151,7 @@ class LogReplyListTileWidget extends ConsumerWidget {
                 const SizedBox(
                   width: 4,
                 ),
-                const Text('1'),
+                Text('${widget.reply!.like}'),
               ],
             ),
           ],

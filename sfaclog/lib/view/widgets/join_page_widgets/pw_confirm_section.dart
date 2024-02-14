@@ -83,7 +83,7 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
                       return '숫자 v 특수문자 v 6-18자 이내 v';
                     }
                     if (!RegExp(
-                            r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{6,18}$')
+                            r'^(?=.*[0-9])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+\S]{6,18}$')
                         .hasMatch(value)) {
                       return '숫자 v 특수문자 v 6-18자 이내 v';
                     }
@@ -158,7 +158,7 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
                         );
 
                         UserModel basicUserInfo =
-                            onboardingState.userInfo!.user!;
+                            onboardingState.userInfo!.profile!;
 
                         // var res = await authNotifier.signup(
                         // name: basicUserInfo.name!,

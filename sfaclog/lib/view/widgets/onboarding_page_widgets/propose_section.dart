@@ -80,7 +80,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
               ? () async {
                   try {
                     if (onboardingState.userInfo != null &&
-                        userInfoState.userInfo!.user != null) {
+                        userInfoState.userInfo!.profile != null) {
                       UserInfo userInfo = onboardingState.userInfo!;
                       List<String> skillList = [
                         ...userInfo.skill!.map((skill) => skill.id)
@@ -90,7 +90,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
                         nickname: userInfo.nickname!,
                         agreement: userInfo.agreementState!,
                         skill: skillList,
-                        userModelId: userInfo.user!.id!,
+                        userModelId: userInfo.profile!.id!,
                         propose_state: userInfo.proposeState!,
                         picture: userInfo.picture,
                       );
@@ -98,11 +98,11 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
                       userInfoNotifier.setUserInfo(
                         res,
                         skills: userInfo.skill!,
-                        user: userInfo.user!,
+                        user: userInfo.profile!,
                       );
                     } else {
                       print(
-                          'createUserInfo: ${onboardingState.userInfo!.user}가 null입니다.');
+                          'createUserInfo: ${onboardingState.userInfo!.profile}가 null입니다.');
                       return;
                     }
 

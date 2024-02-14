@@ -47,8 +47,8 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
 
     late String name = '';
     late String email = '';
+
     return Column(
-      // physics: const NeverScrollableScrollPhysics(),
       children: [
         Expanded(
           child: Column(
@@ -86,7 +86,7 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                         name = newValue;
                         onboardingNotifier.setOnboardingState(
                             onboardingState.userInfo?.copyWith(
-                          user: onboardingState.userInfo?.user
+                          profile: onboardingState.userInfo?.profile
                               ?.copyWith(name: newValue),
                         ));
                       },
@@ -121,7 +121,7 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                             email = newValue;
                             onboardingNotifier.setOnboardingState(
                                 onboardingState.userInfo?.copyWith(
-                              user: onboardingState.userInfo?.user
+                              profile: onboardingState.userInfo?.profile
                                   ?.copyWith(email: newValue),
                             ));
                           },
@@ -186,6 +186,8 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                                         onboardingNotifier.setNewUser(tempData);
 
                                         toggleVerifidReq(true);
+                                        print(tempData);
+                                        print(verifiedReq);
                                       }
                                     : null,
                               ),
