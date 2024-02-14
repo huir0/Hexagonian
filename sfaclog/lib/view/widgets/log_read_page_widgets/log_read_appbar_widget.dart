@@ -20,7 +20,6 @@ class LogReadAppBarWidget extends ConsumerStatefulWidget
 
 class _LogReadAppBarWidgetState extends ConsumerState<LogReadAppBarWidget> {
   @override
-  @override
   Widget build(BuildContext context) {
     var state = ref.watch(logProvider);
     return AppBar(

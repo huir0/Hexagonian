@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogReadHeaderWidget extends StatelessWidget {
   final SFACLogModel sfacLogModel;
+  final dynamic userInfo;
+  final String avatarUrl;
   const LogReadHeaderWidget({
     super.key,
     required this.sfacLogModel,
+    required this.userInfo,
+    required this.avatarUrl,
   });
 
   String _handleCreatedTime(String createdTime) {
@@ -29,7 +35,9 @@ class LogReadHeaderWidget extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: SizedBox(
@@ -64,15 +72,15 @@ class LogReadHeaderWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      'assets/avatars/avatar_17.svg',
+                    SvgPicture.network(
+                      avatarUrl,
                       height: 30,
                     ),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      'Name',
+                      userInfo?['nickname'] ?? '',
                       style: SLTextStyle(style: SLStyle.Text_S_Bold).textStyle,
                     ),
                     const SizedBox(

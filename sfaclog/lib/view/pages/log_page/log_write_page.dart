@@ -40,7 +40,7 @@ class _LogWritePageState extends ConsumerState<LogWritePage> {
       body: '',
       images: [],
       thumbnail: '',
-      public: '',
+      public: 'public',
       tag: [],
       user: '',
       view: 0,

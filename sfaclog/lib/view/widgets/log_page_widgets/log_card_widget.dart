@@ -24,8 +24,9 @@ class LogPageCardWidget extends ConsumerStatefulWidget {
 class _LogPageCardWidgetState extends ConsumerState<LogPageCardWidget> {
   String? imgUrl;
   int replyCnt = 0;
+  String avatarUrl = '';
   List<Widget> chipList = [];
-
+  var userInfo;
   @override
   void initState() {
     super.initState();
@@ -33,6 +34,10 @@ class _LogPageCardWidgetState extends ConsumerState<LogPageCardWidget> {
   }
 
   Future<void> _loadData() async {
+    userInfo =
+        await ref.read(logProvider.notifier).getUserInfo(widget.logData.id);
+    avatarUrl =
+        await ref.read(logProvider.notifier).getAvatarUrl(userInfo['id']);
     imgUrl =
         await ref.read(logProvider.notifier).getThumbNailUrl(widget.logData.id);
     replyCnt =
@@ -97,13 +102,17 @@ class _LogPageCardWidgetState extends ConsumerState<LogPageCardWidget> {
                   top: 14,
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.people,
-                        color: Colors.white,
-                        size: 14,
+                      avatarUrl == ''
+                          ? const SizedBox()
+                          : SvgPicture.network(
+                              avatarUrl,
+                              height: 20,
+                            ),
+                      const SizedBox(
+                        width: 4,
                       ),
                       Text(
-                        '박스팩',
+                        userInfo?['nickname'] ?? '',
                         style:
                             SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
                       )
