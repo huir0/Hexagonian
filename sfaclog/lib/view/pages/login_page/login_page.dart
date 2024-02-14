@@ -118,12 +118,13 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     text: buttonText,
                     isActive: _isActive,
                     onTap: _isActive
-                        ? () {
-                            authNotifier.login(
+                        ? () async {
+                            var id = await authNotifier.login(
                               email: emailController.text,
                               password: passwordController.text,
                             );
                             if (authStatus == AuthStatus.authenticated) {
+                              await authNotifier.setUserInfoById(id);
                               context.push('/home');
                             }
                           }

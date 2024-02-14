@@ -40,6 +40,10 @@ class _SplashPageState extends ConsumerState<SplashPage>
         .read(logProvider.notifier)
         .getLogDataOrderBy(ref.watch(logProvider).orderBy);
     ref.read(logProvider.notifier).setPopularLog(popularLogList);
+    newLogList = await ref
+        .read(logProvider.notifier)
+        .getLogDataOrderBy(ref.watch(logProvider).orderBy);
+
     ref.read(logProvider.notifier).setLog(newLogList);
   }
 
