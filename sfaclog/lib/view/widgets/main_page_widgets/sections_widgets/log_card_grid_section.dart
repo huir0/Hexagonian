@@ -35,7 +35,7 @@ class LogCardGridSection extends StatelessWidget {
             mainAxisSpacing: 24,
             crossAxisSpacing: 16,
             crossAxisCount: 2,
-            childAspectRatio: 148 / 182,
+            childAspectRatio: 148 / 190,
           ),
           itemBuilder: (context, index) {
             return LogCardMini(image: thumbnail);

@@ -34,7 +34,7 @@ class SpecupReviewSection extends ConsumerWidget {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 242,
+          height: 257,
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             itemCount: 5,

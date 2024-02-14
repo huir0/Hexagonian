@@ -31,14 +31,17 @@ class _TodaysContentsState extends State<TodaysContents> {
           child: MainTitle(title: '오늘의 콘텐츠'),
         ),
         const SizedBox(height: 13),
-        TabButtons(
-          onTab: setTab,
-          tabs: [
-            TabInfo(type: TabButtonType.log, label: '로그'),
-            TabInfo(type: TabButtonType.project, label: '프로젝트'),
-            TabInfo(type: TabButtonType.qna, label: '큐앤에이'),
-            TabInfo(type: TabButtonType.sfacProgram, label: '스팩프로그램'),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(left: 24),
+          child: TabButtons(
+            onTab: setTab,
+            tabs: [
+              TabInfo(type: TabButtonType.log, label: '로그'),
+              TabInfo(type: TabButtonType.project, label: '프로젝트'),
+              TabInfo(type: TabButtonType.qna, label: '큐앤에이'),
+              TabInfo(type: TabButtonType.sfacProgram, label: '스팩프로그램'),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         IndexedStack(
@@ -87,7 +90,7 @@ class _TabButtonsState extends State<TabButtons> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: List.generate(widget.tabs.length, (index) {
         final tab = widget.tabs[index];
