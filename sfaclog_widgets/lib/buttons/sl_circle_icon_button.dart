@@ -11,6 +11,7 @@ class SLCircleIconButton extends StatelessWidget {
     this.color,
     this.icon,
     this.assetSvgIcon = 'assets/icons/pencil.svg',
+    this.image,
   });
 
   final double? width;
@@ -19,6 +20,7 @@ class SLCircleIconButton extends StatelessWidget {
   final Color? color;
   final Icon? icon;
   final String? assetSvgIcon;
+  final String? image;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class SLCircleIconButton extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: color ?? SLColor.primary.shade90,
           shape: BoxShape.circle,
@@ -39,6 +42,12 @@ class SLCircleIconButton extends StatelessWidget {
   Widget _buildChild() {
     if (icon != null) {
       return icon!;
+    }
+    if (image != null) {
+      return Image.asset(
+        image!,
+        fit: BoxFit.contain,
+      );
     }
     return SvgPicture.asset(
       assetSvgIcon!,

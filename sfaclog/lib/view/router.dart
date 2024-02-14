@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/alarm_page/alarm_page.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
+import 'package:sfaclog/view/pages/my_page/my_password_page.dart';
 import 'package:sfaclog/view/pages/walkthrough_page/walkthrough_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/community_write_page.dart';
@@ -164,6 +165,10 @@ final router = GoRouter(initialLocation: '/splash', routes: [
   GoRoute(
     path: '/welcome',
     builder: (context, state) => const JoinCompletePage(),
+  ),
+  GoRoute(
+    path: '/passwordReset',
+    builder: (context, state) => const MypageChangePassword(),
   ),
 
   GoRoute(

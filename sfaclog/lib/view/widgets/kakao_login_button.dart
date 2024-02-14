@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/viewmodel/auth/oauth2_auth_notifier.dart';
+import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class KakaoLoginButton extends ConsumerWidget {
   const KakaoLoginButton({
@@ -10,7 +11,7 @@ class KakaoLoginButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
+    return InkWell(
       onTap: () async {
         try {
           final authData =
@@ -22,17 +23,10 @@ class KakaoLoginButton extends ConsumerWidget {
           print('카카오로그인 실패: $e');
         }
       },
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
+      child: const SLCircleIconButton(
         width: 50,
         height: 50,
-        child: Image.asset(
-          'assets/images/kakao.png',
-          fit: BoxFit.contain,
-        ),
+        image: 'assets/images/kakao.png',
       ),
     );
   }

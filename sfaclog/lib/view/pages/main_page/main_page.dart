@@ -29,77 +29,99 @@ class _MainPageState extends ConsumerState<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    const String thumbnail = 'https://source.unsplash.com/random';
-
     return ListView(
-      shrinkWrap: true,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Stack(
+          // shrinkWrap: true,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 24),
-              child: SizedBox(
-                width: 154,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //@todo GestureDetector 삭제할것
-                    GestureDetector(
-                      onTap: () {
-                        context.push('/login');
-                      },
-                      child: Text(
-                        '오늘의 스팩업!',
-                        style: SLTextStyle(
-                          style: SLStyle.Text_L_Bold,
-                          color: Colors.white,
-                        ).textStyle,
+            Column(
+              children: [
+                const SizedBox(height: 130),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    color: SLColor.neutral.shade90,
+                  ),
+                  child: const Column(
+                    children: [
+                      LineDecoWidget(),
+                      TodaysContents(),
+                      Divider(),
+                      LogCardGridSection(),
+                      TopLoggerSection(),
+                      SizedBox(height: 32),
+                      LogCardGridSection(
+                        subject: '#IOS',
+                        subtitle: '개발자라면 주목!',
                       ),
-                    ),
-                    Text(
-                      '$username님을 위해 다양한 맞춤 콘텐츠를 준비했어요!',
-                      style: SLTextStyle(
-                        color: Colors.white,
-                        style: SLStyle.Text_M_Regular,
-                      ).textStyle,
-                    ),
-                  ],
+                      SpecupReviewSection(),
+                      SfacProgramSection(),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-            Image.asset('assets/images/character/character_main.png'),
+            Positioned(
+              top: 0,
+              child: Headline(username: username),
+            ),
           ],
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+      ],
+    );
+  }
+}
+
+class Headline extends StatelessWidget {
+  const Headline({
+    super.key,
+    required this.username,
+  });
+
+  final String username;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 24, bottom: 35),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //@todo GestureDetector 삭제할것
+                GestureDetector(
+                  onTap: () {
+                    context.push('/login');
+                  },
+                  child: const Text(
+                    '오늘의 스팩업!',
+                    style: TextStyle(
+                      // style: SLStyle.Heading_M_Bold,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Text(
+                  '$username님을 위해 다양한 \n맞춤 콘텐츠를 준비했어요!',
+                  style: SLTextStyle(
+                    color: Colors.white,
+                    style: SLStyle.Text_M_Regular,
+                  ).textStyle,
+                ),
+              ],
             ),
-            color: SLColor.neutral.shade90,
-          ),
-          child: const Column(
-            children: [
-              LineDecoWidget(),
-              TodaysContents(),
-              Divider(),
-              LogCardGridSection(),
-              TopLoggerSection(),
-              LogCardGridSection(
-                subject: '#IOS',
-                subtitle: '개발자라면 주목!',
-              ),
-              SpecupReviewSection(),
-              SfacProgramSection(),
-            ],
           ),
         ),
-        // TextButton(
-        //     onPressed: () {
-        //       context.push('/login');
-        //     },
-        //     child: const Text('로그인')),
+        Image.asset('assets/images/character/character_main.png'),
       ],
     );
   }

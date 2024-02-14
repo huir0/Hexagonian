@@ -26,7 +26,7 @@ mixin _$UserInfo {
   List<String>? get agreementState => throw _privateConstructorUsedError;
   String? get picture => throw _privateConstructorUsedError;
   List<SkillModel>? get skill => throw _privateConstructorUsedError;
-  UserModel? get user => throw _privateConstructorUsedError;
+  UserModel? get profile => throw _privateConstructorUsedError;
   String? get introduction => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $UserInfoCopyWith<$Res> {
       List<String>? agreementState,
       String? picture,
       List<SkillModel>? skill,
-      UserModel? user,
+      UserModel? profile,
       String? introduction});
 }
 
@@ -70,7 +70,7 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
     Object? agreementState = freezed,
     Object? picture = freezed,
     Object? skill = freezed,
-    Object? user = freezed,
+    Object? profile = freezed,
     Object? introduction = freezed,
   }) {
     return _then(_value.copyWith(
@@ -98,9 +98,9 @@ class _$UserInfoCopyWithImpl<$Res, $Val extends UserInfo>
           ? _value.skill
           : skill // ignore: cast_nullable_to_non_nullable
               as List<SkillModel>?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
+      profile: freezed == profile
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
               as UserModel?,
       introduction: freezed == introduction
           ? _value.introduction
@@ -125,7 +125,7 @@ abstract class _$$UserInfoImplCopyWith<$Res>
       List<String>? agreementState,
       String? picture,
       List<SkillModel>? skill,
-      UserModel? user,
+      UserModel? profile,
       String? introduction});
 }
 
@@ -146,7 +146,7 @@ class __$$UserInfoImplCopyWithImpl<$Res>
     Object? agreementState = freezed,
     Object? picture = freezed,
     Object? skill = freezed,
-    Object? user = freezed,
+    Object? profile = freezed,
     Object? introduction = freezed,
   }) {
     return _then(_$UserInfoImpl(
@@ -174,9 +174,9 @@ class __$$UserInfoImplCopyWithImpl<$Res>
           ? _value._skill
           : skill // ignore: cast_nullable_to_non_nullable
               as List<SkillModel>?,
-      user: freezed == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
+      profile: freezed == profile
+          ? _value.profile
+          : profile // ignore: cast_nullable_to_non_nullable
               as UserModel?,
       introduction: freezed == introduction
           ? _value.introduction
@@ -196,7 +196,7 @@ class _$UserInfoImpl with DiagnosticableTreeMixin implements _UserInfo {
       final List<String>? agreementState,
       this.picture,
       final List<SkillModel>? skill,
-      this.user,
+      this.profile,
       this.introduction})
       : _agreementState = agreementState,
         _skill = skill;
@@ -233,13 +233,13 @@ class _$UserInfoImpl with DiagnosticableTreeMixin implements _UserInfo {
   }
 
   @override
-  final UserModel? user;
+  final UserModel? profile;
   @override
   final String? introduction;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserInfo(id: $id, nickname: $nickname, proposeState: $proposeState, agreementState: $agreementState, picture: $picture, skill: $skill, user: $user, introduction: $introduction)';
+    return 'UserInfo(id: $id, nickname: $nickname, proposeState: $proposeState, agreementState: $agreementState, picture: $picture, skill: $skill, profile: $profile, introduction: $introduction)';
   }
 
   @override
@@ -253,7 +253,7 @@ class _$UserInfoImpl with DiagnosticableTreeMixin implements _UserInfo {
       ..add(DiagnosticsProperty('agreementState', agreementState))
       ..add(DiagnosticsProperty('picture', picture))
       ..add(DiagnosticsProperty('skill', skill))
-      ..add(DiagnosticsProperty('user', user))
+      ..add(DiagnosticsProperty('profile', profile))
       ..add(DiagnosticsProperty('introduction', introduction));
   }
 
@@ -271,7 +271,7 @@ class _$UserInfoImpl with DiagnosticableTreeMixin implements _UserInfo {
                 .equals(other._agreementState, _agreementState) &&
             (identical(other.picture, picture) || other.picture == picture) &&
             const DeepCollectionEquality().equals(other._skill, _skill) &&
-            (identical(other.user, user) || other.user == user) &&
+            (identical(other.profile, profile) || other.profile == profile) &&
             (identical(other.introduction, introduction) ||
                 other.introduction == introduction));
   }
@@ -286,7 +286,7 @@ class _$UserInfoImpl with DiagnosticableTreeMixin implements _UserInfo {
       const DeepCollectionEquality().hash(_agreementState),
       picture,
       const DeepCollectionEquality().hash(_skill),
-      user,
+      profile,
       introduction);
 
   @JsonKey(ignore: true)
@@ -311,7 +311,7 @@ abstract class _UserInfo implements UserInfo {
       final List<String>? agreementState,
       final String? picture,
       final List<SkillModel>? skill,
-      final UserModel? user,
+      final UserModel? profile,
       final String? introduction}) = _$UserInfoImpl;
 
   factory _UserInfo.fromJson(Map<String, dynamic> json) =
@@ -330,7 +330,7 @@ abstract class _UserInfo implements UserInfo {
   @override
   List<SkillModel>? get skill;
   @override
-  UserModel? get user;
+  UserModel? get profile;
   @override
   String? get introduction;
   @override

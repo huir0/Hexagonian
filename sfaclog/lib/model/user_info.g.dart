@@ -18,9 +18,9 @@ _$UserInfoImpl _$$UserInfoImplFromJson(Map<String, dynamic> json) =>
       skill: (json['skill'] as List<dynamic>?)
           ?.map((e) => SkillModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      user: json['user'] == null
+      profile: json['profile'] == null
           ? null
-          : UserModel.fromJson(json['user'] as String),
+          : UserModel.fromJson(json['profile'] as String),
       introduction: json['introduction'] as String?,
     );
 
@@ -32,6 +32,6 @@ Map<String, dynamic> _$$UserInfoImplToJson(_$UserInfoImpl instance) =>
       'agreementState': instance.agreementState,
       'picture': instance.picture,
       'skill': instance.skill,
-      'user': instance.user,
+      'profile': instance.profile,
       'introduction': instance.introduction,
     };
