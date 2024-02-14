@@ -86,8 +86,6 @@ class DevelopQnA extends StatelessWidget {
                     context.push('/readqa');
                   },
                 ),
-                const ComTileWiget(),
-                const ComTileWiget(),
               ],
             ),
           ),
