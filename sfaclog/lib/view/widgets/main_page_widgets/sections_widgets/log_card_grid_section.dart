@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/log_card_mini.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/more_button.dart';
+import 'package:sfaclog/viewmodel/app_wrapper_viewModel/app_wrapper_notifier.dart';
 import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
 
 class LogCardGridSection extends ConsumerWidget {
@@ -21,6 +22,7 @@ class LogCardGridSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var logList = ref.watch(logProvider).logModelList;
+    var state = ref.read(appwrapperProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -28,7 +30,10 @@ class LogCardGridSection extends ConsumerWidget {
         UnderlinedTitleWithMoreButton(
           subject: subject,
           subtitle: subtitle,
-          onPressed: () {},
+          onPressed: () {
+            int logPage = 2;
+            state.handleFabTap(context, logPage);
+          },
         ),
         const SizedBox(height: 20),
         logList != []
