@@ -108,7 +108,7 @@ class ProposeSectionState extends ConsumerState<ProposeSection> {
 
                     Future.delayed(
                       Duration.zero,
-                      () => context.push('/home'),
+                      () => context.push('/login'),
                     );
                   } catch (e) {
                     print('error: $e');

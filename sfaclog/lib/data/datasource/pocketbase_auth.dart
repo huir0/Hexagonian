@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' hide ClientException;
 import 'package:pocketbase/pocketbase.dart';
+import 'package:sfaclog/model/sl_error_exception.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PocketbaseAuth {
@@ -115,15 +116,28 @@ class PocketbaseAuth {
     return result;
   }
 
-  Future<RecordAuth> loginWithPassword({
+  Future<RecordAuth?> loginWithPassword({
     required String email,
     required String password,
   }) async {
-    final authData = await pb.collection('users').authWithPassword(
-          email,
-          password,
-        );
-    return authData;
+    try {
+      final authData = await pb.collection('users').authWithPassword(
+            email,
+            password,
+          );
+      return authData;
+    } on ClientException catch (e) {
+      throw SLErrorException(
+        code: e.statusCode.toString(),
+        message: e.response['message'],
+      );
+    } catch (e) {
+      SLErrorException(
+        code: 'Exception',
+        message: e.toString(),
+      );
+    }
+    return null;
   }
 
   Future<dynamic> findUser(String tagId) async {

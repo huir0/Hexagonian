@@ -8,18 +8,8 @@ import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 class LogCardMini extends ConsumerStatefulWidget {
   const LogCardMini({
     super.key,
-    // this.image,
-    // this.title,
-    // this.tags,
-    // this.profileImage,
-    // this.isBooked = false,
     required this.logData,
   });
-  // final String? image;
-  // final String? profileImage;
-  // final String? title;
-  // final List<String?>? tags;
-  // final bool isBooked;
   final SFACLogModel logData;
 
   @override
@@ -27,6 +17,7 @@ class LogCardMini extends ConsumerStatefulWidget {
 }
 
 class _LogCardMiniState extends ConsumerState<LogCardMini> {
+  var userInfo;
   String? imgUrl;
   int replyCnt = 0;
   List<Widget> chipList = [];
@@ -45,6 +36,8 @@ class _LogCardMiniState extends ConsumerState<LogCardMini> {
   }
 
   Future<void> _loadData() async {
+    userInfo =
+        await ref.read(logProvider.notifier).getUserInfo(widget.logData.id);
     imgUrl =
         await ref.read(logProvider.notifier).getThumbNailUrl(widget.logData.id);
     replyCnt =
@@ -57,21 +50,21 @@ class _LogCardMiniState extends ConsumerState<LogCardMini> {
 
   @override
   Widget build(BuildContext context) {
-    const String category = '개발자일상';
-    const String title = '개발자가 되고 싶은 이유';
+    // const String category = '개발자일상';
+    // const String title = '개발자가 되고 싶은 이유';
 
     return Column(
       children: [
         _ImageSection(
-          image: imgUrl,
-          isBooked: false,
-        ),
+            image: imgUrl,
+            isBooked: false,
+            username: userInfo?['nickname'] ?? ''),
         const SizedBox(height: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              category,
+              widget.logData.category,
               style: SLTextStyle(
                       style: SLStyle.Text_XS_Regular,
                       color: SLColor.neutral.shade50)
@@ -79,7 +72,7 @@ class _LogCardMiniState extends ConsumerState<LogCardMini> {
             ),
             const SizedBox(height: 4),
             Text(
-              title,
+              widget.logData.title,
               overflow: TextOverflow.ellipsis,
               style: SLTextStyle(
                 style: SLStyle.Text_M_Bold,
@@ -138,11 +131,13 @@ class _ImageSection extends StatelessWidget {
     required this.image,
     this.profileImage,
     required this.isBooked,
+    this.username,
   });
 
   final String? image;
   final String? profileImage;
   final bool isBooked;
+  final String? username;
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +189,7 @@ class _ImageSection extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  '김룰루',
+                  username ?? '',
                   style: SLTextStyle(style: SLStyle.Text_M_Medium).textStyle,
                 )
               ],
@@ -234,6 +229,10 @@ List<Widget> buildTags(List<dynamic> tags, {int maxLen = 3}) {
   for (int i = 0; i < maxLen; i++) {
     result.add(_TagWidget(label: tags[i]));
     tagLength--;
+  }
+
+  if (tagLength == 0) {
+    return [...result];
   }
 
   return [...result, _TagWidget(label: '+$tagLength')];

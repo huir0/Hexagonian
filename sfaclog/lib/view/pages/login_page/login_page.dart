@@ -4,12 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sl_error_exception.dart';
 import 'package:sfaclog/view/widgets/github_login_button.dart';
 import 'package:sfaclog/view/widgets/kakao_login_button.dart';
 import 'package:sfaclog/view/widgets/naver_login_button.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 import 'package:sfaclog_widgets/buttons/sl_button.dart';
+import 'package:sfaclog_widgets/popup/sl_popup_dialog.dart';
 import 'package:sfaclog_widgets/textfields/sl_input.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -121,13 +123,47 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     isActive: _isActive,
                     onTap: _isActive
                         ? () async {
-                            var id = await authNotifier.login(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-                            if (authStatus == AuthStatus.authenticated) {
-                              await authNotifier.setUserInfoById(id);
-                              context.push('/home');
+                            try {
+                              var id = await authNotifier.login(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                              if (authStatus == AuthStatus.authenticated) {
+                                await authNotifier.setUserInfoById(id);
+                                context.push('/home');
+                              }
+                            } on SLErrorException catch (e) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return SFACPopUpDialog(
+                                    widget: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${e.code} 에러 발생',
+                                          style:
+                                              SLTextStyle.Text_L_Bold?.copyWith(
+                                                  color: SLColor.neutral[100]),
+                                        ),
+                                        Text(
+                                          e.message,
+                                          style: SLTextStyle.Text_S_Medium
+                                              ?.copyWith(
+                                            color: SLColor.neutral[100],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    onConfirmed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  );
+                                },
+                              );
                             }
                           }
                         : null,
