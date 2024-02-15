@@ -114,7 +114,6 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
       ref.read(MyPageProfileProvider.notifier).setLinks(newLinks);
       ref.read(MyPageProfileProvider.notifier).setUserInfo(newUserInfo);
 
-
       setState(() {
         avatarUrl = newAvatarUrl;
         follower = followerList.length;
@@ -130,7 +129,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
       return "${difference.inDays}일 전";
     } else {
       var months = difference.inDays ~/ 30;
-      return "${months}달 전";
+      return "$months달 전";
     }
   }
 
@@ -140,27 +139,31 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
     var educations = ref.watch(MyPageProfileProvider).educations;
     var links = ref.watch(MyPageProfileProvider).links!;
     var idUserInfo = ref.watch(MyPageProfileProvider).userInfo;
+    DateTime latestUpdate = DateTime.now();
     double progressValue = ((experiences!.isNotEmpty ? 1 : 0) +
             (educations!.isNotEmpty ? 1 : 0) +
             (links.isNotEmpty ? 1 : 0)) /
         3;
     // 이력서 업데이트 날짜
-    DateTime latestUpdate = DateTime.parse(experiences[0].updated);
-    for (var experience in experiences) {
-      if (DateTime.parse(experience.updated).isAfter(latestUpdate)) {
-        latestUpdate = DateTime.parse(experience.updated);
+    if (experiences.isNotEmpty) {
+      latestUpdate = DateTime.parse(experiences[0].updated);
+      for (var experience in experiences) {
+        if (DateTime.parse(experience.updated).isAfter(latestUpdate)) {
+          latestUpdate = DateTime.parse(experience.updated);
+        }
+      }
+      for (var education in educations) {
+        if (DateTime.parse(education.updated).isAfter(latestUpdate)) {
+          latestUpdate = DateTime.parse(education.updated);
+        }
+      }
+      for (var link in links) {
+        if (DateTime.parse(link.updated).isAfter(latestUpdate)) {
+          latestUpdate = DateTime.parse(link.updated);
+        }
       }
     }
-    for (var education in educations) {
-      if (DateTime.parse(education.updated).isAfter(latestUpdate)) {
-        latestUpdate = DateTime.parse(education.updated);
-      }
-    }
-    for (var link in links) {
-      if (DateTime.parse(link.updated).isAfter(latestUpdate)) {
-        latestUpdate = DateTime.parse(link.updated);
-      }
-    }
+
     return Material(
       child: Container(
         width: 360,
@@ -176,7 +179,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
               // 프로필 카드
               Container(
                 height: 272,
-                padding: EdgeInsets.only(top: 16, left: 22, right: 22),
+                padding: const EdgeInsets.only(top: 16, left: 22, right: 22),
                 decoration: BoxDecoration(
                   color: SLColor.neutral[80],
                   borderRadius: BorderRadius.circular(10),
@@ -189,14 +192,14 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         Container(
                           height: 92,
                           width: 92,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                           ),
                           child: avatarUrl != ''
                               ? SvgPicture.network(
                                   avatarUrl,
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                         ),
                         const SizedBox(
                           width: 24,
@@ -215,7 +218,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             Row(
                               children: [
                                 GestureDetector(
-                                  behavior: HitTestBehavior.opaque,
+                                    behavior: HitTestBehavior.opaque,
                                     onTap: () {
                                       context
                                           .push('/my/follow/${widget.userId}');
@@ -225,8 +228,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                     },
                                     child: Row(
                                       children: [
-                                        Text('팔로잉'),
-                                        SizedBox(
+                                        const Text('팔로잉'),
+                                        const SizedBox(
                                           width: 10,
                                         ),
                                         Text(following.toString()),
@@ -245,8 +248,8 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                                   },
                                   child: Row(
                                     children: [
-                                      Text('팔로워'),
-                                      SizedBox(
+                                      const Text('팔로워'),
+                                      const SizedBox(
                                         width: 10,
                                       ),
                                       Text(follower.toString()),
@@ -339,7 +342,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           SizedBox(
@@ -431,7 +434,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                       style: SLTextStyle.Text_M_Medium?.copyWith(
                           color: Colors.white),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 9,
                     ),
                     // TODO: 레코드 중에 가장 최신인 걸로 뽑아서 now에서 시간 빼기
@@ -443,12 +446,12 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: Color(0xffd6d6d6),
+                                color: const Color(0xffd6d6d6),
                               ),
                             ),
                             child: Text(
                               '업데이트 ${formatDateDifference(DateTime.now().toUtc().difference(latestUpdate))}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 8,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xffd6d6d6),
@@ -456,12 +459,12 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                             ),
                           )
                         : Container(),
-                    Spacer(),
+                    const Spacer(),
                     Text(
                       '${(progressValue * 100).roundToDouble().toStringAsFixed(0)}%',
                       // FIXME: semibold
                       style: SLTextStyle.Text_M_Medium?.copyWith(
-                          color: Color(0xFF397EFF)),
+                          color: const Color(0xFF397EFF)),
                     )
                   ],
                 ),
@@ -470,7 +473,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                 height: 16,
               ),
               // progress indicator
-              Container(
+              SizedBox(
                 height: 6,
                 child: LinearProgressIndicator(
                   value: progressValue,
@@ -496,7 +499,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                     ),
                     // 경력 데이터
                     // FIXME: experience나 resume에서 데이터 뽑아오기
-                    experiences.length > 0
+                    experiences.isNotEmpty
                         ? Container(
                             child: Column(
                               children: [
@@ -536,7 +539,7 @@ class _MyProfilePageState extends ConsumerState<MyProfilePage> {
                         title: '학력/교육'),
                     // 교육 데이터
                     // FIXME: resumes => education이나 resume에서 데이터 뽑아오기
-                    educations.length > 0
+                    educations.isNotEmpty
                         ? Container(
                             child: Column(
                               children: [

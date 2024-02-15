@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/commuity_qna.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class ComTileWiget extends StatelessWidget {
+class ComTileWiget extends StatefulWidget {
   final VoidCallback? onPressed;
 
   const ComTileWiget({super.key, this.onPressed});
 
+  @override
+  State<ComTileWiget> createState() => _ComTileWigetState();
+}
+
+class _ComTileWigetState extends State<ComTileWiget> {
   @override
   Widget build(BuildContext context) {
     double listTileW = 360;
@@ -36,7 +42,7 @@ class ComTileWiget extends StatelessWidget {
       ),
     ];
     return InkWell(
-      onTap: onPressed,
+      onTap: widget.onPressed,
       child: SizedBox(
         width: listTileW,
         height: listTileH,

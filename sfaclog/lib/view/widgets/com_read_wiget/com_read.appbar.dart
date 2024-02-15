@@ -33,13 +33,13 @@ class ComReadAppBarWidget extends StatelessWidget
                           '삭제하기',
                           style: SLTextStyle(
                                   style: SLStyle.Text_L_Bold,
-                                  color: Colors.white)
+                                  color: SLColor.warning)
                               .textStyle,
                         )),
                     TextButton(
                         onPressed: () {},
                         child: Text(
-                          '차단하기',
+                          '수정하기',
                           style: SLTextStyle(
                                   style: SLStyle.Text_L_Bold,
                                   color: Colors.white)
