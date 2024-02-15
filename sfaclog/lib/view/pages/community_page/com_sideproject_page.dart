@@ -102,7 +102,9 @@ class _ComSidePageState extends State<ComSidePage> {
                           width: 317,
                           active: false,
                           hintText: '#프론트앤드 #백앤드 #개발자일상',
-                          onTap: () {},
+                          onTap: () {
+                            context.push('/comsearch');
+                          },
                         ),
                       ),
                       const SizedBox(
@@ -121,11 +123,17 @@ class _ComSidePageState extends State<ComSidePage> {
                               text: '전체',
                               fontColor: Colors.white,
                             ),
+                            SizedBox(
+                              width: 8,
+                            ),
                             reviselabel(
                               width: 87,
                               height: 30,
                               text: '프론트엔드',
                               fontSize: 12,
+                            ),
+                            SizedBox(
+                              width: 8,
                             ),
                             GrayLabel1(
                               width: 57,
@@ -153,7 +161,21 @@ class _ComSidePageState extends State<ComSidePage> {
                           context.push('/comsideread');
                         },
                       ),
-                      const ComListTile(),
+                      ComListTile(
+                        onPressed: () {
+                          context.push('/comsideread');
+                        },
+                      ),
+                      ComListTile(
+                        onPressed: () {
+                          context.push('/comsideread');
+                        },
+                      ),
+                      ComListTile(
+                        onPressed: () {
+                          context.push('/comsideread');
+                        },
+                      ),
                     ],
                   ),
                 )),

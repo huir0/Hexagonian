@@ -174,19 +174,15 @@ class ComReple extends StatelessWidget {
                                                 BorderRadius.circular(10),
                                           ),
                                         ),
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              30, 20, 70, 80),
-                                          child: TextField(
-                                            decoration: InputDecoration(
+                                        child: TextField(
+                                          maxLines: null, // 다중 라인으로 입력 받기 위한 설정
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
                                               hintText:
-                                                  '내용을 입력해주세요. 최데 500자까지 가능합니다.',
-                                              labelStyle: TextStyle(
-                                                  color: Color(0xFF7F7F7F),
-                                                  fontSize: 5,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ),
+                                                  '   내용을 입력해주세요. 최대 500까지 가능합니다',
+                                              hintStyle: TextStyle(
+                                                fontSize: 12,
+                                              )),
                                         ),
                                       ),
                                     )

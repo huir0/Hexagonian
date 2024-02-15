@@ -8,8 +8,30 @@ import 'package:sfaclog_widgets/labels/log_label.dart';
 import 'package:sfaclog_widgets/util/common.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class ComSideReadPage extends StatelessWidget {
+class ComSideReadPage extends StatefulWidget {
   const ComSideReadPage({super.key});
+
+  @override
+  State<ComSideReadPage> createState() => _ComSideReadPageState();
+}
+
+class _ComSideReadPageState extends State<ComSideReadPage> {
+  DateTime selectedDay = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+
+  DateTime focusedDay = DateTime.now();
+
+  Map<DateTime, List<Event>> events = {
+    DateTime.utc(2022, 7, 13): [Event('title'), Event('title2')],
+    DateTime.utc(2022, 7, 14): [Event('title3')],
+  };
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return events[day] ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,9 +294,30 @@ class ComSideReadPage extends StatelessWidget {
                   ],
                 ),
                 TableCalendar(
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    formatButtonVisible: false,
+                  ),
+                  locale: 'ko_KR',
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: DateTime.now(),
+                  onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                    setState(() {
+                      this.selectedDay = selectedDay;
+                      this.focusedDay = focusedDay;
+                    });
+                  },
+                  selectedDayPredicate: (DateTime day) {
+                    // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
+                    return isSameDay(selectedDay, day);
+                  },
+                  calendarStyle: CalendarStyle(
+                    markerSize: 10.0,
+                    markerDecoration: BoxDecoration(
+                        color: Colors.red, shape: BoxShape.circle),
+                  ),
+                  eventLoader: _getEventsForDay,
                 ),
                 const ComSideReadFooter(),
                 Padding(
@@ -311,4 +354,10 @@ class ComSideReadPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class Event {
+  String title;
+
+  Event(this.title);
 }

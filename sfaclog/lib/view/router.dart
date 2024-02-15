@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/view/app_wrapper.dart';
 import 'package:sfaclog/view/pages/alarm_page/alarm_page.dart';
+import 'package:sfaclog/view/pages/community_page/com_search_page.dart';
 import 'package:sfaclog/view/pages/community_page/com_side_read_page.dart';
 import 'package:sfaclog/view/pages/walkthrough_page/walkthrough_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
@@ -177,6 +178,10 @@ final router = GoRouter(initialLocation: '/splash', routes: [
   GoRoute(
     path: '/comsideread',
     builder: (context, state) => const ComSideReadPage(),
+  ),
+  GoRoute(
+    path: '/comsearch',
+    builder: (context, state) => const ComSearchPage(),
   ),
 
   // GoRoute(
