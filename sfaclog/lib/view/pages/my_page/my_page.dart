@@ -18,34 +18,34 @@ class MyPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      child: Column(children: [
-        Container(
-          padding: const EdgeInsets.only(top: 7),
-          child: SLTab(
-            currentIndex: ref.watch(myPageProvider).tab,
-            horizontalMargin: 9,
-            height: 43,
-            menu: const [
-              Text('프로필'),
-              Text('나의 로그'),
-              Text('북마크'),
-            ],
-            onTap: (index) {
-              ref.read(myPageProvider.notifier).tabChanged(index);
-            },
-          ),
+    return Column(children: [
+      Container(
+        padding: const EdgeInsets.only(top: 7),
+        child: SLTab(
+          currentIndex: ref.watch(myPageProvider).tab,
+          horizontalMargin: 9,
+          height: 43,
+          menu: const [
+            Text('프로필'),
+            Text('나의 로그'),
+            Text('북마크'),
+          ],
+          onTap: (index) {
+            print(index);
+            ref.read(myPageProvider.notifier).tabChanged(index);
+          },
         ),
-        const Expanded(
-          child: MyPageBody(),
-        ),
-      ]),
-    );
+      ),
+      const Expanded(
+        child: MyPageBody(),
+      ),
+    ]);
   }
 }
 
 class MyPageBody extends ConsumerStatefulWidget {
   const MyPageBody({super.key});
+  @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MyPageBodyState();
 }
 
