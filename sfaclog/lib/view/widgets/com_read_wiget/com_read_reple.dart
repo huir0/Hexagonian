@@ -3,11 +3,18 @@ import 'package:http/http.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_reple_card.dart';
+import 'package:sfaclog/view/widgets/com_read_wiget/com_reple_plus_card.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class ComReple extends StatelessWidget {
+class ComReple extends StatefulWidget {
   const ComReple({super.key});
 
+  @override
+  State<ComReple> createState() => _ComRepleState();
+}
+
+class _ComRepleState extends State<ComReple> {
+  List<String> comments = []; // 댓글 목록을 저장하는 리스트
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -221,6 +228,21 @@ class ComReple extends StatelessWidget {
                     height: 13,
                     child: Image.asset('assets/images/Vector 4850.png')),
                 ComReadCard(),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Padding(padding: EdgeInsets.all(5)),
+                Container(
+                    width: 14,
+                    height: 13,
+                    child: Image.asset('assets/images/Vector 4850.png')),
+                ComReadplusCard(
+                  addedText: 'rr',
+                ),
               ],
             ),
           ],
