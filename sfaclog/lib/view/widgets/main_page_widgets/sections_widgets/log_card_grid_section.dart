@@ -32,7 +32,7 @@ class LogCardGridSection extends ConsumerWidget {
           subtitle: subtitle,
           onPressed: () {
             int logPage = 2;
-            state.handleFabTap(context, logPage);
+            state.pageChanged(logPage);
           },
         ),
         const SizedBox(height: 20),
