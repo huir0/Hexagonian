@@ -133,16 +133,19 @@ final router = GoRouter(initialLocation: '/splash', routes: [
             },
             routes: [
               GoRoute(
-                path: 'email',
-                builder: (context, state) => MypageChangeEmail(),
+                path: 'email/:usersId',
+                builder: (context, state) {
+                  final usersId = state.pathParameters['usersId'];
+                  return MypageChangeEmail(usersId: usersId!);
+                },
               ),
               GoRoute(
                 path: 'mobile',
-                builder: (context, state) => MypageChangeMobile(),
+                builder: (context, state) => const MypageChangeMobile(),
               ),
               GoRoute(
                 path: 'password',
-                builder: (context, state) => MypageChangePassword(),
+                builder: (context, state) => const MypageChangePassword(),
               ),
             ]),
         GoRoute(

@@ -1,19 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sfaclog/data/datasource/remote_datasource.dart';
+import 'package:sfaclog/model/users_model.dart';
 import 'package:sfaclog_widgets/buttons/answer_button.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 import '../../../common.dart';
+import '../../../viewmodel/my_profile_viewmodel/my_profile_notifier.dart';
 
-class MypageChangeEmail extends StatefulWidget {
-  const MypageChangeEmail({super.key});
+class MypageChangeEmail extends ConsumerStatefulWidget {
+  const MypageChangeEmail({
+    super.key,
+    required this.usersId,
+  });
+  final String usersId;
 
   @override
-  State<MypageChangeEmail> createState() => _MypageChangeEmailState();
+  ConsumerState<MypageChangeEmail> createState() => _MypageChangeEmailState();
 }
 
-class _MypageChangeEmailState extends State<MypageChangeEmail> {
+class _MypageChangeEmailState extends ConsumerState<MypageChangeEmail> {
+  RemoteDataSource _remoteDataSource = RemoteDataSource();
   final newEmail = TextEditingController();
+  final currentEmail = TextEditingController();
+  UsersModel userInfo = UsersModel(id: '', email: '', name: '');
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  Future<void> _init() async {
+    var newUsersInfo = await ref
+        .read(MyPageProfileProvider.notifier)
+        .getUsersInfo(widget.usersId);
+
+    setState(() {
+      userInfo = newUsersInfo;
+      currentEmail.text = userInfo.email;
+    });
+  }
+
   bool btnEnabled = false;
   @override
   Widget build(BuildContext context) {
@@ -23,10 +52,7 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
           scrolledUnderElevation: 0,
           leading: IconButton(
             onPressed: () {
-              // final currentTab = ref.read(myPageProvider).tab;
-              // ref.read(myPageProvider.notifier).tabChanged(currentTab);
-              // router.go('/my');
-              Navigator.pop(context);
+              context.pop();
             },
             icon: SvgPicture.asset('assets/icons/arrow_back.svg'),
           ),
@@ -55,9 +81,8 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: const SLInput(
-                // FIXME: 계정 연동해서 이메일 주소 보여주기
-                hintText: 'test@test.com',
+              child: SLInput(
+                controller: currentEmail,
               ),
             ),
             const SizedBox(
@@ -76,17 +101,28 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: SLInput(
+              child: SFACTextField(
                 controller: newEmail,
-                // FIXME: 계정 연동해서 이메일 주소 받기
+                height: 47,
+                width: 312,
+                border: Border.all(color: SLColor.neutral[70]!),
                 hintText: 'example@example.com',
-                validator: (txt) {
-                  if (txt != null) {
+                onChanged: (txt) {
+                  bool isEmail(String txt) {
+                    String p = r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
+                    RegExp regExp = new RegExp(p);
+                    return regExp.hasMatch(txt);
+                  }
+
+                  if (isEmail(txt)) {
                     setState(() {
                       btnEnabled = true;
                     });
+                  } else {
+                    setState(() {
+                      btnEnabled = false;
+                    });
                   }
-                  return null;
                 },
               ),
             ),
@@ -99,8 +135,11 @@ class _MypageChangeEmailState extends State<MypageChangeEmail> {
               padding: EdgeInsets.zero,
               child: btnEnabled
                   ? applyButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        final body = <String, dynamic>{"email": newEmail.text};
+                        await _remoteDataSource.updateTableData(
+                            'users', userInfo.id, body);
+                        context.pop();
                       },
                       text1: '변경하기',
                       width: 312,

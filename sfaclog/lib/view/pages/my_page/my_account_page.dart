@@ -107,7 +107,7 @@ class _MypageAccountState extends ConsumerState<MypageAccount> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                context.push('/my/setting/account/${widget.userId}/email/');
+                context.push('/my/setting/account/${widget.userId}/email/${widget.userId}');
               },
               child: Container(
                   padding:
@@ -143,7 +143,7 @@ class _MypageAccountState extends ConsumerState<MypageAccount> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                context.push('/my/setting/account/mobile/');
+                context.push('/my/setting/account/${widget.userId}/mobile/');
               },
               child: Container(
                   padding:
@@ -156,7 +156,7 @@ class _MypageAccountState extends ConsumerState<MypageAccount> {
                         width: 134,
                         height: 22,
                         // FIXME: 데이터 불러오기
-                        child: Text('010-1234-2951'),
+                        child: Text('010-1234-5678'),
                       ),
                       const SizedBox(
                         width: 9,
@@ -176,7 +176,7 @@ class _MypageAccountState extends ConsumerState<MypageAccount> {
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                context.push('/my/setting/account/password/');
+                context.push('/my/setting/account/${widget.userId}/password/');
               },
               child: Container(
                   padding:
