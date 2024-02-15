@@ -38,11 +38,14 @@ class _MyFollowCardState extends ConsumerState<MyFollowCard> {
     var newfollowerList = await ref
         .watch(MyPageProfileProvider.notifier)
         .getFollowers(widget.user.follower);
-
     bool tempBool = await isFollowing(newfollowerList);
     setState(() {
       avatarUrl = newavatarUrl;
-      following = tempBool;
+      if (widget.user.expand['follower'] == null) {
+        following = true;
+      } else {
+        following = tempBool;
+      }
     });
   }
 

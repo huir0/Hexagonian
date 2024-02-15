@@ -25,27 +25,26 @@ class _MyLogPageState extends ConsumerState<MyLogPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      return _init();
-    });
+    Future.microtask(() => _init());
   }
 
   Future<void> _init() async {
     try {
       var newLogList = await ref
           .read(myPageLogProvider.notifier)
-          .getUserLogs(userId: widget.userId, expand: 'user');
+          .getUserLogs(userId: widget.userId, filter: '', expand: 'user');
 
       ref.read(myPageLogProvider.notifier).setUserLogs(newLogList);
     } catch (e, st) {
       print("Error loading logs: $e\\n$st");
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
-    final logList = ref.watch(myPageLogProvider).userLogs;
-    final category = ref.watch(myPageLogProvider).category;
+    List<dynamic> logList = ref.watch(myPageLogProvider).userLogs;
+    var category = ref.watch(myPageLogProvider).category;
     return Material(
       child: Container(
         child: SingleChildScrollView(

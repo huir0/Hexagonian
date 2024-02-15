@@ -70,6 +70,8 @@ class _MypageLogBigCardState extends ConsumerState<MypageLogBigCard> {
                   child: Image.network(
                     imgUrl,
                     fit: BoxFit.fitWidth,
+                    height: 157,
+                    width: 313,
                   ),
                 ),
                 Positioned(
@@ -257,19 +259,19 @@ class _MypageLogSmallCardState extends ConsumerState<MypageLogSmallCard> {
             Container(
               width: 148,
               height: 80,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    widget.log.thumbnail,
-                  ),
-                ),
               ),
               child: Stack(
                 children: [
                   Container(
-                    child: Image.network(imgUrl),
+                    child: Image.network(
+                      imgUrl,
+                      fit: BoxFit.cover,
+                      height: 80,
+                      width: 148,
+                    ),
                   ),
                   Positioned(
                     top: 6,
