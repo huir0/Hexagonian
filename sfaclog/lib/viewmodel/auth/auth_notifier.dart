@@ -12,7 +12,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier() : super(AuthState.init());
 
   Future<RecordModel> updateUser({
-    required String nickname,
     required String password,
     required String passwordConfirm,
     required String name,
@@ -21,7 +20,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       RecordModel result = await PocketbaseAuth().updateUser(
         userId: userId,
-        nickname: nickname,
         password: password,
         passwordConfirm: passwordConfirm,
         name: name,

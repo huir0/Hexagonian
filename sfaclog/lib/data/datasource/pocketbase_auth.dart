@@ -54,14 +54,12 @@ class PocketbaseAuth {
   }
 
   Future<RecordModel> updateUser({
-    required String nickname,
     required String password,
     required String passwordConfirm,
     required String name,
     required String userId,
   }) async {
     final record = await pb.collection('users').update(userId, body: {
-      "username": nickname,
       "emailVisibility": false,
       "password": password,
       "passwordConfirm": passwordConfirm,
@@ -82,7 +80,6 @@ class PocketbaseAuth {
   }) async {
     try {
       final record = await pb.collection('users').create(body: {
-        "username": name,
         "email": email,
         "emailVisibility": true,
         "password": "1234qwer!",
@@ -106,7 +103,6 @@ class PocketbaseAuth {
     required String nickname,
   }) async {
     RecordModel result = await pb.collection('users').create(body: {
-      'username': nickname,
       'email': email,
       'emailVisibility': true,
       'password': password,

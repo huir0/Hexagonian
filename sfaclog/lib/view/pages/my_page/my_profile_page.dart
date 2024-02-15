@@ -20,28 +20,28 @@ import '../../widgets/mypage_widgets/resume_widgets/education_card.dart';
 
 const List<Map<String, dynamic>> reviews = [
   {
-    'profile_image': 'assets/avatars/avatar_00',
+    'profile_image': 'assets/avatars/avatar_02.svg',
     'reviewer': '김개발',
     'rating': 5,
     'updatedOn': 2023 - 12 - 31,
     'content': '너무 잘하십니다.',
   },
   {
-    'profile_image': 'assets/avatars/avatar_08',
+    'profile_image': 'assets/avatars/avatar_08.svg',
     'reviewer': '장개발',
     'rating': 3,
     'updatedOn': 2022 - 12 - 31,
     'content': '그냥 그래요.',
   },
   {
-    'profile_image': 'assets/avatars/avatar_09',
+    'profile_image': 'assets/avatars/avatar_09.svg',
     'reviewer': '이개발',
     'rating': 4.5,
     'updatedOn': 2023 - 11 - 30,
     'content': '너무 잘하십니다.',
   },
   {
-    'profile_image': 'assets/avatars/avatar_01',
+    'profile_image': 'assets/avatars/avatar_01.svg',
     'reviewer': '박개발',
     'rating': 1,
     'updatedOn': 2023 - 12 - 31,
