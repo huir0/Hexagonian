@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
+import 'package:sfaclog/model/sl_error_exception.dart';
 import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 
@@ -47,20 +48,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // 메일 전송
       pb.requestVerification(email: email);
       // 로그인
-      RecordAuth tempRecord = await pb.loginWithPassword(
+      RecordAuth? tempRecord = await pb.loginWithPassword(
         email: email,
         password: '1234qwer!',
       );
 
-      state = state.copyWith(
-        authStatus: AuthStatus.authenticated,
-        token: tempRecord.token,
-        verified: tempRecord.record!.data['verified'],
-      );
+      if (tempRecord != null) {
+        state = state.copyWith(
+          authStatus: AuthStatus.authenticated,
+          token: tempRecord.token,
+          verified: tempRecord.record!.data['verified'],
+        );
+      }
 
       return result;
-    } catch (e) {
-      print('verified error: $e');
+    } on SLErrorException catch (_) {
+      state = state.copyWith(authStatus: AuthStatus.unauthenticated);
       rethrow;
     }
   }
@@ -77,20 +80,26 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String password,
   }) async {
     try {
-      RecordAuth result = await PocketbaseAuth().loginWithPassword(
+      String id = '';
+      RecordAuth? result = await PocketbaseAuth().loginWithPassword(
         email: email,
         password: password,
       );
 
-      state = state.copyWith(
-        authStatus: AuthStatus.authenticated,
-        token: result.token,
-        verified: result.record!.data['verified'],
-      );
+      if (result != null) {
+        state = state.copyWith(
+          authStatus: AuthStatus.authenticated,
+          token: result.token,
+          verified: result.record!.data['verified'],
+        );
 
-      return result.record!.id;
-    } catch (e) {
+        id = result.record!.id;
+        return id;
+      }
+      return id;
+    } on SLErrorException catch (e) {
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
+      print('Error Exception in login: $e');
       rethrow;
     }
   }
