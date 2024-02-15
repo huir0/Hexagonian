@@ -273,6 +273,11 @@ class _ReviewCardState extends State<ReviewCard> {
                             Container(
                               width: 45,
                               height: 45,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child:
+                                  SvgPicture.asset(review['profile_image']),
                             ),
                             SizedBox(
                               width: 16,

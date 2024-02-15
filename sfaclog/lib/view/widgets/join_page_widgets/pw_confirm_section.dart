@@ -173,7 +173,6 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
                           name: basicUserInfo.name!,
                           password: password,
                           passwordConfirm: passwordConfirm,
-                          nickname: basicUserInfo.name!,
                         );
 
                         await userInfoNotifier.setBasicUserInfo(res);
