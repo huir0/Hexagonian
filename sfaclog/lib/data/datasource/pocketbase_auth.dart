@@ -53,6 +53,13 @@ class PocketbaseAuth {
     return result;
   }
 
+  Future<bool> subscribeVerifiedEmail() async {
+    await pb.collection('users').subscribe(pb.authStore.model.id, (e) {
+      pb.collection('users').authRefresh();
+    });
+    return pb.authStore.model.data['verified'];
+  }
+
   Future<RecordModel> updateUser({
     required String password,
     required String passwordConfirm,
@@ -90,7 +97,7 @@ class PocketbaseAuth {
       print('temp user info!!!!!: $record');
       return record;
     } catch (e) {
-      print('cant create tempuser: $e');
+      print('cant create temp user: $e');
       rethrow;
     }
   }
@@ -121,6 +128,7 @@ class PocketbaseAuth {
             email,
             password,
           );
+
       return authData;
     } on ClientException catch (e) {
       throw SLErrorException(

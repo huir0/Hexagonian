@@ -183,9 +183,9 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                                           email: emailController.text,
                                         );
 
+                                        toggleVerifidReq(true);
                                         onboardingNotifier.setNewUser(tempData);
 
-                                        toggleVerifidReq(true);
                                         print(tempData);
                                         print(verifiedReq);
                                       }
@@ -213,7 +213,10 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                       password: '1234qwer!',
                     );
 
-                    if (authState.verified != true) {
+                    bool isVerifyEmail = await authNotifier
+                        .subscribeVerifiedEmail(); // verify 여부 체크
+
+                    if (isVerifyEmail != true) {
                       await Future.delayed(
                         Duration.zero,
                         () => showDialog(
@@ -240,6 +243,36 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                         ),
                       );
                       return;
+                    } else {
+                      () async {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SFACPopUpDialog(
+                              widget: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '메일을 아직 확인하지 않았습니다.',
+                                    style: SLTextStyle.Text_L_Bold?.copyWith(
+                                        color: SLColor.neutral[100]),
+                                  ),
+                                  Text(
+                                    '${emailController.text}로 메일이 전송되었으니 다시한번 확인해주세요.',
+                                    style: SLTextStyle.Text_S_Medium?.copyWith(
+                                      color: SLColor.neutral[100],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onConfirmed: () {
+                                Navigator.pop(context);
+                              },
+                            );
+                          },
+                        );
+                      };
                     }
 
                     if (formKey.currentState!.validate()) {
