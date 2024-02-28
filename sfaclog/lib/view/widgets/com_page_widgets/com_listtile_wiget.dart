@@ -1,175 +1,170 @@
 import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/model/commuity_qna.dart';
+import 'package:sfaclog/model/sfac_qna_model.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class ComTileWiget extends StatefulWidget {
   final VoidCallback? onPressed;
-
-  const ComTileWiget({super.key, this.onPressed});
+  final SFACQnaModel qnaData;
+  const ComTileWiget({
+    super.key,
+    this.onPressed,
+    required this.qnaData,
+  });
 
   @override
   State<ComTileWiget> createState() => _ComTileWigetState();
 }
 
 class _ComTileWigetState extends State<ComTileWiget> {
+  final String respondent = '프레드윰';
   @override
   Widget build(BuildContext context) {
-    double listTileW = 360;
-    double listTileH = 174;
-    double imgH = 174;
-    List<Widget> chipList = [
-      SFACTag(
-        text: Text(
-          '#Port-Fowarding',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-      SFACTag(
-        text: Text(
-          '#IPTIME',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-      SFACTag(
-        text: Text(
-          '#창업/수익창출가능',
-          style: SLTextStyle(color: Colors.white, style: SLStyle.Text_XS_Medium)
-              .textStyle,
-        ),
-      ),
-    ];
+    print(widget.qnaData.expand['answer']?.length);
+
     return InkWell(
       onTap: widget.onPressed,
-      child: SizedBox(
-        width: listTileW,
-        height: listTileH,
-        child: Column(
-          children: [
-            SizedBox(
-                width: listTileW,
-                height: imgH,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text('💬 3시간전 프레드윰 님의 새로운 답변',
-                              style: TextStyle(
-                                  color: Color(0xFF666666),
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.w600,
-                                  height: 0.17)),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text('IPTIME 포트포워딩',
-                              style: SLTextStyle(style: SLStyle.Text_M_Bold)
-                                  .textStyle),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'NEW',
-                            style: SLTextStyle(
-                                    color: SLColor.primary.shade90,
-                                    style: SLStyle.Text_S_Bold)
-                                .textStyle,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '안녕하세요 지금 웹을 개발하고 있는데 포트포워딩해서 외부 접속..',
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Text('💬 3시간전·',
+                        style: TextStyle(
+                            color: Color(0xFF666666),
+                            fontSize: 8,
+                            fontWeight: FontWeight.w600,
+                            height: 0.17)),
+                    Text('$respondent 님의 새로운 답변',
+                        style: const TextStyle(
+                            color: Color(0xFF666666),
+                            fontSize: 8,
+                            fontWeight: FontWeight.w600,
+                            height: 0.17)),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Text(widget.qnaData.title,
                         style:
-                            SLTextStyle(style: SLStyle.Text_S_Medium).textStyle,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      SizedBox(
-                        height: 22,
-                        child: ListView.separated(
-                          itemCount: chipList.length,
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(
-                              width: 4,
-                            );
-                          },
-                          scrollDirection: Axis.horizontal,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return chipList[index];
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '답변 1',
-                            style: SLTextStyle(
-                                    style: SLStyle.Text_S_Medium,
-                                    color: SLColor.neutral.shade50)
-                                .textStyle,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            '🩷 680',
-                            style: SLTextStyle(
-                                    style: SLStyle.Text_S_Medium,
-                                    color: SLColor.neutral.shade50)
-                                .textStyle,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Image.asset('assets/images/Union (1).png'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            '680',
-                            style: SLTextStyle(
-                                    style: SLStyle.Text_S_Medium,
-                                    color: SLColor.neutral.shade50)
-                                .textStyle,
-                          ),
-                          SizedBox(
-                            width: 130,
-                          ),
-                          Text(
-                            '조회121',
-                            style: SLTextStyle(
-                                    style: SLStyle.Text_S_Medium,
-                                    color: SLColor.neutral.shade50)
-                                .textStyle,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Divider(
-                        thickness: 1,
-                        height: 1,
-                        color: Color(0xFF333333),
-                      )
-                    ],
+                            SLTextStyle(style: SLStyle.Text_M_Bold).textStyle),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'NEW', //@todo 가장 최근에 생성된 경우 'New' 키워드가 붙도록 수정
+                      style: SLTextStyle(
+                              color: SLColor.primary.shade90,
+                              style: SLStyle.Text_S_Bold)
+                          .textStyle,
+                    ),
+                  ],
+                ),
+                Text(
+                  widget.qnaData.content,
+                  style: SLTextStyle(style: SLStyle.Text_S_Medium).textStyle,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  height: 22,
+                  child: ListView.separated(
+                    itemCount: widget.qnaData.tag.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        width: 4,
+                      );
+                    },
+                    scrollDirection: Axis.horizontal,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return _TagWidget(
+                          label: widget.qnaData.expand['tag'][index]['name']);
+                    },
                   ),
-                )),
-          ],
-        ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          widget.qnaData.expand['answer'] != null
+                              ? '답변 ${widget.qnaData.expand['answer']!.length}'
+                              : '답변 0',
+                          style: SLTextStyle(
+                                  style: SLStyle.Text_S_Medium,
+                                  color: SLColor.neutral.shade50)
+                              .textStyle,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          '🩷 ${widget.qnaData.like}',
+                          style: SLTextStyle(
+                                  style: SLStyle.Text_S_Medium,
+                                  color: SLColor.neutral.shade50)
+                              .textStyle,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Image.asset('assets/images/Union (1).png'),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          '680',
+                          style: SLTextStyle(
+                                  style: SLStyle.Text_S_Medium,
+                                  color: SLColor.neutral.shade50)
+                              .textStyle,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '조회 ${widget.qnaData.view}',
+                      style: SLTextStyle(
+                              style: SLStyle.Text_S_Medium,
+                              color: SLColor.neutral.shade50)
+                          .textStyle,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//@todo: mini log card에 있음. common widget으로 뽑아놓을것
+class _TagWidget extends StatelessWidget {
+  const _TagWidget({
+    required this.label,
+  });
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return SFACTag(
+      text: Text(
+        label,
+        style: SLTextStyle(
+          color: SLColor.neutral.shade60,
+          style: SLStyle.Text_XS_Medium,
+        ).textStyle,
       ),
     );
   }

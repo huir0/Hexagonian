@@ -19,6 +19,8 @@ _$SFACQnaModelImpl _$$SFACQnaModelImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       user: json['user'] as String,
       view: json['view'] as int,
+      answer: json['answer'] as List<dynamic>,
+      expand: json['expand'],
     );
 
 Map<String, dynamic> _$$SFACQnaModelImplToJson(_$SFACQnaModelImpl instance) =>
@@ -34,4 +36,6 @@ Map<String, dynamic> _$$SFACQnaModelImplToJson(_$SFACQnaModelImpl instance) =>
       'title': instance.title,
       'user': instance.user,
       'view': instance.view,
+      'answer': instance.answer,
+      'expand': instance.expand,
     };
