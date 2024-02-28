@@ -17,20 +17,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<RecordModel> updateUser({
     required String password,
     required String passwordConfirm,
-    required String name,
-    required String userId,
+    String? name,
   }) async {
     try {
       RecordModel result = await _pocketbaseAuth.updateUser(
-        userId: userId,
         password: password,
         passwordConfirm: passwordConfirm,
         name: name,
       );
 
       return result;
-    } catch (e) {
-      print('update error: $e');
+    } on SLErrorException catch (_) {
       rethrow;
     }
   }
@@ -43,7 +40,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       return result;
     } on SLErrorException catch (_) {
       state = state.copyWith(verified: false);
-      print('error');
       rethrow;
     }
   }
@@ -54,6 +50,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }) async {
     try {
       // 임시로 가입
+      //@todo: 임시 가입 시 보안 여부
       RecordModel result = await _pocketbaseAuth.createTempUser(
         name: username,
         email: email,
@@ -78,7 +75,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       return result;
     } on SLErrorException catch (_) {
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
-      print('error');
       rethrow;
     }
   }
@@ -107,15 +103,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
           verified: result.record!.data['verified'],
         );
 
-        print('login verify: ${result.record!.data['verified']}'); //true
-
         id = result.record!.id;
         return id;
       }
       return id;
-    } on SLErrorException catch (e) {
+    } on SLErrorException catch (_) {
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
-      print('Error Exception in login: $e');
       rethrow;
     }
   }

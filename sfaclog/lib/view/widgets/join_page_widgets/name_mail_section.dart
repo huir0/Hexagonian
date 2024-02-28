@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/sl_error_exception.dart';
+import 'package:sfaclog/util/error_exception.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:sfaclog/viewmodel/auth/onboarding_notifier.dart';
@@ -13,6 +15,8 @@ class NameMailSection extends ConsumerStatefulWidget {
   @override
   NameMailSectionState createState() => NameMailSectionState();
 }
+
+const String title = '회원가입';
 
 class NameMailSectionState extends ConsumerState<NameMailSection> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -38,15 +42,68 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
 
   @override
   Widget build(BuildContext context) {
-    const String title = '회원가입';
-
     final onboardingState = ref.watch(onboardingProvider);
     final onboardingNotifier = ref.read(onboardingProvider.notifier);
     final authNotifier = ref.read(authProvider.notifier);
-    final authState = ref.watch(authProvider);
 
     late String name = '';
     late String email = '';
+
+    reqVerifyEmail() async {
+      errorExceptionPopup(
+        context,
+        title: '메일을 확인해주세요.',
+        message: '${emailController.text}로 메일이 전송되었습니다.',
+      );
+      var tempData = await authNotifier.signupForVerification(
+        username: nameController.text,
+        email: emailController.text,
+      );
+
+      toggleVerifidReq(true);
+      onboardingNotifier.setNewUser(tempData);
+    }
+
+    verifyEmail() async {
+      try {
+        await authNotifier.login(
+          email: emailController.text,
+          password: '1234qwer!',
+        );
+
+        bool isVerifyEmail = await authNotifier.subscribeVerifiedEmail();
+
+        if (isVerifyEmail != true) {
+          Future.delayed(
+            Duration.zero,
+            () => errorExceptionPopup(
+              context,
+              title: '메일을 아직 확인하지 않았습니다.',
+              message: '메일이 전송되었으니 다시한번 확인해주세요.',
+            ),
+          );
+          return;
+        }
+
+        if (formKey.currentState!.validate()) {
+          formKey.currentState!.save();
+          onboardingNotifier.uploadNameAndEmail(
+            name: name,
+            email: email,
+          );
+        }
+        onboardingNotifier.moveNextSection();
+      } on SLErrorException catch (e) {
+        Future.delayed(
+          Duration.zero,
+          () => errorExceptionPopup(
+            context,
+            title: '${e.code} 에러 발생',
+            message: e.message,
+          ),
+        );
+      }
+    }
 
     return Column(
       children: [
@@ -140,56 +197,7 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
                                   horizontal: 8,
                                 ),
                                 isActive: activeVerifyBtn,
-                                onTap: activeVerifyBtn
-                                    ? () async {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return SFACPopUpDialog(
-                                              widget: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '메일을 확인해주세요.',
-                                                    style: SLTextStyle
-                                                            .Text_L_Bold
-                                                        ?.copyWith(
-                                                            color: SLColor
-                                                                .neutral[100]),
-                                                  ),
-                                                  Text(
-                                                    '${emailController.text}로 메일이 전송되었습니다.',
-                                                    style: SLTextStyle
-                                                            .Text_S_Medium
-                                                        ?.copyWith(
-                                                      color:
-                                                          SLColor.neutral[100],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              onConfirmed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            );
-                                          },
-                                        );
-                                        var tempData = await authNotifier
-                                            .signupForVerification(
-                                          username: nameController.text,
-                                          email: emailController.text,
-                                        );
-
-                                        toggleVerifidReq(true);
-                                        onboardingNotifier.setNewUser(tempData);
-
-                                        print(tempData);
-                                        print(verifiedReq);
-                                      }
-                                    : null,
+                                onTap: activeVerifyBtn ? reqVerifyEmail : null,
                               ),
                             ),
                           ),
@@ -206,87 +214,7 @@ class NameMailSectionState extends ConsumerState<NameMailSection> {
           text: '다음',
           isActive: onboardingState.isButtonEnabled && verifiedReq,
           onTap: onboardingState.isButtonEnabled && verifiedReq
-              ? () async {
-                  try {
-                    await authNotifier.login(
-                      email: emailController.text,
-                      password: '1234qwer!',
-                    );
-
-                    bool isVerifyEmail = await authNotifier
-                        .subscribeVerifiedEmail(); // verify 여부 체크
-
-                    if (isVerifyEmail != true) {
-                      await Future.delayed(
-                        Duration.zero,
-                        () => showDialog(
-                          context: context,
-                          builder: (context) => SFACPopUpDialog(
-                            widget: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '이메일이 인증되지 않았습니다.',
-                                  style: SLTextStyle.Text_L_Bold?.copyWith(
-                                      color: SLColor.neutral[100]),
-                                ),
-                              ],
-                            ),
-                            onConfirmed: () async {
-                              Future.delayed(
-                                Duration.zero,
-                                () => Navigator.pop(context),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                      return;
-                    } else {
-                      () async {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return SFACPopUpDialog(
-                              widget: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '메일을 아직 확인하지 않았습니다.',
-                                    style: SLTextStyle.Text_L_Bold?.copyWith(
-                                        color: SLColor.neutral[100]),
-                                  ),
-                                  Text(
-                                    '${emailController.text}로 메일이 전송되었으니 다시한번 확인해주세요.',
-                                    style: SLTextStyle.Text_S_Medium?.copyWith(
-                                      color: SLColor.neutral[100],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onConfirmed: () {
-                                Navigator.pop(context);
-                              },
-                            );
-                          },
-                        );
-                      };
-                    }
-
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                      onboardingNotifier.uploadNameAndEmail(
-                        name: name,
-                        email: email,
-                      );
-                    }
-                    onboardingNotifier.moveNextSection();
-                  } catch (e) {
-                    print(e);
-                  }
-                }
+              ? verifyEmail
               : null,
         ),
       ],

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sfaclog/model/sl_error_exception.dart';
 import 'package:sfaclog/model/user_model.dart';
+import 'package:sfaclog/util/error_exception.dart';
+import 'package:sfaclog/util/terms.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/auth/user_info_notifier.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
@@ -30,6 +33,8 @@ class PwConfirmSection extends ConsumerStatefulWidget {
   PwConfirmSectionState createState() => PwConfirmSectionState();
 }
 
+const String title = '회원가입';
+
 class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late String password = '';
@@ -43,15 +48,39 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
     final authNotifier = ref.read(authProvider.notifier);
     final userInfoNotifier = ref.read(userInfoProvider.notifier);
 
-    const String title = '회원가입';
+    joinAndNext() async {
+      try {
+        if (formKey.currentState!.validate()) {
+          formKey.currentState!.save();
+          onboardingNotifier.uploadTerms(
+            terms: agreementState,
+          );
 
-    List<String> terms = [
-      '본인인증 약관 전체동의 (필수)',
-      '개인정보 수집 이용 동의',
-      '고유식별 정보처리 동의',
-      '통신사 이용약관 동의',
-      '서비스 이용약관 동의',
-    ];
+          UserModel basicUserInfo = onboardingState.userInfo!.profile!;
+
+          var res = await authNotifier.updateUser(
+            password: password,
+            passwordConfirm: passwordConfirm,
+          );
+
+          await userInfoNotifier.setBasicUserInfo(res);
+          onboardingNotifier.setNewUser(res);
+        }
+
+        Future.delayed(Duration.zero, () {
+          context.push('/welcome');
+        });
+      } on SLErrorException catch (e) {
+        Future.delayed(
+          Duration.zero,
+          () => errorExceptionPopup(
+            context,
+            title: '${e.code} 에러 발생',
+            message: e.message,
+          ),
+        );
+      }
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -149,43 +178,7 @@ class PwConfirmSectionState extends ConsumerState<PwConfirmSection> {
                 agreementState.contains('all'),
             onTap: onboardingState.isButtonEnabled &&
                     agreementState.contains('all')
-                ? () async {
-                    try {
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        onboardingNotifier.uploadTerms(
-                          terms: agreementState,
-                        );
-
-                        UserModel basicUserInfo =
-                            onboardingState.userInfo!.profile!;
-
-                        // var res = await authNotifier.signup(
-                        // name: basicUserInfo.name!,
-                        // email: basicUserInfo.email!,
-                        // password: password,
-                        // passwordConfirm: passwordConfirm,
-                        // nickname: basicUserInfo.name!,
-                        // );
-
-                        var res = await authNotifier.updateUser(
-                          userId: basicUserInfo.id!,
-                          name: basicUserInfo.name!,
-                          password: password,
-                          passwordConfirm: passwordConfirm,
-                        );
-
-                        await userInfoNotifier.setBasicUserInfo(res);
-                        onboardingNotifier.setNewUser(res);
-                      }
-
-                      Future.delayed(Duration.zero, () {
-                        context.push('/welcome');
-                      });
-                    } catch (e) {
-                      print('pw_confirm_section error: $e');
-                    }
-                  }
+                ? joinAndNext
                 : null,
           ),
         ),

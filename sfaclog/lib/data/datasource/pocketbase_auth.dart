@@ -63,18 +63,23 @@ class PocketbaseAuth {
   Future<RecordModel> updateUser({
     required String password,
     required String passwordConfirm,
-    required String name,
-    required String userId,
+    String? name,
+    String? oldPassword,
   }) async {
-    final record = await pb.collection('users').update(userId, body: {
-      "emailVisibility": false,
-      "password": password,
-      "passwordConfirm": passwordConfirm,
-      "oldPassword": "1234qwer!",
-      "name": name,
-    });
+    try {
+      final record =
+          await pb.collection('users').update(pb.authStore.model.id, body: {
+        "emailVisibility": false,
+        "password": password,
+        "passwordConfirm": passwordConfirm,
+        "oldPassword": oldPassword ?? "1234qwer!",
+        "name": name ?? pb.authStore.model.data['name'],
+      });
 
-    return record;
+      return record;
+    } catch (_) {
+      rethrow;
+    }
   }
 
   void deleteTempUser(String id) async {
