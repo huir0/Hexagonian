@@ -53,21 +53,33 @@ class PocketbaseAuth {
     return result;
   }
 
+  Future<bool> subscribeVerifiedEmail() async {
+    await pb.collection('users').subscribe(pb.authStore.model.id, (e) {
+      pb.collection('users').authRefresh();
+    });
+    return pb.authStore.model.data['verified'];
+  }
+
   Future<RecordModel> updateUser({
     required String password,
     required String passwordConfirm,
-    required String name,
-    required String userId,
+    String? name,
+    String? oldPassword,
   }) async {
-    final record = await pb.collection('users').update(userId, body: {
-      "emailVisibility": false,
-      "password": password,
-      "passwordConfirm": passwordConfirm,
-      "oldPassword": "1234qwer!",
-      "name": name,
-    });
+    try {
+      final record =
+          await pb.collection('users').update(pb.authStore.model.id, body: {
+        "emailVisibility": false,
+        "password": password,
+        "passwordConfirm": passwordConfirm,
+        "oldPassword": oldPassword ?? "1234qwer!",
+        "name": name ?? pb.authStore.model.data['name'],
+      });
 
-    return record;
+      return record;
+    } catch (_) {
+      rethrow;
+    }
   }
 
   void deleteTempUser(String id) async {
@@ -90,7 +102,7 @@ class PocketbaseAuth {
       print('temp user info!!!!!: $record');
       return record;
     } catch (e) {
-      print('cant create tempuser: $e');
+      print('cant create temp user: $e');
       rethrow;
     }
   }
@@ -121,6 +133,7 @@ class PocketbaseAuth {
             email,
             password,
           );
+
       return authData;
     } on ClientException catch (e) {
       throw SLErrorException(

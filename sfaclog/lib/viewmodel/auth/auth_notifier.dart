@@ -5,29 +5,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
 import 'package:sfaclog/model/sl_error_exception.dart';
-import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthState.init());
+  AuthNotifier()
+      : _pocketbaseAuth = PocketbaseAuth(),
+        super(AuthState.init());
+
+  final PocketbaseAuth _pocketbaseAuth;
 
   Future<RecordModel> updateUser({
     required String password,
     required String passwordConfirm,
-    required String name,
-    required String userId,
+    String? name,
   }) async {
     try {
-      RecordModel result = await PocketbaseAuth().updateUser(
-        userId: userId,
+      RecordModel result = await _pocketbaseAuth.updateUser(
         password: password,
         passwordConfirm: passwordConfirm,
         name: name,
       );
 
       return result;
-    } catch (e) {
-      print('update error: $e');
+    } on SLErrorException catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<bool> subscribeVerifiedEmail() async {
+    try {
+      bool result = await _pocketbaseAuth.subscribeVerifiedEmail();
+      state = state.copyWith(verified: result);
+
+      return result;
+    } on SLErrorException catch (_) {
+      state = state.copyWith(verified: false);
       rethrow;
     }
   }
@@ -37,16 +49,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String email,
   }) async {
     try {
-      PocketbaseAuth pb = PocketbaseAuth();
       // 임시로 가입
-      RecordModel result = await pb.createTempUser(
+      //@todo: 임시 가입 시 보안 여부
+      RecordModel result = await _pocketbaseAuth.createTempUser(
         name: username,
         email: email,
       );
       // 메일 전송
-      pb.requestVerification(email: email);
+      _pocketbaseAuth.requestVerification(email: email);
       // 로그인
-      RecordAuth? tempRecord = await pb.loginWithPassword(
+      RecordAuth? tempRecord = await _pocketbaseAuth.loginWithPassword(
         email: email,
         password: '1234qwer!',
       );
@@ -57,6 +69,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           token: tempRecord.token,
           verified: tempRecord.record!.data['verified'],
         );
+        print('temp verity: ${tempRecord.record!.data['verified']}');
       }
 
       return result;
@@ -67,8 +80,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> setUserInfoById(String tagId) async {
-    PocketbaseAuth pb = PocketbaseAuth();
-    var data = await pb.findUser(tagId);
+    var data = await _pocketbaseAuth.findUser(tagId);
     dynamic userInfo = jsonDecode(data.toString())['items'][0];
     state = state.copyWith(userInfo: userInfo);
   }
@@ -79,7 +91,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }) async {
     try {
       String id = '';
-      RecordAuth? result = await PocketbaseAuth().loginWithPassword(
+      RecordAuth? result = await _pocketbaseAuth.loginWithPassword(
         email: email,
         password: password,
       );
@@ -95,9 +107,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return id;
       }
       return id;
-    } on SLErrorException catch (e) {
+    } on SLErrorException catch (_) {
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
-      print('Error Exception in login: $e');
       rethrow;
     }
   }
@@ -112,7 +123,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       state = state.copyWith(authStatus: AuthStatus.authenticated);
 
-      RecordModel result = await PocketbaseAuth().setUserData(
+      RecordModel result = await _pocketbaseAuth.setUserData(
         name: name,
         email: email,
         password: password,
