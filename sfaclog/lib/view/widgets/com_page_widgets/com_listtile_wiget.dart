@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_qna_model.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
+import 'package:html/parser.dart';
 
 class ComTileWiget extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -29,6 +31,7 @@ class _ComTileWigetState extends State<ComTileWiget> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
@@ -67,8 +70,9 @@ class _ComTileWigetState extends State<ComTileWiget> {
                   ],
                 ),
                 Text(
-                  widget.qnaData.content,
-                  style: SLTextStyle(style: SLStyle.Text_S_Medium).textStyle,
+                  parseHtmlString(widget.qnaData.content),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(
                   height: 10,
@@ -85,8 +89,11 @@ class _ComTileWigetState extends State<ComTileWiget> {
                     scrollDirection: Axis.horizontal,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
+                      Map<String, dynamic> tag =
+                          widget.qnaData.expand['tag'][index];
                       return _TagWidget(
-                          label: widget.qnaData.expand['tag'][index]['name']);
+                        label: tag['name'],
+                      );
                     },
                   ),
                 ),
@@ -105,38 +112,48 @@ class _ComTileWigetState extends State<ComTileWiget> {
                                   color: SLColor.neutral.shade50)
                               .textStyle,
                         ),
-                        const SizedBox(
-                          width: 10,
+                        const SizedBox(width: 12),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/heart_red.svg',
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${widget.qnaData.like}',
+                              style: SLTextStyle(
+                                      style: SLStyle.Text_S_Medium,
+                                      color: SLColor.neutral.shade50)
+                                  .textStyle,
+                            ),
+                          ],
                         ),
-                        Text(
-                          '🩷 ${widget.qnaData.like}',
-                          style: SLTextStyle(
-                                  style: SLStyle.Text_S_Medium,
-                                  color: SLColor.neutral.shade50)
-                              .textStyle,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Image.asset('assets/images/Union (1).png'),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          '680',
-                          style: SLTextStyle(
-                                  style: SLStyle.Text_S_Medium,
-                                  color: SLColor.neutral.shade50)
-                              .textStyle,
+                        const SizedBox(width: 12),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/bookmark_outline.svg',
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Text(
+                              '680',
+                              style: SLTextStyle(
+                                style: SLStyle.Text_S_Medium,
+                                color: SLColor.neutral.shade50,
+                              ).textStyle,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                     Text(
                       '조회 ${widget.qnaData.view}',
                       style: SLTextStyle(
-                              style: SLStyle.Text_S_Medium,
-                              color: SLColor.neutral.shade50)
-                          .textStyle,
+                        style: SLStyle.Text_S_Medium,
+                        color: SLColor.neutral.shade50,
+                      ).textStyle,
                     ),
                   ],
                 ),
@@ -167,5 +184,17 @@ class _TagWidget extends StatelessWidget {
         ).textStyle,
       ),
     );
+  }
+}
+
+String parseHtmlString(String htmlString) {
+  try {
+    final document = parse(htmlString);
+    final String parsedString =
+        parse(document.body!.text).documentElement!.text;
+
+    return parsedString;
+  } catch (e) {
+    return htmlString;
   }
 }
