@@ -12,7 +12,7 @@ class QnaProvider extends StateNotifier<QnaState> {
 
   Future<void> getAllQna() async {
     try {
-      final data = await _qnaRepository.getAllQna();
+      final data = await _qnaRepository.getAllQna(sort: '-created');
 
       List<SFACQnaModel> result = data.map(
         (el) {
