@@ -281,8 +281,13 @@ final router = GoRouter(initialLocation: '/splash', routes: [
   ),
 
   GoRoute(
-    path: '/readqa',
-    builder: (context, state) => const ComReadPage(),
+    path: '/qna/:qnaId',
+    builder: (context, state) {
+      final qnaId = state.pathParameters['qnaId'];
+      return ComReadPage(
+        id: qnaId!,
+      );
+    },
   ),
   GoRoute(
     path: '/writecom',

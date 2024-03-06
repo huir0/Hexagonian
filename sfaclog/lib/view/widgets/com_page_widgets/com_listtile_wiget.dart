@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_qna_model.dart';
-import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 import 'package:html/parser.dart';
+import 'package:sfaclog/view/widgets/common_widgets/tag_widget.dart';
 
 class ComTileWiget extends StatefulWidget {
   final VoidCallback? onPressed;
@@ -19,11 +19,9 @@ class ComTileWiget extends StatefulWidget {
 }
 
 class _ComTileWigetState extends State<ComTileWiget> {
-  final String respondent = '프레드윰';
+  final String respondent = '프레드윰'; //@todo 최근 답변 순으로 답변자 이름 얻도록 하기
   @override
   Widget build(BuildContext context) {
-    print(widget.qnaData.expand['answer']?.length);
-
     return InkWell(
       onTap: widget.onPressed,
       child: Column(
@@ -91,7 +89,7 @@ class _ComTileWigetState extends State<ComTileWiget> {
                     itemBuilder: (context, index) {
                       Map<String, dynamic> tag =
                           widget.qnaData.expand['tag'][index];
-                      return _TagWidget(
+                      return TagWidget(
                         label: tag['name'],
                       );
                     },
@@ -161,27 +159,6 @@ class _ComTileWigetState extends State<ComTileWiget> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-//@todo: mini log card에 있음. common widget으로 뽑아놓을것
-class _TagWidget extends StatelessWidget {
-  const _TagWidget({
-    required this.label,
-  });
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return SFACTag(
-      text: Text(
-        label,
-        style: SLTextStyle(
-          color: SLColor.neutral.shade60,
-          style: SLStyle.Text_XS_Medium,
-        ).textStyle,
       ),
     );
   }

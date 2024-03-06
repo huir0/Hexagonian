@@ -24,7 +24,21 @@ class QnaReposotory {
     try {
       final record = await pb.collection('qna').getOne(
             qnaId,
-            expand: 'tag, answer',
+            expand: 'tag, user',
+          );
+      return record;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<RecordModel> getAnswerById({
+    required String answerId,
+  }) async {
+    try {
+      final record = await pb.collection('qna_answer').getOne(
+            answerId,
+            expand: 'user',
           );
       return record;
     } catch (_) {

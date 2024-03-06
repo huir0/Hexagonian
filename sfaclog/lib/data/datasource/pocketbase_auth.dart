@@ -154,6 +154,15 @@ class PocketbaseAuth {
     return data;
   }
 
+  Future<RecordModel> getUserInfoById(String id) async {
+    final result = await pb.collection('user').getOne(
+          id,
+          expand: 'profile, skill',
+        );
+    print('pb auth: $result');
+    return result;
+  }
+
   void requestVerification({
     required String email,
   }) async {

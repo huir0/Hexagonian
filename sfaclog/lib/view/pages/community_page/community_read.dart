@@ -1,18 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sfaclog/model/qna_answer_model.dart';
+import 'package:sfaclog/model/sfac_qna_model.dart';
+import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/view/pages/community_page/com_reply_page.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read.appbar.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_card.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_header_wiget.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_reple.dart';
+import 'package:sfaclog/view/widgets/com_read_wiget/question_body_widget.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/qna_viewmodel/qna_provider.dart';
 
 import 'package:sfaclog_widgets/labels/log_label.dart';
 import 'package:sfaclog_widgets/buttons/edit_button.dart';
 
-class ComReadPage extends StatelessWidget {
-  const ComReadPage({super.key});
+class ComReadPage extends ConsumerStatefulWidget {
+  const ComReadPage({
+    super.key,
+    required this.id,
+  });
+  final String id;
+
+  @override
+  ConsumerState<ComReadPage> createState() => _ComReadPageState();
+}
+
+class _ComReadPageState extends ConsumerState<ComReadPage> {
+  SFACQnaModel? question;
+  List<QnaAnswerModel>? answers;
+  UserInfo? author;
+
+  @override
+  void initState() {
+    super.initState();
+    initQna();
+  }
+
+  Future<void> initQna() async {
+    final qnaNotifier = ref.read(qnaProvider.notifier);
+    final question = await qnaNotifier.getOneQna(widget.id);
+    if (question.answer.isNotEmpty) {
+      answers = await Future.wait(question.answer.map((answer) async {
+        final result = await qnaNotifier.getAnswerById(answer);
+        return result;
+      }).toList());
+    } else {
+      answers = [];
+    }
+    author =
+        await ref.read(authProvider.notifier).getUserInfoById(question.user);
+
+    setState(() {
+      this.question = question;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (question == null || answers == null) {
+      const CircularProgressIndicator();
+    }
     return SafeArea(
       child: Scaffold(
         appBar: const ComReadAppBarWidget(),
@@ -23,11 +71,22 @@ class ComReadPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const ComReadingHeader(),
-                  const Divider(height: 1, color: Color(0xFF333333)),
+                  if (question != null || author != null)
+                    Column(
+                      children: [
+                        ComReadingHeader(
+                          title: question!.title,
+                          author: author!,
+                          qna: question!,
+                        ),
+                        const Divider(height: 1, color: Color(0xFF333333)),
+                        QuestionBodyWidget(
+                          content: question!.content,
+                          tags: question?.expand['tag'],
+                        ),
+                      ],
+                    ),
+                  const Divider(height: 3, color: Color(0xFF333333)),
                   const ComReple(),
                   const Divider(height: 1, color: Color(0xFF333333)),
                   const Padding(

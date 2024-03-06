@@ -116,10 +116,17 @@ class _DevelopQnAState extends ConsumerState<DevelopQnA> {
                 ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 3,
+                  itemCount: 5, //@todo: 무한스크롤
                   itemBuilder: (context, index) {
                     final data = qnaState.allQnaList[index];
-                    return ComTileWiget(qnaData: data);
+                    return GestureDetector(
+                      onTap: () {
+                        context.push('/qna/${data.id}');
+                      },
+                      child: ComTileWiget(
+                        qnaData: data,
+                      ),
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return const Divider(
