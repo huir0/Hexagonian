@@ -12,6 +12,7 @@ class QnaAnswerModel with _$QnaAnswerModel {
     required String content,
     required String collectionName,
     required String qna,
+    required dynamic expand,
     String? qnaTitle,
   }) = _QnaAnswerModel;
 

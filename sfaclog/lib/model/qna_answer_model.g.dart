@@ -14,6 +14,7 @@ _$QnaAnswerModelImpl _$$QnaAnswerModelImplFromJson(Map<String, dynamic> json) =>
       content: json['content'] as String,
       collectionName: json['collectionName'] as String,
       qna: json['qna'] as String,
+      expand: json['expand'],
       qnaTitle: json['qnaTitle'] as String?,
     );
 
@@ -26,5 +27,6 @@ Map<String, dynamic> _$$QnaAnswerModelImplToJson(
       'content': instance.content,
       'collectionName': instance.collectionName,
       'qna': instance.qna,
+      'expand': instance.expand,
       'qnaTitle': instance.qnaTitle,
     };

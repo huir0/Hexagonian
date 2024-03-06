@@ -91,7 +91,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     UserInfo userInfo = UserInfo.fromJson({
       ...data.toJson(),
       'skill': data.expand['skill'],
-      'profile': data.expand['profile'],
+      'profile': data.expand['user'],
     });
     return userInfo;
   }

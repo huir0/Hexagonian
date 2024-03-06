@@ -26,6 +26,7 @@ mixin _$QnaAnswerModel {
   String get content => throw _privateConstructorUsedError;
   String get collectionName => throw _privateConstructorUsedError;
   String get qna => throw _privateConstructorUsedError;
+  dynamic get expand => throw _privateConstructorUsedError;
   String? get qnaTitle => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $QnaAnswerModelCopyWith<$Res> {
       String content,
       String collectionName,
       String qna,
+      dynamic expand,
       String? qnaTitle});
 }
 
@@ -69,6 +71,7 @@ class _$QnaAnswerModelCopyWithImpl<$Res, $Val extends QnaAnswerModel>
     Object? content = null,
     Object? collectionName = null,
     Object? qna = null,
+    Object? expand = freezed,
     Object? qnaTitle = freezed,
   }) {
     return _then(_value.copyWith(
@@ -96,6 +99,10 @@ class _$QnaAnswerModelCopyWithImpl<$Res, $Val extends QnaAnswerModel>
           ? _value.qna
           : qna // ignore: cast_nullable_to_non_nullable
               as String,
+      expand: freezed == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       qnaTitle: freezed == qnaTitle
           ? _value.qnaTitle
           : qnaTitle // ignore: cast_nullable_to_non_nullable
@@ -119,6 +126,7 @@ abstract class _$$QnaAnswerModelImplCopyWith<$Res>
       String content,
       String collectionName,
       String qna,
+      dynamic expand,
       String? qnaTitle});
 }
 
@@ -139,6 +147,7 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
     Object? content = null,
     Object? collectionName = null,
     Object? qna = null,
+    Object? expand = freezed,
     Object? qnaTitle = freezed,
   }) {
     return _then(_$QnaAnswerModelImpl(
@@ -166,6 +175,10 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
           ? _value.qna
           : qna // ignore: cast_nullable_to_non_nullable
               as String,
+      expand: freezed == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       qnaTitle: freezed == qnaTitle
           ? _value.qnaTitle
           : qnaTitle // ignore: cast_nullable_to_non_nullable
@@ -184,6 +197,7 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
       required this.content,
       required this.collectionName,
       required this.qna,
+      required this.expand,
       this.qnaTitle});
 
   factory _$QnaAnswerModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -202,11 +216,13 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   @override
   final String qna;
   @override
+  final dynamic expand;
+  @override
   final String? qnaTitle;
 
   @override
   String toString() {
-    return 'QnaAnswerModel(id: $id, title: $title, user: $user, content: $content, collectionName: $collectionName, qna: $qna, qnaTitle: $qnaTitle)';
+    return 'QnaAnswerModel(id: $id, title: $title, user: $user, content: $content, collectionName: $collectionName, qna: $qna, expand: $expand, qnaTitle: $qnaTitle)';
   }
 
   @override
@@ -221,6 +237,7 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
             (identical(other.collectionName, collectionName) ||
                 other.collectionName == collectionName) &&
             (identical(other.qna, qna) || other.qna == qna) &&
+            const DeepCollectionEquality().equals(other.expand, expand) &&
             (identical(other.qnaTitle, qnaTitle) ||
                 other.qnaTitle == qnaTitle));
   }
@@ -228,7 +245,15 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, title, user, content, collectionName, qna, qnaTitle);
+      runtimeType,
+      id,
+      title,
+      user,
+      content,
+      collectionName,
+      qna,
+      const DeepCollectionEquality().hash(expand),
+      qnaTitle);
 
   @JsonKey(ignore: true)
   @override
@@ -253,6 +278,7 @@ abstract class _QnaAnswerModel implements QnaAnswerModel {
       required final String content,
       required final String collectionName,
       required final String qna,
+      required final dynamic expand,
       final String? qnaTitle}) = _$QnaAnswerModelImpl;
 
   factory _QnaAnswerModel.fromJson(Map<String, dynamic> json) =
@@ -270,6 +296,8 @@ abstract class _QnaAnswerModel implements QnaAnswerModel {
   String get collectionName;
   @override
   String get qna;
+  @override
+  dynamic get expand;
   @override
   String? get qnaTitle;
   @override

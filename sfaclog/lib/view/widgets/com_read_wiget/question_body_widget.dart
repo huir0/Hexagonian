@@ -23,6 +23,7 @@ class QuestionBodyWidget extends StatelessWidget {
             style: {
               "body": Style(
                 fontSize: FontSize(14),
+                margin: Margins.zero,
               ),
             },
           ),
