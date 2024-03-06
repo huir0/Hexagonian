@@ -5,6 +5,7 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/qna_answer_model.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/answering_button.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_reple_card.dart';
+import 'package:intl/intl.dart';
 
 class AnswerCard extends StatelessWidget {
   const AnswerCard({
@@ -40,9 +41,10 @@ class AnswerCard extends StatelessWidget {
             ),
             Row(
               children: [
-                //@todo: model에 created, updated 추가하기 + 포매팅하기
                 Text(
-                  '30분 전',
+                  DateFormat('yyyy.MM.dd').format(
+                    DateTime.parse(answer.created),
+                  ),
                   style: SLTextStyle(
                     style: SLStyle.Text_S_Regular,
                     color: SLColor.neutral.shade50,

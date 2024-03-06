@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_qna_model.dart';
 import 'package:sfaclog/model/user_info.dart';
+import 'package:intl/intl.dart';
 
 class QuestionHeaderWidget extends StatelessWidget {
   const QuestionHeaderWidget({
@@ -67,7 +68,9 @@ class QuestionHeaderWidget extends StatelessWidget {
                       ),
                       const WidgetSpan(child: SizedBox(width: 4)),
                       TextSpan(
-                        text: '4시간전',
+                        text: DateFormat('yyyy.MM.dd').format(
+                          DateTime.parse(qna.created),
+                        ),
                         style: SLTextStyle(
                           style: SLStyle.Text_XS_Medium,
                           color: SLColor.neutral.shade30,

@@ -13,6 +13,10 @@ class QnaAnswerModel with _$QnaAnswerModel {
     required String collectionName,
     required String qna,
     required dynamic expand,
+    required int like,
+    required List<dynamic> reply,
+    required String created,
+    required String updated,
     String? qnaTitle,
   }) = _QnaAnswerModel;
 
