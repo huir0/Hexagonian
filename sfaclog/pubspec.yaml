@@ -46,6 +46,7 @@ dependencies:
   google_sign_in: ^6.2.1
   http: ^1.2.0
   image_picker: ^1.0.7
+  intl: ^0.19.0
   json_serializable: ^6.7.1
   lottie: ^3.0.0
   markdown_toolbar: ^0.5.0
