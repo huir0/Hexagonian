@@ -6,7 +6,7 @@ import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/view/pages/community_page/com_reply_page.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read.appbar.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_card.dart';
-import 'package:sfaclog/view/widgets/com_read_wiget/com_read_header_wiget.dart';
+import 'package:sfaclog/view/widgets/com_read_wiget/question_header_widget.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read_reple.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/question_body_widget.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
@@ -74,7 +74,7 @@ class _ComReadPageState extends ConsumerState<ComReadPage> {
                   if (question != null || author != null)
                     Column(
                       children: [
-                        ComReadingHeader(
+                        QuestionHeaderWidget(
                           title: question!.title,
                           author: author!,
                           qna: question!,
@@ -87,7 +87,9 @@ class _ComReadPageState extends ConsumerState<ComReadPage> {
                       ],
                     ),
                   const Divider(height: 3, color: Color(0xFF333333)),
-                  const ComReple(),
+                  ComReple(
+                    answers: answers,
+                  ),
                   const Divider(height: 1, color: Color(0xFF333333)),
                   const Padding(
                     padding: EdgeInsets.all(20),

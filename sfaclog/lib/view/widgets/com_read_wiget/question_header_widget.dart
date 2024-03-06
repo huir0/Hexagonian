@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_qna_model.dart';
 import 'package:sfaclog/model/user_info.dart';
 
-class ComReadingHeader extends StatelessWidget {
-  const ComReadingHeader({
+class QuestionHeaderWidget extends StatelessWidget {
+  const QuestionHeaderWidget({
     super.key,
     required this.title,
     required this.author,
