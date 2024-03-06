@@ -88,7 +88,7 @@ class _ComReadPageState extends ConsumerState<ComReadPage> {
                     ),
                     const Divider(height: 3, color: Color(0xFF333333)),
                     AnswerSecion(
-                      answers: answers,
+                      answers: answers ?? [],
                     ),
                     const Divider(height: 1, color: Color(0xFF333333)),
                     const Padding(
