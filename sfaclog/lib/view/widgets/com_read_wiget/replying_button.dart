@@ -3,8 +3,8 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/line_deco_widget.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class AnsweringButton extends StatelessWidget {
-  const AnsweringButton({
+class ReplyingButton extends StatelessWidget {
+  const ReplyingButton({
     super.key,
   });
 
@@ -73,7 +73,7 @@ class AnsweringButton extends StatelessWidget {
             });
       },
       child: Text(
-        '답글달기',
+        '댓글달기',
         style: SLTextStyle(
           style: SLStyle.Text_S_Bold,
           color: SLColor.neutral.shade50,
