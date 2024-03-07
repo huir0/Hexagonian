@@ -16,6 +16,7 @@ _$AnswerReplyModelImpl _$$AnswerReplyModelImplFromJson(
       author: json['author'] as String,
       created: json['created'] as String,
       updated: json['updated'] as String,
+      expand: json['expand'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$$AnswerReplyModelImplToJson(
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$AnswerReplyModelImplToJson(
       'author': instance.author,
       'created': instance.created,
       'updated': instance.updated,
+      'expand': instance.expand,
     };

@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/qna_answer_model.dart';
-import 'package:sfaclog/view/widgets/com_read_wiget/answering_button.dart';
-import 'package:sfaclog/view/widgets/com_read_wiget/com_reple_card.dart';
+import 'package:sfaclog/view/widgets/com_read_wiget/replying_button.dart';
+import 'package:sfaclog/view/widgets/com_read_wiget/answer_reply_card.dart';
 import 'package:intl/intl.dart';
+import 'package:sfaclog/model/answer_reply_model.dart';
+import 'package:sfaclog/viewmodel/qna_viewmodel/qna_provider.dart';
 
-class AnswerCard extends StatelessWidget {
+class AnswerCard extends ConsumerStatefulWidget {
   const AnswerCard({
     super.key,
     required this.answer,
   });
   final QnaAnswerModel answer;
+
+  @override
+  ConsumerState<AnswerCard> createState() => _AnswerCardState();
+}
+
+class _AnswerCardState extends ConsumerState<AnswerCard> {
+  List<AnswerReplyModel>? answerReplyList;
+
+  @override
+  void initState() {
+    super.initState();
+    initData();
+  }
+
+  Future<void> initData() async {
+    answerReplyList = await ref
+        .read(qnaProvider.notifier)
+        .getAnswersReplyList(widget.answer.id);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +55,7 @@ class AnswerCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  answer.expand?['user']?['nickname'] ?? 'Unknown',
+                  widget.answer.expand?['user']?['nickname'] ?? 'Unknown',
                   style: SLTextStyle(
                     style: SLStyle.Text_M_Medium,
                   ).textStyle,
@@ -43,7 +66,7 @@ class AnswerCard extends StatelessWidget {
               children: [
                 Text(
                   DateFormat('yyyy.MM.dd').format(
-                    DateTime.parse(answer.created),
+                    DateTime.parse(widget.answer.created),
                   ),
                   style: SLTextStyle(
                     style: SLStyle.Text_S_Regular,
@@ -60,7 +83,7 @@ class AnswerCard extends StatelessWidget {
           ],
         ),
         Html(
-          data: answer.content,
+          data: widget.answer.content,
           style: {
             "body": Style(
               fontSize: FontSize(14),
@@ -71,7 +94,7 @@ class AnswerCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const AnsweringButton(),
+            const ReplyingButton(),
             Row(
               children: [
                 SizedBox(
@@ -82,9 +105,9 @@ class AnswerCard extends StatelessWidget {
                     height: 10,
                   ),
                 ),
-                //@todo: model에 like 추가하기
+                const SizedBox(width: 4),
                 Text(
-                  '  3 ',
+                  widget.answer.like.toString(),
                   style: SLTextStyle(
                     style: SLStyle.Text_XS_Medium,
                     color: SLColor.neutral.shade30,
@@ -94,23 +117,52 @@ class AnswerCard extends StatelessWidget {
             )
           ],
         ),
-        //@todo: 댓글 여기서 렌더링
         const SizedBox(height: 8),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const SizedBox(width: 8),
-            Icon(
-              Icons.subdirectory_arrow_right_rounded,
-              color: SLColor.neutral.shade70,
+        RepleListView(answerReplyList: answerReplyList),
+      ],
+    );
+  }
+}
+
+class RepleListView extends StatelessWidget {
+  const RepleListView({
+    super.key,
+    required this.answerReplyList,
+  });
+
+  final List<AnswerReplyModel>? answerReplyList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 8),
+        if (answerReplyList!.isNotEmpty)
+          Expanded(
+            child: ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.subdirectory_arrow_right_rounded,
+                      color: SLColor.neutral.shade70,
+                    ),
+                    AnswerReplyCard(
+                      reple: answerReplyList![index],
+                    ),
+                  ],
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 10);
+              },
+              itemCount: answerReplyList?.length ?? 0,
             ),
-            const IntrinsicWidth(
-              //@todo: answer reply get
-              child: ComReadCard(),
-            ),
-          ],
-        ),
+          ),
       ],
     );
   }

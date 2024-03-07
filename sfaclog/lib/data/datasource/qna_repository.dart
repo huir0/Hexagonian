@@ -45,4 +45,22 @@ class QnaReposotory {
       rethrow;
     }
   }
+
+  Future<ResultList<RecordModel>> getAnswersReplyList({
+    int? page,
+    String? sort,
+    required String answerId,
+  }) async {
+    try {
+      final resultList = await pb.collection('answer_reply').getList(
+            page: page ?? 1,
+            perPage: 5,
+            filter: 'answerId="$answerId"',
+            expand: 'author',
+          );
+      return resultList;
+    } catch (_) {
+      rethrow;
+    }
+  }
 }

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sfaclog/common.dart';
+import 'package:sfaclog/model/answer_reply_model.dart';
 
-class ComReadCard extends StatelessWidget {
-  const ComReadCard({super.key});
+class AnswerReplyCard extends StatelessWidget {
+  const AnswerReplyCard({
+    super.key,
+    required this.reple,
+  });
+  final AnswerReplyModel reple;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.sizeOf(context).width - 80,
       decoration: ShapeDecoration(
         color: SLColor.neutral,
         shape: RoundedRectangleBorder(
@@ -36,29 +43,22 @@ class ComReadCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 10,
-                  ),
+                  const SizedBox(width: 8),
                   Text(
-                    '서나정',
+                    reple.expand['author']['nickname'] ?? 'Unknown',
                     style: SLTextStyle(
                       style: SLStyle.Text_S_Bold,
                       color: Colors.white,
                     ).textStyle,
                   ),
-                  Text(
-                    '  수료생',
-                    style: SLTextStyle(
-                      style: SLStyle.Text_XS_Medium,
-                      color: SLColor.primary.shade90,
-                    ).textStyle,
-                  )
                 ],
               ),
               Row(
                 children: [
                   Text(
-                    '30분전',
+                    DateFormat('yyyy.MM.dd').format(
+                      DateTime.parse(reple.created),
+                    ),
                     style: SLTextStyle(
                       style: SLStyle.Text_XS_Regular,
                       color: SLColor.neutral.shade50,
@@ -74,7 +74,7 @@ class ComReadCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '다른 공유기를 쓰다가 바꾼거라 포트포워딩만\n새로 했는데, 나스 설정도 봐야겠네요.',
+            reple.content,
             style: SLTextStyle(
               style: SLStyle.Text_M_Regular,
               color: SLColor.neutral.shade10,
@@ -87,8 +87,9 @@ class ComReadCard extends StatelessWidget {
               Image.asset(
                 'assets/images/Vector (1).png',
               ),
+              const SizedBox(width: 4),
               Text(
-                ' 680',
+                reple.like.toString(),
                 style: SLTextStyle(
                   style: SLStyle.Text_XS_Regular,
                   color: SLColor.neutral.shade50,

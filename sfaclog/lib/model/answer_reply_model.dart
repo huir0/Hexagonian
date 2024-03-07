@@ -13,6 +13,7 @@ class AnswerReplyModel with _$AnswerReplyModel {
     required String author,
     required String created,
     required String updated,
+    required Map<String, dynamic> expand,
   }) = _AnswerReplyModel;
 
   factory AnswerReplyModel.fromJson(Map<String, dynamic> json) =>

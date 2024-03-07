@@ -27,6 +27,7 @@ mixin _$AnswerReplyModel {
   String get author => throw _privateConstructorUsedError;
   String get created => throw _privateConstructorUsedError;
   String get updated => throw _privateConstructorUsedError;
+  Map<String, dynamic> get expand => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $AnswerReplyModelCopyWith<$Res> {
       int like,
       String author,
       String created,
-      String updated});
+      String updated,
+      Map<String, dynamic> expand});
 }
 
 /// @nodoc
@@ -70,6 +72,7 @@ class _$AnswerReplyModelCopyWithImpl<$Res, $Val extends AnswerReplyModel>
     Object? author = null,
     Object? created = null,
     Object? updated = null,
+    Object? expand = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -100,6 +103,10 @@ class _$AnswerReplyModelCopyWithImpl<$Res, $Val extends AnswerReplyModel>
           ? _value.updated
           : updated // ignore: cast_nullable_to_non_nullable
               as String,
+      expand: null == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ) as $Val);
   }
 }
@@ -119,7 +126,8 @@ abstract class _$$AnswerReplyModelImplCopyWith<$Res>
       int like,
       String author,
       String created,
-      String updated});
+      String updated,
+      Map<String, dynamic> expand});
 }
 
 /// @nodoc
@@ -140,6 +148,7 @@ class __$$AnswerReplyModelImplCopyWithImpl<$Res>
     Object? author = null,
     Object? created = null,
     Object? updated = null,
+    Object? expand = null,
   }) {
     return _then(_$AnswerReplyModelImpl(
       id: freezed == id
@@ -170,6 +179,10 @@ class __$$AnswerReplyModelImplCopyWithImpl<$Res>
           ? _value.updated
           : updated // ignore: cast_nullable_to_non_nullable
               as String,
+      expand: null == expand
+          ? _value._expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -184,7 +197,9 @@ class _$AnswerReplyModelImpl implements _AnswerReplyModel {
       required this.like,
       required this.author,
       required this.created,
-      required this.updated});
+      required this.updated,
+      required final Map<String, dynamic> expand})
+      : _expand = expand;
 
   factory _$AnswerReplyModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AnswerReplyModelImplFromJson(json);
@@ -203,10 +218,17 @@ class _$AnswerReplyModelImpl implements _AnswerReplyModel {
   final String created;
   @override
   final String updated;
+  final Map<String, dynamic> _expand;
+  @override
+  Map<String, dynamic> get expand {
+    if (_expand is EqualUnmodifiableMapView) return _expand;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_expand);
+  }
 
   @override
   String toString() {
-    return 'AnswerReplyModel(id: $id, content: $content, answerId: $answerId, like: $like, author: $author, created: $created, updated: $updated)';
+    return 'AnswerReplyModel(id: $id, content: $content, answerId: $answerId, like: $like, author: $author, created: $created, updated: $updated, expand: $expand)';
   }
 
   @override
@@ -221,13 +243,14 @@ class _$AnswerReplyModelImpl implements _AnswerReplyModel {
             (identical(other.like, like) || other.like == like) &&
             (identical(other.author, author) || other.author == author) &&
             (identical(other.created, created) || other.created == created) &&
-            (identical(other.updated, updated) || other.updated == updated));
+            (identical(other.updated, updated) || other.updated == updated) &&
+            const DeepCollectionEquality().equals(other._expand, _expand));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, content, answerId, like, author, created, updated);
+  int get hashCode => Object.hash(runtimeType, id, content, answerId, like,
+      author, created, updated, const DeepCollectionEquality().hash(_expand));
 
   @JsonKey(ignore: true)
   @override
@@ -252,7 +275,8 @@ abstract class _AnswerReplyModel implements AnswerReplyModel {
       required final int like,
       required final String author,
       required final String created,
-      required final String updated}) = _$AnswerReplyModelImpl;
+      required final String updated,
+      required final Map<String, dynamic> expand}) = _$AnswerReplyModelImpl;
 
   factory _AnswerReplyModel.fromJson(Map<String, dynamic> json) =
       _$AnswerReplyModelImpl.fromJson;
@@ -271,6 +295,8 @@ abstract class _AnswerReplyModel implements AnswerReplyModel {
   String get created;
   @override
   String get updated;
+  @override
+  Map<String, dynamic> get expand;
   @override
   @JsonKey(ignore: true)
   _$$AnswerReplyModelImplCopyWith<_$AnswerReplyModelImpl> get copyWith =>
