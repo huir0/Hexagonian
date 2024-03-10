@@ -83,12 +83,6 @@ class QnaReposotory {
       };
       await pb.collection('qna').create(
             body: body,
-            // files: [
-            //   http.MultipartFile.fromString(
-            //     'content',
-            //     content,
-            //   ),
-            // ],
           );
     } catch (_) {
       rethrow;

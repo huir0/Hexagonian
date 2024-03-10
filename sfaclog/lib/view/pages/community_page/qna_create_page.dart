@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:fleather/fleather.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,14 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sl_error_exception.dart';
+import 'package:sfaclog/util/delta_to_html_encoder.dart';
 import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
 import 'package:sfaclog/viewmodel/qna_viewmodel/craete_qna_provider.dart';
 import 'package:sfaclog_widgets/popup/sl_popup_dialog.dart';
 import 'package:sfaclog_widgets/tags/sl_tag.dart';
-import 'package:sfaclog_widgets/tooltips/sl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:parchment_delta/parchment_delta.dart';
-import 'package:http/http.dart' as http;
 
 class QnaCreatePage extends ConsumerStatefulWidget {
   const QnaCreatePage({super.key});
@@ -77,9 +75,15 @@ class _QnaCreatePageState extends ConsumerState<QnaCreatePage> {
           TextButton(
             onPressed: () async {
               try {
-                var content = jsonEncode(_controller!.document);
+                Delta delta = _controller!.document.toDelta();
 
-                // content = http.MultipartFile.fromString('content', content);
+                List<Map<String, dynamic>> deltaList = delta.map((operation) {
+                  return {
+                    "insert": operation.value,
+                  };
+                }).toList();
+
+                var content = deltaToHtmlEncoder(deltaList);
 
                 ref.read(createQnaProvider.notifier).setQna(
                       title: _headerController.value.text,
@@ -87,7 +91,6 @@ class _QnaCreatePageState extends ConsumerState<QnaCreatePage> {
                       tag: tagList,
                       userId: userId,
                     );
-
                 context.pop();
               } on SLErrorException catch (e) {
                 showDialog(
@@ -274,43 +277,5 @@ class _QnaCreatePageState extends ConsumerState<QnaCreatePage> {
     if (canLaunch) {
       await launchUrl(uri);
     }
-  }
-}
-
-class ForceNewlineForInsertsAroundInlineImageRule extends InsertRule {
-  @override
-  Delta? apply(Delta document, int index, Object data) {
-    if (data is! String) return null;
-
-    final iter = DeltaIterator(document);
-    final previous = iter.skip(index);
-    final target = iter.next();
-    final cursorBeforeInlineEmbed = _isInlineImage(target.data);
-    final cursorAfterInlineEmbed =
-        previous != null && _isInlineImage(previous.data);
-
-    if (cursorBeforeInlineEmbed || cursorAfterInlineEmbed) {
-      final delta = Delta()..retain(index);
-      if (cursorAfterInlineEmbed && !data.startsWith('\n')) {
-        delta.insert('\n');
-      }
-      delta.insert(data);
-      if (cursorBeforeInlineEmbed && !data.endsWith('\n')) {
-        delta.insert('\n');
-      }
-      return delta;
-    }
-    return null;
-  }
-
-  bool _isInlineImage(Object data) {
-    if (data is EmbeddableObject) {
-      return data.type == 'image' && data.inline;
-    }
-    if (data is Map) {
-      return data[EmbeddableObject.kTypeKey] == 'image' &&
-          data[EmbeddableObject.kInlineKey];
-    }
-    return false;
   }
 }
