@@ -7,7 +7,6 @@ part 'qna_answer_model.g.dart';
 class QnaAnswerModel with _$QnaAnswerModel {
   const factory QnaAnswerModel({
     required String id,
-    required String title,
     required String user,
     required String content,
     required String collectionName,

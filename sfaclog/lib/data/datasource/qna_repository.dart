@@ -1,11 +1,28 @@
-import 'dart:convert';
-
 import 'package:pocketbase/pocketbase.dart';
-import 'package:http/http.dart' as http;
 
 class QnaReposotory {
   final pb = PocketBase('http://43.202.59.218:8090');
   QnaReposotory();
+
+  Future<void> createAnswer({
+    required String answer,
+    required String qnaId,
+    required String respondentId,
+  }) async {
+    try {
+      final data = {
+        "content": answer,
+        "qna": qnaId,
+        "user": respondentId,
+      };
+
+      final newAnswer = await pb.collection('qna_answer').create(body: data);
+
+      await updateQuestion(qnaId, userId: respondentId, answerId: newAnswer.id);
+    } catch (_) {
+      rethrow;
+    }
+  }
 
   Future<List<RecordModel>> getAllQna({
     String? sort,
@@ -27,7 +44,7 @@ class QnaReposotory {
     try {
       final record = await pb.collection('qna').getOne(
             qnaId,
-            expand: 'tag, user',
+            expand: 'tag, user, answer',
           );
       return record;
     } catch (_) {
@@ -44,6 +61,23 @@ class QnaReposotory {
             expand: 'user',
           );
       return record;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<ResultList<RecordModel>> getAnswerList({
+    required String questionId,
+    int? page,
+  }) async {
+    try {
+      final resultList = await pb.collection('qna_answer').getList(
+            page: page ?? 1,
+            perPage: 5,
+            filter: 'qna="$questionId"',
+            expand: 'author',
+          );
+      return resultList;
     } catch (_) {
       rethrow;
     }
@@ -89,18 +123,27 @@ class QnaReposotory {
     }
   }
 
-  Future<void> updateQuestion({
-    required String questionId,
-    required String title,
-    required String content,
-    required List<String> tag,
+  Future<void> updateQuestion(
+    String questionId, {
+    required String userId,
+    String? title,
+    String? content,
+    List<String>? tag,
+    String? answerId,
   }) async {
     try {
+      var curData = await getOneQna(qnaId: questionId);
+
       final body = <String, dynamic>{
-        "title": title,
-        "user": pb.authStore.model.id,
-        "tag": tag,
-        "content": content,
+        "user": userId,
+        if (title != null) "title": title,
+        if (tag != null) "tag": tag,
+        if (content != null) "content": content,
+        if (answerId != null)
+          "answer": [
+            answerId,
+            ...curData.data['answer'],
+          ],
       };
 
       await pb.collection('qna').update(questionId, body: body);

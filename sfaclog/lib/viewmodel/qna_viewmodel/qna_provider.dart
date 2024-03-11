@@ -43,11 +43,24 @@ class QnaProvider extends StateNotifier<QnaState> {
     }
   }
 
+  Future<List<QnaAnswerModel>> getAnswerList(questionId) async {
+    try {
+      final data = await _qnaRepository.getAnswerList(questionId: questionId);
+      List<QnaAnswerModel> resultList = data.items.map((res) {
+        return QnaAnswerModel.fromJson(res.toJson());
+      }).toList();
+      return resultList;
+    } catch (e) {
+      state = state.copyWith(qnaStatus: QnaStatus.error);
+      rethrow;
+    }
+  }
+
   Future<SFACQnaModel> getOneQna(qnaId) async {
     try {
       final data = await _qnaRepository.getOneQna(qnaId: qnaId);
       SFACQnaModel question = SFACQnaModel.fromJson(data.toJson());
-
+      print(question);
       return question;
     } catch (e) {
       state = state.copyWith(qnaStatus: QnaStatus.error);

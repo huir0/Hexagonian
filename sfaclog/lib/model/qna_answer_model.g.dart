@@ -9,7 +9,6 @@ part of 'qna_answer_model.dart';
 _$QnaAnswerModelImpl _$$QnaAnswerModelImplFromJson(Map<String, dynamic> json) =>
     _$QnaAnswerModelImpl(
       id: json['id'] as String,
-      title: json['title'] as String,
       user: json['user'] as String,
       content: json['content'] as String,
       collectionName: json['collectionName'] as String,
@@ -26,7 +25,6 @@ Map<String, dynamic> _$$QnaAnswerModelImplToJson(
         _$QnaAnswerModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'title': instance.title,
       'user': instance.user,
       'content': instance.content,
       'collectionName': instance.collectionName,

@@ -21,7 +21,6 @@ QnaAnswerModel _$QnaAnswerModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$QnaAnswerModel {
   String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
   String get user => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   String get collectionName => throw _privateConstructorUsedError;
@@ -47,7 +46,6 @@ abstract class $QnaAnswerModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String title,
       String user,
       String content,
       String collectionName,
@@ -74,7 +72,6 @@ class _$QnaAnswerModelCopyWithImpl<$Res, $Val extends QnaAnswerModel>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
     Object? user = null,
     Object? content = null,
     Object? collectionName = null,
@@ -90,10 +87,6 @@ class _$QnaAnswerModelCopyWithImpl<$Res, $Val extends QnaAnswerModel>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
               as String,
       user: null == user
           ? _value.user
@@ -149,7 +142,6 @@ abstract class _$$QnaAnswerModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String title,
       String user,
       String content,
       String collectionName,
@@ -174,7 +166,6 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
     Object? user = null,
     Object? content = null,
     Object? collectionName = null,
@@ -190,10 +181,6 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
               as String,
       user: null == user
           ? _value.user
@@ -244,7 +231,6 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
 class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   const _$QnaAnswerModelImpl(
       {required this.id,
-      required this.title,
       required this.user,
       required this.content,
       required this.collectionName,
@@ -262,8 +248,6 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
 
   @override
   final String id;
-  @override
-  final String title;
   @override
   final String user;
   @override
@@ -293,7 +277,7 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
 
   @override
   String toString() {
-    return 'QnaAnswerModel(id: $id, title: $title, user: $user, content: $content, collectionName: $collectionName, qna: $qna, expand: $expand, like: $like, reply: $reply, created: $created, updated: $updated, qnaTitle: $qnaTitle)';
+    return 'QnaAnswerModel(id: $id, user: $user, content: $content, collectionName: $collectionName, qna: $qna, expand: $expand, like: $like, reply: $reply, created: $created, updated: $updated, qnaTitle: $qnaTitle)';
   }
 
   @override
@@ -302,7 +286,6 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
         (other.runtimeType == runtimeType &&
             other is _$QnaAnswerModelImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.collectionName, collectionName) ||
@@ -322,7 +305,6 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      title,
       user,
       content,
       collectionName,
@@ -352,7 +334,6 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
 abstract class _QnaAnswerModel implements QnaAnswerModel {
   const factory _QnaAnswerModel(
       {required final String id,
-      required final String title,
       required final String user,
       required final String content,
       required final String collectionName,
@@ -369,8 +350,6 @@ abstract class _QnaAnswerModel implements QnaAnswerModel {
 
   @override
   String get id;
-  @override
-  String get title;
   @override
   String get user;
   @override
