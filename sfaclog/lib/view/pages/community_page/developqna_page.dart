@@ -14,7 +14,7 @@ class DevelopQnA extends ConsumerStatefulWidget {
   const DevelopQnA({super.key});
 
   @override
-  _DevelopQnAState createState() => _DevelopQnAState();
+  ConsumerState<DevelopQnA> createState() => _DevelopQnAState();
 }
 
 class _DevelopQnAState extends ConsumerState<DevelopQnA> {
@@ -113,27 +113,29 @@ class _DevelopQnAState extends ConsumerState<DevelopQnA> {
                     },
                   ),
                 ),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: 5, //@todo: 무한스크롤
-                  itemBuilder: (context, index) {
-                    final data = qnaState.allQnaList[index];
-                    return GestureDetector(
-                      onTap: () {
-                        context.push('/qna/${data.id}');
-                      },
-                      child: ComTileWiget(
-                        qnaData: data,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      color: Color(0xFF333333),
-                    );
-                  },
-                ),
+                qnaState.allQnaList.isNotEmpty
+                    ? ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 5, //@todo: 무한스크롤
+                        itemBuilder: (context, index) {
+                          final data = qnaState.allQnaList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              context.push('/qna/${data.id}');
+                            },
+                            child: ComTileWiget(
+                              qnaData: data,
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider(
+                            color: Color(0xFF333333),
+                          );
+                        },
+                      )
+                    : const CircularProgressIndicator(),
               ],
             ),
           ),

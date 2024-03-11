@@ -20,7 +20,7 @@ import 'package:sfaclog/view/pages/join_page/join_complete_page.dart';
 import 'package:sfaclog/view/pages/community_page/qna_create_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_add_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_category_page.dart';
-import 'package:sfaclog/view/pages/community_page/community_read.dart';
+import 'package:sfaclog/view/pages/community_page/question_read_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/pages/join_page/join_page.dart';
 import 'package:sfaclog/view/pages/log_page/log_read_page.dart';
@@ -303,7 +303,7 @@ final router = GoRouter(
           path: ':qnaId',
           builder: (context, state) {
             final qnaId = state.pathParameters['qnaId'];
-            return ComReadPage(
+            return QuestionReadPage(
               id: qnaId!,
             );
           },

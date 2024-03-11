@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sfaclog/view/pages/community_page/com_reply_page.dart';
+import 'package:sfaclog/view/pages/community_page/answer_write_page.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/com_read.appbar.dart';
 import 'package:sfaclog/view/widgets/com_side_read_wigets/com_side_read_body.dart';
 import 'package:sfaclog/view/widgets/com_side_read_wigets/com_side_read_footer.dart';
@@ -294,7 +294,7 @@ class _ComSideReadPageState extends State<ComSideReadPage> {
                   ],
                 ),
                 TableCalendar(
-                  headerStyle: HeaderStyle(
+                  headerStyle: const HeaderStyle(
                     titleCentered: true,
                     formatButtonVisible: false,
                   ),
@@ -312,7 +312,7 @@ class _ComSideReadPageState extends State<ComSideReadPage> {
                     // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
                     return isSameDay(selectedDay, day);
                   },
-                  calendarStyle: CalendarStyle(
+                  calendarStyle: const CalendarStyle(
                     markerSize: 10.0,
                     markerDecoration: BoxDecoration(
                         color: Colors.red, shape: BoxShape.circle),
@@ -334,14 +334,7 @@ class _ComSideReadPageState extends State<ComSideReadPage> {
                         width: 160,
                         height: 40,
                         text: '지원하기',
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ComReplayPage(),
-                            ),
-                          );
-                        },
+                        onPressed: () {},
                         fontSize: 14,
                       ),
                     ],
