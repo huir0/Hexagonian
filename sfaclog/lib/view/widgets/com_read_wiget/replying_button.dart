@@ -13,8 +13,10 @@ class ReplyingButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         showModalBottomSheet(
+            isScrollControlled: true,
             context: context,
             builder: (BuildContext context) {
+              print(MediaQuery.of(context).viewInsets.bottom);
               return Container(
                 padding: const EdgeInsets.only(
                   left: 20,
@@ -30,44 +32,47 @@ class ReplyingButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      LineDecoWidget(
-                        color: SLColor.neutral.shade70,
-                        width: 38,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            '댓글 작성하기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                            ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LineDecoWidget(
+                      color: SLColor.neutral.shade70,
+                      width: 38,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          '댓글 작성하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
-                          SLButton(
-                            text: '완료',
-                            textStyle: SLTextStyle.Text_M_Medium,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 4,
-                              horizontal: 8,
-                            ),
-                            isActive: true,
+                        ),
+                        SLButton(
+                          text: '완료',
+                          textStyle: SLTextStyle.Text_M_Medium,
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      const SLInput(
+                          isActive: true,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: const SLInput(
                         hintText: '내용을 입력해주세요. 최대 500자까지 가능합니다',
                         maxLines: 5,
                         borderColor: Colors.transparent,
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               );
             });
