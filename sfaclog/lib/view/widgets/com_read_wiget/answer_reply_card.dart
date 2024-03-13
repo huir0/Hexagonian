@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/answer_reply_model.dart';
@@ -22,6 +23,7 @@ class AnswerReplyCard extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(12),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,8 +86,8 @@ class AnswerReplyCard extends StatelessWidget {
           Row(
             children: [
               const Spacer(),
-              Image.asset(
-                'assets/images/Vector (1).png',
+              SvgPicture.asset(
+                'assets/icons/heart.svg',
               ),
               const SizedBox(width: 4),
               Text(
