@@ -118,7 +118,9 @@ class _AnswerCardState extends ConsumerState<AnswerCard> {
           ],
         ),
         const SizedBox(height: 8),
-        RepleListView(answerReplyList: answerReplyList),
+        answerReplyList != null
+            ? RepleListView(answerReplyList: answerReplyList)
+            : const CircularProgressIndicator(),
       ],
     );
   }
