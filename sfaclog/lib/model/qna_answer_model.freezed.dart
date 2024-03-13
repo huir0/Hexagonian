@@ -12,7 +12,7 @@ part of 'qna_answer_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 QnaAnswerModel _$QnaAnswerModelFromJson(Map<String, dynamic> json) {
   return _QnaAnswerModel.fromJson(json);
@@ -21,11 +21,15 @@ QnaAnswerModel _$QnaAnswerModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$QnaAnswerModel {
   String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
   String get user => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   String get collectionName => throw _privateConstructorUsedError;
   String get qna => throw _privateConstructorUsedError;
+  dynamic get expand => throw _privateConstructorUsedError;
+  int get like => throw _privateConstructorUsedError;
+  List<dynamic> get reply => throw _privateConstructorUsedError;
+  String get created => throw _privateConstructorUsedError;
+  String get updated => throw _privateConstructorUsedError;
   String? get qnaTitle => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,11 +46,15 @@ abstract class $QnaAnswerModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String title,
       String user,
       String content,
       String collectionName,
       String qna,
+      dynamic expand,
+      int like,
+      List<dynamic> reply,
+      String created,
+      String updated,
       String? qnaTitle});
 }
 
@@ -64,21 +72,21 @@ class _$QnaAnswerModelCopyWithImpl<$Res, $Val extends QnaAnswerModel>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
     Object? user = null,
     Object? content = null,
     Object? collectionName = null,
     Object? qna = null,
+    Object? expand = freezed,
+    Object? like = null,
+    Object? reply = null,
+    Object? created = null,
+    Object? updated = null,
     Object? qnaTitle = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
               as String,
       user: null == user
           ? _value.user
@@ -95,6 +103,26 @@ class _$QnaAnswerModelCopyWithImpl<$Res, $Val extends QnaAnswerModel>
       qna: null == qna
           ? _value.qna
           : qna // ignore: cast_nullable_to_non_nullable
+              as String,
+      expand: freezed == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      like: null == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as int,
+      reply: null == reply
+          ? _value.reply
+          : reply // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      created: null == created
+          ? _value.created
+          : created // ignore: cast_nullable_to_non_nullable
+              as String,
+      updated: null == updated
+          ? _value.updated
+          : updated // ignore: cast_nullable_to_non_nullable
               as String,
       qnaTitle: freezed == qnaTitle
           ? _value.qnaTitle
@@ -114,11 +142,15 @@ abstract class _$$QnaAnswerModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String title,
       String user,
       String content,
       String collectionName,
       String qna,
+      dynamic expand,
+      int like,
+      List<dynamic> reply,
+      String created,
+      String updated,
       String? qnaTitle});
 }
 
@@ -134,21 +166,21 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
     Object? user = null,
     Object? content = null,
     Object? collectionName = null,
     Object? qna = null,
+    Object? expand = freezed,
+    Object? like = null,
+    Object? reply = null,
+    Object? created = null,
+    Object? updated = null,
     Object? qnaTitle = freezed,
   }) {
     return _then(_$QnaAnswerModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
               as String,
       user: null == user
           ? _value.user
@@ -166,6 +198,26 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
           ? _value.qna
           : qna // ignore: cast_nullable_to_non_nullable
               as String,
+      expand: freezed == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      like: null == like
+          ? _value.like
+          : like // ignore: cast_nullable_to_non_nullable
+              as int,
+      reply: null == reply
+          ? _value._reply
+          : reply // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      created: null == created
+          ? _value.created
+          : created // ignore: cast_nullable_to_non_nullable
+              as String,
+      updated: null == updated
+          ? _value.updated
+          : updated // ignore: cast_nullable_to_non_nullable
+              as String,
       qnaTitle: freezed == qnaTitle
           ? _value.qnaTitle
           : qnaTitle // ignore: cast_nullable_to_non_nullable
@@ -179,20 +231,23 @@ class __$$QnaAnswerModelImplCopyWithImpl<$Res>
 class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   const _$QnaAnswerModelImpl(
       {required this.id,
-      required this.title,
       required this.user,
       required this.content,
       required this.collectionName,
       required this.qna,
-      this.qnaTitle});
+      required this.expand,
+      required this.like,
+      required final List<dynamic> reply,
+      required this.created,
+      required this.updated,
+      this.qnaTitle})
+      : _reply = reply;
 
   factory _$QnaAnswerModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$QnaAnswerModelImplFromJson(json);
 
   @override
   final String id;
-  @override
-  final String title;
   @override
   final String user;
   @override
@@ -202,11 +257,27 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   @override
   final String qna;
   @override
+  final dynamic expand;
+  @override
+  final int like;
+  final List<dynamic> _reply;
+  @override
+  List<dynamic> get reply {
+    if (_reply is EqualUnmodifiableListView) return _reply;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_reply);
+  }
+
+  @override
+  final String created;
+  @override
+  final String updated;
+  @override
   final String? qnaTitle;
 
   @override
   String toString() {
-    return 'QnaAnswerModel(id: $id, title: $title, user: $user, content: $content, collectionName: $collectionName, qna: $qna, qnaTitle: $qnaTitle)';
+    return 'QnaAnswerModel(id: $id, user: $user, content: $content, collectionName: $collectionName, qna: $qna, expand: $expand, like: $like, reply: $reply, created: $created, updated: $updated, qnaTitle: $qnaTitle)';
   }
 
   @override
@@ -215,12 +286,16 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
         (other.runtimeType == runtimeType &&
             other is _$QnaAnswerModelImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.collectionName, collectionName) ||
                 other.collectionName == collectionName) &&
             (identical(other.qna, qna) || other.qna == qna) &&
+            const DeepCollectionEquality().equals(other.expand, expand) &&
+            (identical(other.like, like) || other.like == like) &&
+            const DeepCollectionEquality().equals(other._reply, _reply) &&
+            (identical(other.created, created) || other.created == created) &&
+            (identical(other.updated, updated) || other.updated == updated) &&
             (identical(other.qnaTitle, qnaTitle) ||
                 other.qnaTitle == qnaTitle));
   }
@@ -228,7 +303,18 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, title, user, content, collectionName, qna, qnaTitle);
+      runtimeType,
+      id,
+      user,
+      content,
+      collectionName,
+      qna,
+      const DeepCollectionEquality().hash(expand),
+      like,
+      const DeepCollectionEquality().hash(_reply),
+      created,
+      updated,
+      qnaTitle);
 
   @JsonKey(ignore: true)
   @override
@@ -248,11 +334,15 @@ class _$QnaAnswerModelImpl implements _QnaAnswerModel {
 abstract class _QnaAnswerModel implements QnaAnswerModel {
   const factory _QnaAnswerModel(
       {required final String id,
-      required final String title,
       required final String user,
       required final String content,
       required final String collectionName,
       required final String qna,
+      required final dynamic expand,
+      required final int like,
+      required final List<dynamic> reply,
+      required final String created,
+      required final String updated,
       final String? qnaTitle}) = _$QnaAnswerModelImpl;
 
   factory _QnaAnswerModel.fromJson(Map<String, dynamic> json) =
@@ -261,8 +351,6 @@ abstract class _QnaAnswerModel implements QnaAnswerModel {
   @override
   String get id;
   @override
-  String get title;
-  @override
   String get user;
   @override
   String get content;
@@ -270,6 +358,16 @@ abstract class _QnaAnswerModel implements QnaAnswerModel {
   String get collectionName;
   @override
   String get qna;
+  @override
+  dynamic get expand;
+  @override
+  int get like;
+  @override
+  List<dynamic> get reply;
+  @override
+  String get created;
+  @override
+  String get updated;
   @override
   String? get qnaTitle;
   @override

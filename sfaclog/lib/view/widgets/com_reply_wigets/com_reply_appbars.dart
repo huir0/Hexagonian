@@ -3,7 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class ComReplyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ComReplyAppBar({super.key});
+  const ComReplyAppBar({
+    super.key,
+    this.onTap,
+  });
+  final Function()? onTap;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -29,12 +33,15 @@ class ComReplyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Container(
           width: 100,
         ),
-        const Text(
-          '완료',
-          style: TextStyle(
-              color: Color(0xFFCCCCCC),
-              fontSize: 16,
-              fontWeight: FontWeight.w400),
+        GestureDetector(
+          onTap: onTap,
+          child: const Text(
+            '완료',
+            style: TextStyle(
+                color: Color(0xFFCCCCCC),
+                fontSize: 16,
+                fontWeight: FontWeight.w400),
+          ),
         ),
         Container(
           width: 25,

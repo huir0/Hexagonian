@@ -17,6 +17,8 @@ class SFACQnaModel with _$SFACQnaModel {
     required String title,
     required String user,
     required int view,
+    required List<dynamic> answer,
+    required dynamic expand,
   }) = _SFACQnaModel;
 
   factory SFACQnaModel.fromJson(Map<String, dynamic> json) =>

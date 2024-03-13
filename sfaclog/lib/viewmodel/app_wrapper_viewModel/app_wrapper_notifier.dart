@@ -26,7 +26,7 @@ class AppWrapperNotifier extends StateNotifier<AppWrapperState> {
         context.push('/log/write');
         break;
       case 1: // '커뮤니티'
-        print('커뮤니티 쓰기 페이지 이동');
+        context.push('/qna/create');
         break;
       // 기타 케이스
     }

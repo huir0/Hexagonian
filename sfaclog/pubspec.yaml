@@ -35,6 +35,7 @@ dependencies:
   fleather: ^1.14.1
   flutter:
     sdk: flutter
+  flutter_html: ^3.0.0-beta.2
   flutter_markdown: ^0.6.0
   flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^2.4.9
@@ -45,6 +46,7 @@ dependencies:
   google_sign_in: ^6.2.1
   http: ^1.2.0
   image_picker: ^1.0.7
+  intl: ^0.19.0
   json_serializable: ^6.7.1
   lottie: ^3.0.0
   markdown_toolbar: ^0.5.0
@@ -52,9 +54,9 @@ dependencies:
   sfaclog_widgets:
     path: ../sfaclog_widgets
   shared_preferences: ^2.2.2
+  shimmer: ^3.0.0
   table_calendar: ^3.0.9
   url_launcher: ^6.2.4
-  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^3.0.0

@@ -6,8 +6,7 @@ import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/pages/log_page/log_page.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/card1.dart';
 import 'package:sfaclog/view/widgets/com_page_widgets/com_listtile_wiget.dart';
-import 'package:sfaclog/view/widgets/log_page_widgets/log_card_widget.dart';
-import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
+import 'package:sfaclog/viewmodel/qna_viewmodel/qna_provider.dart';
 
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
@@ -15,7 +14,7 @@ class DevelopQnA extends ConsumerStatefulWidget {
   const DevelopQnA({super.key});
 
   @override
-  _DevelopQnAState createState() => _DevelopQnAState();
+  ConsumerState<DevelopQnA> createState() => _DevelopQnAState();
 }
 
 class _DevelopQnAState extends ConsumerState<DevelopQnA> {
@@ -25,6 +24,11 @@ class _DevelopQnAState extends ConsumerState<DevelopQnA> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(
+      () {
+        return _initQnaData();
+      },
+    );
     controller = CarouselController();
   }
 
@@ -34,9 +38,13 @@ class _DevelopQnAState extends ConsumerState<DevelopQnA> {
     controller = CarouselController();
   }
 
+  Future<void> _initQnaData() async {
+    await ref.read(qnaProvider.notifier).getAllQna();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var popularLogState = ref.watch(logProvider).popularLogModel;
+    var qnaState = ref.watch(qnaProvider);
     return Column(
       children: [
         Expanded(
@@ -66,36 +74,12 @@ class _DevelopQnAState extends ConsumerState<DevelopQnA> {
                     enlargeCenterPage: true,
                   ),
                   items: List.generate(
-                    5, // Replace with the number of cards you want to display
-                    (index) => InkWell(
-                        child:
-                            const comCard()), // Replace comCard() with your card widget
+                    5,
+                    (index) => const InkWell(
+                      child: comCard(),
+                    ),
                   ),
                 ),
-                // CarouselSlider(
-                //   carouselController: controller,
-                //   options: CarouselOptions(
-                //     height: 200,
-                //     viewportFraction: 0.725,
-                //     enlargeCenterPage: true,
-                //     onPageChanged: (val, _) {
-                //       setState(() {
-                //         curIdx = val;
-                //         controller.jumpToPage(val);
-                //       });
-                //     },
-                //   ),
-                //   items: List.generate(popularLogState?.length ?? 0, (index) {
-                //     return InkWell(
-                //         onTap: () {
-                //           context
-                //               .push('/log/read/${popularLogState[index].id}');
-                //         },
-                //         child: LogPageCardWidget(
-                //           logData: popularLogState![index],
-                //         ));
-                //   }).toList(),
-                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -129,26 +113,29 @@ class _DevelopQnAState extends ConsumerState<DevelopQnA> {
                     },
                   ),
                 ),
-                ComTileWiget(
-                  onPressed: () {
-                    context.push('/readqa');
-                  },
-                ),
-                ComTileWiget(
-                  onPressed: () {
-                    context.push('/readqa');
-                  },
-                ),
-                ComTileWiget(
-                  onPressed: () {
-                    context.push('/readqa');
-                  },
-                ),
-                ComTileWiget(
-                  onPressed: () {
-                    context.push('/readqa');
-                  },
-                ),
+                qnaState.allQnaList.isNotEmpty
+                    ? ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: 5, //@todo: 무한스크롤
+                        itemBuilder: (context, index) {
+                          final data = qnaState.allQnaList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              context.push('/qna/${data.id}');
+                            },
+                            child: ComTileWiget(
+                              qnaData: data,
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider(
+                            color: Color(0xFF333333),
+                          );
+                        },
+                      )
+                    : const CircularProgressIndicator(),
               ],
             ),
           ),

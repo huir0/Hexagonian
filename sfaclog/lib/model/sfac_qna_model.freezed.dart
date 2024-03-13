@@ -12,7 +12,7 @@ part of 'sfac_qna_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 SFACQnaModel _$SFACQnaModelFromJson(Map<String, dynamic> json) {
   return _SFACQnaModel.fromJson(json);
@@ -31,6 +31,8 @@ mixin _$SFACQnaModel {
   String get title => throw _privateConstructorUsedError;
   String get user => throw _privateConstructorUsedError;
   int get view => throw _privateConstructorUsedError;
+  List<dynamic> get answer => throw _privateConstructorUsedError;
+  dynamic get expand => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,7 +57,9 @@ abstract class $SFACQnaModelCopyWith<$Res> {
       List<dynamic> tag,
       String title,
       String user,
-      int view});
+      int view,
+      List<dynamic> answer,
+      dynamic expand});
 }
 
 /// @nodoc
@@ -82,6 +86,8 @@ class _$SFACQnaModelCopyWithImpl<$Res, $Val extends SFACQnaModel>
     Object? title = null,
     Object? user = null,
     Object? view = null,
+    Object? answer = null,
+    Object? expand = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -128,6 +134,14 @@ class _$SFACQnaModelCopyWithImpl<$Res, $Val extends SFACQnaModel>
           ? _value.view
           : view // ignore: cast_nullable_to_non_nullable
               as int,
+      answer: null == answer
+          ? _value.answer
+          : answer // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      expand: freezed == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -151,7 +165,9 @@ abstract class _$$SFACQnaModelImplCopyWith<$Res>
       List<dynamic> tag,
       String title,
       String user,
-      int view});
+      int view,
+      List<dynamic> answer,
+      dynamic expand});
 }
 
 /// @nodoc
@@ -176,6 +192,8 @@ class __$$SFACQnaModelImplCopyWithImpl<$Res>
     Object? title = null,
     Object? user = null,
     Object? view = null,
+    Object? answer = null,
+    Object? expand = freezed,
   }) {
     return _then(_$SFACQnaModelImpl(
       id: null == id
@@ -222,6 +240,14 @@ class __$$SFACQnaModelImplCopyWithImpl<$Res>
           ? _value.view
           : view // ignore: cast_nullable_to_non_nullable
               as int,
+      answer: null == answer
+          ? _value._answer
+          : answer // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      expand: freezed == expand
+          ? _value.expand
+          : expand // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
@@ -240,8 +266,11 @@ class _$SFACQnaModelImpl implements _SFACQnaModel {
       required final List<dynamic> tag,
       required this.title,
       required this.user,
-      required this.view})
-      : _tag = tag;
+      required this.view,
+      required final List<dynamic> answer,
+      required this.expand})
+      : _tag = tag,
+        _answer = answer;
 
   factory _$SFACQnaModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SFACQnaModelImplFromJson(json);
@@ -274,10 +303,20 @@ class _$SFACQnaModelImpl implements _SFACQnaModel {
   final String user;
   @override
   final int view;
+  final List<dynamic> _answer;
+  @override
+  List<dynamic> get answer {
+    if (_answer is EqualUnmodifiableListView) return _answer;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_answer);
+  }
+
+  @override
+  final dynamic expand;
 
   @override
   String toString() {
-    return 'SFACQnaModel(id: $id, created: $created, updated: $updated, collectionId: $collectionId, collectionName: $collectionName, content: $content, like: $like, tag: $tag, title: $title, user: $user, view: $view)';
+    return 'SFACQnaModel(id: $id, created: $created, updated: $updated, collectionId: $collectionId, collectionName: $collectionName, content: $content, like: $like, tag: $tag, title: $title, user: $user, view: $view, answer: $answer, expand: $expand)';
   }
 
   @override
@@ -297,7 +336,9 @@ class _$SFACQnaModelImpl implements _SFACQnaModel {
             const DeepCollectionEquality().equals(other._tag, _tag) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.user, user) || other.user == user) &&
-            (identical(other.view, view) || other.view == view));
+            (identical(other.view, view) || other.view == view) &&
+            const DeepCollectionEquality().equals(other._answer, _answer) &&
+            const DeepCollectionEquality().equals(other.expand, expand));
   }
 
   @JsonKey(ignore: true)
@@ -314,7 +355,9 @@ class _$SFACQnaModelImpl implements _SFACQnaModel {
       const DeepCollectionEquality().hash(_tag),
       title,
       user,
-      view);
+      view,
+      const DeepCollectionEquality().hash(_answer),
+      const DeepCollectionEquality().hash(expand));
 
   @JsonKey(ignore: true)
   @override
@@ -342,7 +385,9 @@ abstract class _SFACQnaModel implements SFACQnaModel {
       required final List<dynamic> tag,
       required final String title,
       required final String user,
-      required final int view}) = _$SFACQnaModelImpl;
+      required final int view,
+      required final List<dynamic> answer,
+      required final dynamic expand}) = _$SFACQnaModelImpl;
 
   factory _SFACQnaModel.fromJson(Map<String, dynamic> json) =
       _$SFACQnaModelImpl.fromJson;
@@ -369,6 +414,10 @@ abstract class _SFACQnaModel implements SFACQnaModel {
   String get user;
   @override
   int get view;
+  @override
+  List<dynamic> get answer;
+  @override
+  dynamic get expand;
   @override
   @JsonKey(ignore: true)
   _$$SFACQnaModelImplCopyWith<_$SFACQnaModelImpl> get copyWith =>

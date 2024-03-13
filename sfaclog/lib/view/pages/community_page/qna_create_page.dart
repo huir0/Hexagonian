@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:fleather/fleather.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,52 +6,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:sfaclog/common.dart';
-import 'package:sfaclog/model/sfac_log_model.dart';
-import 'package:sfaclog/viewmodel/log_write_viewmodel/log_write_notifier.dart';
+import 'package:sfaclog/model/sl_error_exception.dart';
+import 'package:sfaclog/util/delta_to_html_encoder.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/qna_viewmodel/craete_qna_provider.dart';
+import 'package:sfaclog_widgets/popup/sl_popup_dialog.dart';
 import 'package:sfaclog_widgets/tags/sl_tag.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:parchment_delta/parchment_delta.dart';
 
-class ComWritePage extends ConsumerStatefulWidget {
-  const ComWritePage({super.key});
+class QnaCreatePage extends ConsumerStatefulWidget {
+  const QnaCreatePage({super.key});
 
   @override
-  ConsumerState<ComWritePage> createState() => _ComWritePageState();
+  ConsumerState<QnaCreatePage> createState() => _QnaCreatePageState();
 }
 
-class _ComWritePageState extends ConsumerState<ComWritePage> {
+class _QnaCreatePageState extends ConsumerState<QnaCreatePage> {
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _headerController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
-  final SFACLogModel _logModel = SFACLogModel(
-      id: '',
-      collectionId: '',
-      collectionName: '',
-      created: '',
-      expand: '',
-      favorite: 0,
-      updated: '',
-      title: '',
-      category: '선택 안함',
-      body: '',
-      images: [],
-      thumbnail: '',
-      public: '',
-      tag: [],
-      user: '',
-      view: 0,
-      like: 0,
-      replyCnt: 0);
+
   FleatherController? _controller;
   bool editorFocused = false;
   List<String> tagList = [];
+  String userId = '';
 
   @override
   void initState() {
     super.initState();
     if (kIsWeb) BrowserContextMenu.disableContextMenu();
     _initController();
+    initData();
   }
 
   @override
@@ -70,6 +56,14 @@ class _ComWritePageState extends ConsumerState<ComWritePage> {
     setState(() {});
   }
 
+  Future<void> initData() async {
+    try {
+      userId = await ref.read(authProvider).userInfo['id'];
+    } catch (e) {
+      print('init error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,22 +74,53 @@ class _ComWritePageState extends ConsumerState<ComWritePage> {
         actions: [
           TextButton(
             onPressed: () async {
-              var contents = jsonEncode(_controller!.document);
-              List<dynamic> data = json.decode(contents);
-              //이미지 유무 체크
-              List<dynamic> imageList = data.where((item) {
-                var insertData = item['insert'];
-                return insertData is Map<String, dynamic> &&
-                    insertData['_type'] == 'image';
-              }).toList();
-              SFACLogModel newValue = _logModel.copyWith(
-                title: _headerController.value.text,
-                body: contents,
-                images: imageList,
-                tag: tagList,
-              );
-              ref.read(logwriteProvider.notifier).setLog(newValue);
-              context.push('/log/write/setting');
+              try {
+                Delta delta = _controller!.document.toDelta();
+
+                List<Map<String, dynamic>> deltaList = delta.map((operation) {
+                  return {
+                    "insert": operation.value,
+                  };
+                }).toList();
+
+                var content = deltaToHtmlEncoder(deltaList);
+
+                ref.read(createQnaProvider.notifier).setQna(
+                      title: _headerController.value.text,
+                      content: content,
+                      tag: tagList,
+                      userId: userId,
+                    );
+                context.pop();
+              } on SLErrorException catch (e) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SFACPopUpDialog(
+                      widget: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${e.code} 에러 발생',
+                            style: SLTextStyle.Text_L_Bold?.copyWith(
+                                color: SLColor.neutral[100]),
+                          ),
+                          Text(
+                            e.message,
+                            style: SLTextStyle.Text_S_Medium?.copyWith(
+                              color: SLColor.neutral[100],
+                            ),
+                          ),
+                        ],
+                      ),
+                      onConfirmed: () {
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                );
+              }
             },
             child: const Text('완료'),
           )
@@ -106,56 +131,6 @@ class _ComWritePageState extends ConsumerState<ComWritePage> {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (editorFocused)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FleatherToolbar.basic(
-                        leading: [
-                          InkWell(
-                            onTap: () async {
-                              final picker = ImagePicker();
-                              final image = await picker.pickImage(
-                                  source: ImageSource.gallery);
-                              if (image != null) {
-                                final selection = _controller!.selection;
-                                _controller!.replaceText(
-                                  selection.baseOffset,
-                                  selection.extentOffset - selection.baseOffset,
-                                  EmbeddableObject(
-                                    'image',
-                                    inline: false,
-                                    data: {
-                                      'source_type': kIsWeb ? 'url' : 'file',
-                                      'source': image.path,
-                                    },
-                                  ),
-                                );
-                                _controller!.replaceText(
-                                  selection.baseOffset + 1,
-                                  0,
-                                  '\n',
-                                  selection: TextSelection.collapsed(
-                                    offset: selection.baseOffset + 2,
-                                  ),
-                                );
-                              }
-                            },
-                            child: const Icon(Icons.picture_as_pdf),
-                          ),
-                        ],
-                        controller: _controller!,
-                      ),
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      Divider(height: 1, color: Colors.grey.shade200),
-                    ],
-                  )
-                else
-                  const SizedBox(
-                    height: 0,
-                  ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: TextField(

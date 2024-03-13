@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:sfaclog/data/datasource/pocketbase_auth.dart';
 import 'package:sfaclog/model/sl_error_exception.dart';
+import 'package:sfaclog/model/user_info.dart';
 import 'package:sfaclog/viewmodel/auth/auth_state.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -83,6 +84,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
     var data = await _pocketbaseAuth.findUser(tagId);
     dynamic userInfo = jsonDecode(data.toString())['items'][0];
     state = state.copyWith(userInfo: userInfo);
+  }
+
+  Future<UserInfo> getUserInfoById(String id) async {
+    final data = await _pocketbaseAuth.getUserInfoById(id);
+    UserInfo userInfo = UserInfo.fromJson({
+      ...data.toJson(),
+      'skill': data.expand['skill'],
+      'profile': data.expand['user'],
+    });
+    return userInfo;
   }
 
   Future<String> login({

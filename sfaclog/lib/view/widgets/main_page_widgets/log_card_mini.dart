@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/model/sfac_log_model.dart';
+import 'package:sfaclog/view/widgets/common_widgets/tag_widget.dart';
 import 'package:sfaclog/viewmodel/log_viewmodel/log_notifier.dart';
-import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
 class LogCardMini extends ConsumerStatefulWidget {
   const LogCardMini({
@@ -227,7 +227,7 @@ List<Widget> buildTags(List<dynamic> tags, {int maxLen = 3}) {
   List<Widget> result = [];
   if (tags.isEmpty) return [];
   for (int i = 0; i < maxLen; i++) {
-    result.add(_TagWidget(label: tags[i]));
+    result.add(TagWidget(label: tags[i]));
     tagLength--;
   }
 
@@ -235,25 +235,5 @@ List<Widget> buildTags(List<dynamic> tags, {int maxLen = 3}) {
     return [...result];
   }
 
-  return [...result, _TagWidget(label: '+$tagLength')];
-}
-
-class _TagWidget extends StatelessWidget {
-  const _TagWidget({
-    required this.label,
-  });
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return SFACTag(
-      text: Text(
-        label,
-        style: SLTextStyle(
-          color: SLColor.neutral.shade60,
-          style: SLStyle.Text_XS_Medium,
-        ).textStyle,
-      ),
-    );
-  }
+  return [...result, TagWidget(label: '+$tagLength')];
 }
