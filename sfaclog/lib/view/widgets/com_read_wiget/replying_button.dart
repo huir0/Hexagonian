@@ -1,12 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/common.dart';
 import 'package:sfaclog/view/widgets/main_page_widgets/line_deco_widget.dart';
+import 'package:sfaclog/viewmodel/auth/auth_notifier.dart';
+import 'package:sfaclog/viewmodel/qna_viewmodel/reply_provider.dart';
 import 'package:sfaclog_widgets/sfaclog_widgets.dart';
 
-class ReplyingButton extends StatelessWidget {
+class ReplyingButton extends ConsumerStatefulWidget {
   const ReplyingButton({
     super.key,
+    required this.answerId,
   });
+  final String answerId;
+
+  @override
+  ConsumerState<ReplyingButton> createState() => _ReplyingButtonState();
+}
+
+class _ReplyingButtonState extends ConsumerState<ReplyingButton> {
+  TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> createReply() async {
+    final user = ref.read(authProvider).userInfo;
+    final provider = await ref.read(replyProvider.notifier).createReply(
+          controller.text,
+          answerId: widget.answerId,
+          userId: user['id'],
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +42,8 @@ class ReplyingButton extends StatelessWidget {
         showModalBottomSheet(
             isScrollControlled: true,
             context: context,
+            isDismissible: true,
             builder: (BuildContext context) {
-              print(MediaQuery.of(context).viewInsets.bottom);
               return Container(
                 padding: const EdgeInsets.only(
                   left: 20,
@@ -52,26 +79,30 @@ class ReplyingButton extends StatelessWidget {
                           ),
                         ),
                         SLButton(
-                          text: '완료',
-                          textStyle: SLTextStyle.Text_M_Medium,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          isActive: true,
-                        ),
+                            text: '완료',
+                            textStyle: SLTextStyle.Text_M_Medium,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 8,
+                            ),
+                            isActive: true,
+                            onTap: () {
+                              createReply();
+                              Navigator.pop(context);
+                            }),
                       ],
                     ),
                     const SizedBox(height: 16),
                     Padding(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: const SLInput(
+                      child: SLInput(
                         hintText: '내용을 입력해주세요. 최대 500자까지 가능합니다',
                         maxLines: 5,
                         borderColor: Colors.transparent,
+                        controller: controller,
                       ),
-                    )
+                    ),
                   ],
                 ),
               );

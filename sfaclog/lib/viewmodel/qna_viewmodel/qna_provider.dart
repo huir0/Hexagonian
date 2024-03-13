@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sfaclog/data/datasource/qna_repository.dart';
-import 'package:sfaclog/model/answer_reply_model.dart';
 import 'package:sfaclog/model/qna_answer_model.dart';
 import 'package:sfaclog/model/sfac_qna_model.dart';
 import 'package:sfaclog/viewmodel/qna_viewmodel/qna_state.dart';
@@ -60,21 +59,7 @@ class QnaProvider extends StateNotifier<QnaState> {
     try {
       final data = await _qnaRepository.getOneQna(qnaId: qnaId);
       SFACQnaModel question = SFACQnaModel.fromJson(data.toJson());
-      print(question);
       return question;
-    } catch (e) {
-      state = state.copyWith(qnaStatus: QnaStatus.error);
-      rethrow;
-    }
-  }
-
-  Future<List<AnswerReplyModel>> getAnswersReplyList(answerId) async {
-    try {
-      final data = await _qnaRepository.getAnswersReplyList(answerId: answerId);
-      List<AnswerReplyModel> resultList = data.items.map((res) {
-        return AnswerReplyModel.fromJson(res.toJson());
-      }).toList();
-      return resultList;
     } catch (e) {
       state = state.copyWith(qnaStatus: QnaStatus.error);
       rethrow;

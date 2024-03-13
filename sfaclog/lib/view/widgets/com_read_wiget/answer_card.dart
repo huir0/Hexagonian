@@ -8,7 +8,7 @@ import 'package:sfaclog/view/widgets/com_read_wiget/replying_button.dart';
 import 'package:sfaclog/view/widgets/com_read_wiget/answer_reply_card.dart';
 import 'package:intl/intl.dart';
 import 'package:sfaclog/model/answer_reply_model.dart';
-import 'package:sfaclog/viewmodel/qna_viewmodel/qna_provider.dart';
+import 'package:sfaclog/viewmodel/qna_viewmodel/reply_provider.dart';
 
 class AnswerCard extends ConsumerStatefulWidget {
   const AnswerCard({
@@ -32,7 +32,7 @@ class _AnswerCardState extends ConsumerState<AnswerCard> {
 
   Future<void> initData() async {
     answerReplyList = await ref
-        .read(qnaProvider.notifier)
+        .read(replyProvider.notifier)
         .getAnswersReplyList(widget.answer.id);
     setState(() {});
   }
@@ -94,7 +94,9 @@ class _AnswerCardState extends ConsumerState<AnswerCard> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const ReplyingButton(),
+            ReplyingButton(
+              answerId: widget.answer.id,
+            ),
             Row(
               children: [
                 SizedBox(

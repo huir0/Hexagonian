@@ -4,26 +4,6 @@ class QnaReposotory {
   final pb = PocketBase('http://43.202.59.218:8090');
   QnaReposotory();
 
-  Future<void> createAnswer({
-    required String answer,
-    required String qnaId,
-    required String respondentId,
-  }) async {
-    try {
-      final data = {
-        "content": answer,
-        "qna": qnaId,
-        "user": respondentId,
-      };
-
-      final newAnswer = await pb.collection('qna_answer').create(body: data);
-
-      await updateQuestion(qnaId, userId: respondentId, answerId: newAnswer.id);
-    } catch (_) {
-      rethrow;
-    }
-  }
-
   Future<List<RecordModel>> getAllQna({
     String? sort,
   }) async {
@@ -47,6 +27,57 @@ class QnaReposotory {
             expand: 'tag, user, answer',
           );
       return record;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateAnswer(
+    String answerId, {
+    required String userId,
+    String? content,
+    String? replyId,
+    int? like,
+  }) async {
+    try {
+      var curData = await getAnswerById(answerId: answerId);
+
+      final body = <String, dynamic>{
+        "qna": curData.data['qna'],
+        "user": userId,
+        if (content != null) "content": content,
+        if (replyId != null)
+          "reply": [
+            replyId,
+            ...curData.data['reply'],
+          ],
+        if (like != null) "like": curData.data['like']++,
+      };
+
+      await pb.collection('qna_answer').update(
+            answerId,
+            body: body,
+          );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> createAnswer({
+    required String answer,
+    required String qnaId,
+    required String respondentId,
+  }) async {
+    try {
+      final data = {
+        "content": answer,
+        "qna": qnaId,
+        "user": respondentId,
+      };
+
+      final newAnswer = await pb.collection('qna_answer').create(body: data);
+
+      await updateQuestion(qnaId, userId: respondentId, answerId: newAnswer.id);
     } catch (_) {
       rethrow;
     }
@@ -96,6 +127,28 @@ class QnaReposotory {
             expand: 'author',
           );
       return resultList;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<RecordModel> createReply({
+    required String reply,
+    required String authorId,
+    required String answerId,
+  }) async {
+    try {
+      final data = {
+        "content": reply,
+        "answerId": answerId,
+        "author": authorId,
+      };
+
+      final result = await pb.collection('answer_reply').create(
+            body: data,
+          );
+
+      return result;
     } catch (_) {
       rethrow;
     }
